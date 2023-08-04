@@ -3,7 +3,7 @@
 ## Database Design
 
 - [ ] ER diagram of the database: ![ER diagram of Data Base ](https://iili.io/HZ4YIYQ.png)
-- [ ] Script for creating table : [/src/main/resources/db/migration/V1__create_products.sql]  
+- [ ] Script for creating table : [script](/src/main/resources/db/migration/V1__create_products.sql)  
 
 ## Project Setup
 
