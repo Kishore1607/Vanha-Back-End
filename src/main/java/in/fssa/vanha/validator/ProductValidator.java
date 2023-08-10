@@ -104,7 +104,7 @@ public class ProductValidator {
 		
 		// Product exists checking
 		if (ProductService.findByProductId(productID) == null) {
-			throw new RuntimeException("Product already exists");
+			throw new RuntimeException("Product doesn't exists");
 		}
 	}
 

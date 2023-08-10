@@ -24,8 +24,8 @@ public class APP {
 			
 			BidHistory bid = new BidHistory();
 			bid.setBidAmount(10000000);
-			bid.setBuyerId(2);
-			bid.setProductId(1);			
+			bid.setBuyerUnique("Nataliya Dyer");
+			bid.setProductUnique("P12345");			
 
             BidHistoryService bidService = new BidHistoryService();
             
