@@ -2,8 +2,44 @@
 
 ## Database Design
 
-- [ ] ER diagram of the database: ![ER diagram of Data Base ](https://iili.io/HZ4YIYQ.png)
-- [ ] Script for creating table : [script](/src/main/resources/db/migration/V1__create_users.sql)  
+- [ ] ER diagram of the database: ![ER diagram of Data Base ](https://iili.io/HDoubSe.png)
+- [ ] Script for creating table : 
+
+      * CREATE TABLE users (  
+           user_id INT AUTO_INCREMENT PRIMARY KEY,  
+           username VARCHAR(100) NOT NULL,  
+           email VARCHAR(100) NOT NULL,  
+           number BIGINT NOT NULL,  
+           password VARCHAR(100) NOT NULL,  
+           location VARCHAR(100) NOT NULL,  
+           status BOOLEAN DEFAULT 1,  
+           created_at DATE,  
+           modified_at DATE  
+      );
+      * CREATE TABLE products (  
+            id INT AUTO_INCREMENT PRIMARY KEY,  
+            product_id VARCHAR(100) UNIQUE NOT NULL,  
+            category VARCHAR(50) NOT NULL,  
+            used_period INT NOT NULL,  
+            used_duration ENUM('year', 'month') NOT NULL,  
+            description TEXT,  
+            name VARCHAR(255) NOT NULL,  
+            price INT(10) NOT NULL,  
+            min price INT(10)NOT NULL,x
+            seller_id INT NOT NULL,  
+            status ENUM('active', 'sold', 'deleted') DEFAULT 'active',  
+            created_at DATETIME,  
+            modified_at DATETIME  
+      );
+      * CREATE TABLE bid_history (  
+            bid_id INT AUTO_INCREMENT PRIMARY KEY,  
+            bid_amount INT NOT NULL,  
+            bid_date DATE NOT NULL,  
+            buyer_id INT NOT NULL,  
+            product_id VARCHAR(100) NOT NULL,  
+            status BOOLEAN DEFAULT 1  
+      );
+  
 
 ## Project Setup
 
@@ -30,17 +66,23 @@
   * name ( null, empty, pattern )  
   * email ( null, empty, pattern )  
   * password ( null, empty, pattern )  
+  * location ( null, empty, pattern )  
   * phone number ( length, >= 600000001 && <= 9999999999 ) 
 
 * Business Validation  
    * Email Already exists
 #### Messages:  
-  * User cannot be null  
-  * Name can't null or empty
-  * Email can't null or empty
-  * Password can't null or empty
-  * Phone number can't null or empty
-  * User already exists  
+  * Invalid user input 
+  * Name cannot be null or empty
+  * Email cannot be null or empty
+  * Password cannot be null or empty
+  * Location cannot be null or empty
+  * Invalid number input
+  * Invalid email pattern
+  * Invalid name pattern
+  * Invalid password pattern
+  * Invalid location pattern
+  * User already exists
 #### Flow:  
 > Invalid When a user's email address is already in use or when the input provided does not meet the criteria, users arise.
 ```mermaid  
@@ -68,23 +110,23 @@ C -- Invalid --> H(Throw Validation Exception)
      * name ( null, empty, pattern )  
      * email ( null, empty, pattern )  
      * password ( null, empty, pattern )  
-     * id ( <= 0 )  
+     * Location ( null, empty, pattern )  
      * phone number ( length, >= 600000001 && <= 9999999999 )  
 * Business Validation  
    * user does exists or not
    * Status is active
 #### Message:  
 
-  * User cannot be null  
-  * Name can't null or empty
-  * Name doesn't match the pattern
-  * Email can't null or empty
-  * Email doesn't match the pattern
-  * Password can't null or empty
-  * Password doesn't match the pattern
-  * Phone number can't null or empty
-  * Id should above 0  
-  * User doesn't exists  
+  * Invalid user input
+  *  Name cannot be null or empty
+  * Email cannot be null or empty
+  * Password cannot be null or empty
+  * Location cannot be null or empty
+  * Invalid number input
+  * Invalid email pattern
+  * Invalid name pattern
+  * Invalid location pattern
+  * User doesn't exists
  #### Flow:  
 > Invalid Users occur when a user doesn't exist in the database or when the input provided doesn't meet the criteria.
 ```mermaid  
@@ -113,32 +155,26 @@ C -- Invalid --> F(Throw Validation Exception)
    * name ( null, empty, pattern )  
    * category ( null, empty, pattern ) 
    * product id ( null, empty, pattern ) 
+   * seller id ( null, empty, pattern ) 
    * description ( null, empty ) 
-   * status  ( null, empty ) 
    * used duration ( null, empty, pattern ) 
    * price (100000000< price >0)
-   * min price (100000000< price >0)
-   * id ( id > 0 ) 
+   * min price (100000000< price >0) 
    * used period (100 < price > 0)
-   * seller id (seller id > 0)
 
 * Business Validation  
   * name does exists or not
 #### Message:  
-  * product cannot be null  
-  * Name can't null or empty
-  * Category can't null or empty  
-  * Product id can't null or empty
+  * Invalid product input
+  * Product Id can't null or empty
+  * Name can't null or empty  
   * Description can't null or empty
-  * Status can't null or empty
-  * Used duration can't null or empty
-  * Price should with in range of above 0 and below  100000000
-  * min price should with in range of above 0 and below  100000000
-  * Id should with in range of above 0
-  * Used period should with in range of above 0 and below  100
-  * Seller id should with in range of above 0
-  * min price should below the quoted price
-  * Product name already exists  
+  * Price should between the limit 1 - 100000000
+  * Price should between the limit 1 - 100000000
+  * Minimum amount price should be lesser than price
+  * Used period should between the limit 1 - 100
+  * Product already exists
+  * User already exists
 #### Flow: 
 
 > Note: Invalid happen when the input provided does not meet the criteria.
@@ -158,6 +194,14 @@ C -- Invalid --> F[Throw Validation Error Response]
 - [ ] Product model
 - [ ] Product Dao 
 - [ ] Product service
+
+#### Validations: 
+* Form Validation 
+      * User ID ( null, empty ) 
+      * 
+#### Message:  
+  * User ID can't null or empty
+
 
  #### Flow:  
 ```mermaid  
@@ -187,17 +231,14 @@ B --> C(Get all Products from Database)
    * product does exists or not
    * Status is active
 #### Message:  
-  * product cannot be null  
+  * Invalid product input
   * Name can't null or empty
   * Product id can't null or empty
   * Description can't null or empty
   * Used duration can't null or empty
-  * Price should with in range of above 0 and below  100000000
-  * min price should with in range of above 0 and below  100000000
-  * Id should with in range of above 0
-  * Used period should with in range of above 0 and below  100
-  *  min price should below the quoted price
-  * Product does not exists
+  * Price should between the limit 1 - 100000000
+  * Used period should between the limit 1 - 100
+  * product doesn't exists
  #### Flow:  
 > Invalid occur when a product doesn't exist in the database or  when the input provided doesn't meet the criteria.
 ```mermaid  
@@ -221,16 +262,12 @@ C -- Invalid --> F(Throw Validation Error Response)
 - [ ] product validator 
 
  * Form Validation 
-     * product Object 
-     * product null  
      * product id ( null, empty, pattern ) 
 * Business Validation  
    * product does exists or not
-   * Status is active
  #### Message:  
-  * product cannot be null  
   * Product id can't null or empty
-  * Product does not exists
+  * Product doesn't exists
  #### Flow:  
 > Invalid Users occur when a user doesn't exist in the database or  when the input provided doesn't meet the criteria.
 ```mermaid  
@@ -258,19 +295,18 @@ C -- Invalid --> F(Throw Validation Error Response)
   * Bid Object 
      * bid ( null, empty )  
      * product id ( null, empty, pattern ) 
-     * bid_date ( format ) 
      * bid_amount (100000000 > bid amount > minimum amount)
-     * bid_id (bid_id > 0)
+     * seller id ( null, empty, pattern ) 
 * Business Validation  
    * product does exists or not (name)
 #### Message:  
-  * Bid cannot be null  
+  * Bid input cannot be null
   * Product id can't null or empty
-  * Invalid date format  
-  * Invalid password input 
-  * Bided amount should be above the minimum amount and below 100000000
-  * Bid_id should be above 0
-  * product doesn't exists  
+  * Bidded amount should be with in the limit of 1 - 100000000
+  * Bidded amount is lesser than minimum amount
+  * Buyer Id cannot be same as Seller Id
+  * Invalid Buyer Id
+  * Buyer not found in user table
 #### Flow: 
 
 > Note: Invalid happen when the input provided does not meet the criteria.
@@ -304,4 +340,75 @@ C -- Invalid --> F[Throw Validation Error Response]
 graph TD;  
 A(BidService) --> B(BidDAO to reterive data)  
 B --> C(Get all bids from Database)  
+```
+## Module: Assets
+### Feature: Create Asset
+> The create asset feature creates new asset in the asset table of the database.
+#### Pre-requisites:
+- [ ] Create asset table
+- [ ] Create asset entity
+- [ ] Create asset model
+- [ ] asset DAO (create)
+- [ ] asset service
+#### Validations:  
+* Form Validation  
+  * url( null, empty, pattern )  
+#### Messages:  
+  * Asset cannot be null or empty
+  * Invalid url pattern
+#### Flow:  
+> Invalid occur When a asset  does not meet the criteria, asset arise.
+```mermaid  
+graph TD;  
+A(Argument Passed to AssetsService - asset) --> B(Form Validation) 
+B--Valid--> C(Argument Passed to UserDAO)  
+B--Invalid-->I(Throw Validation Exception)  
+C -->E(Store Value in Database)
+```
+### Feature: Find All Assets
+#### Pre-requisites:  
+- [ ] assets table
+- [ ] products table
+- [ ] product_assert table
+- [ ] asset entity
+- [ ] product entity
+- [ ] asset model
+- [ ] product model
+- [ ] asset Dao(find all asset) 
+- [ ] asset service
+#### Validations:  
+
+ * Form Validation 
+     * product id ( null, empty) 
+     * asset id ( null, empty) 
+* Business Validation 
+   *  product does exists or not
+ #### Message:  
+  * product Id cannot be null or empty
+  * asset Id cannot be null or empty
+  * Product does not exists
+ #### Flow:  
+ > Invalid occur When a asset  does not meet the criteria or product does not exists, asset arise.
+```mermaid  
+graph TD;  
+A(arugument passes to AssetsService) --> B(Form Validation)  
+B --Valid--> C(Business Validation)
+B --Invalid--> E(Throw Validation  Exception)
+C --valid--> D(Get all assets from Database)
+C --Invalid--> F(Throw Validation  Exception)
+```
+## Module: Product Assets
+### Feature: Create Product Asset
+> The create a bridge to connect product  table and asset table in database.
+#### Pre-requisites:
+- [ ] Create product asset table
+- [ ] Create product asset entity
+- [ ] Create product asset model
+- [ ] product asset DAO (create)
+- [ ] product asset service
+#### Flow:  
+```mermaid  
+graph TD;  
+A(Argument Passed to ProductAssetsService - ProductAsset) --> B(Argument Passed to ProductAssetsDAO)  
+B -->C(Store Value in Database)
 ```
