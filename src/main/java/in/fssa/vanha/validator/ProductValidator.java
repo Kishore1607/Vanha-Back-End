@@ -47,7 +47,7 @@ public class ProductValidator {
 		
 		// Seller exists checking
 		if (UserService.findUserByEmail(newProduct.getSellerUnique()) == null) {
-			throw new RuntimeException("User already exists");
+			throw new RuntimeException("User does not exists");
 		}
 	}
 		

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +13,11 @@ import java.util.Set;
 
 import in.fssa.vanha.enumPackage.Category;
 import in.fssa.vanha.enumPackage.UsedDuration;
+import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.Product;
+import in.fssa.vanha.model.ProductAsset;
+import in.fssa.vanha.service.AssetsService;
+import in.fssa.vanha.service.ProductAssetService;
 import in.fssa.vanha.service.UserService;
 import in.fssa.vanha.util.ConnectionUtil;
 
@@ -23,51 +28,72 @@ public class ProductDAO {
     DateTimeFormatter targetFormatter = DateTimeFormatter.ofPattern(newDateFormat);
 
 
-	public void create(Product newProduct) {
-		// TODO Auto-generated method stub
-		Connection conn = null;
-		PreparedStatement pre = null;
+    public void create(Product newProduct, Assets newAsset) throws Exception {
+        Connection conn = null;
+        PreparedStatement pre = null;
+        ResultSet generatedKeys = null;
+        int generatedProductId = -1; // Initialize to a default value
 
-		try {
-			String query = "Insert Into products (product_id, category, used_period, used_duration, description, name, price, min_price, seller_id, status, created_at, modified_at) "
-					+ "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, 'a', ?, ?)";
-			conn = ConnectionUtil.getConnection();
-			pre = conn.prepareStatement(query);
-			pre.setString(1, newProduct.getProductId());
-			
-			char categoryChar = Category.getCate(newProduct.getCategory());
-			pre.setString(2, String.valueOf(categoryChar));
+        try {
+            String query = "INSERT INTO products (product_id, category, used_period, used_duration, description, name, price, min_price, seller_id, status, created_at, modified_at) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'a', ?, ?)";
+            conn = ConnectionUtil.getConnection();
+            pre = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pre.setString(1, newProduct.getProductId());
+
+            char categoryChar = Category.getCate(newProduct.getCategory());
+            pre.setString(2, String.valueOf(categoryChar));
+
+            pre.setInt(3, newProduct.getUsedPeriod());
+
+            char usedDuration = UsedDuration.used(newProduct.getUsedDuration());
+            pre.setString(4, String.valueOf(usedDuration));
+
+            pre.setString(5, newProduct.getDescription());
+            pre.setString(6, newProduct.getName());
+            pre.setInt(7, newProduct.getPrice());
+            pre.setInt(8, newProduct.getMinPrice());
+
+            int userId = UserService.findUserByEmail(newProduct.getSellerUnique()).getId();
+            pre.setInt(9, userId);
+
+            String nowDate = "" + LocalDateTime.now();
+            LocalDateTime dateTime = LocalDateTime.parse(nowDate);
+            String formattedDateTime = targetFormatter.format(dateTime);
+
+            pre.setString(10, formattedDateTime);
+            pre.setString(11, formattedDateTime);
+
+            pre.executeUpdate();
+
+            // Retrieve the generated product ID
+            generatedKeys = pre.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                generatedProductId = generatedKeys.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionUtil.close(conn, pre, generatedKeys);
+        }
+
+        int pId = generatedProductId;
+        
+        AssetsService assetsService = new AssetsService();
+		int sId = assetsService.create(newAsset);
 		
-			pre.setInt(3, newProduct.getUsedPeriod());
-			
-			char usedDuration = UsedDuration.used(newProduct.getUsedDuration());
-			pre.setString(4, String.valueOf(usedDuration));
-			
-			pre.setString(5, newProduct.getDescription());
-			pre.setString(6, newProduct.getName());
-			pre.setInt(7, newProduct.getPrice());
-			pre.setInt(8, newProduct.getMinPrice());
-			
-			int userId = UserService.findUserByEmail(newProduct.getSellerUnique()).getId();
-			pre.setInt(9, userId);
+		ProductAsset productAsset = new ProductAsset();
+		
+		productAsset.setProductId(pId);
+		productAsset.setAssetId(sId);
+		
+		ProductAssetService PaService = new ProductAssetService();
+		PaService.create(productAsset);
+		
+    }
 
-			String nowDate = "" + LocalDateTime.now();
-	        LocalDateTime dateTime = LocalDateTime.parse(nowDate);
-	        String formattedDateTime = targetFormatter.format(dateTime);
-
-			pre.setString(10, formattedDateTime);
-			pre.setString(11, formattedDateTime);
-
-			pre.executeUpdate();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} finally {
-			ConnectionUtil.close(conn, pre);
-		}
-	}
-	
 
 	public static Product findProductByProductId(String productId) {
 

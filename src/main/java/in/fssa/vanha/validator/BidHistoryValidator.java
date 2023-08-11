@@ -9,10 +9,13 @@ import in.fssa.vanha.util.StringUtil;
 public class BidHistoryValidator {
 
 	public static void createValidate(BidHistory newBid) throws Exception {
-
-		if (newBid.getProductId() < 0) {
-			throw new RuntimeException("Invalid Product Id");
+		
+		if (newBid == null) {
+			throw new RuntimeException("Bid input cannot be null");
 		}
+		
+		StringUtil.RegectIfInvalidString(newBid.getProductUnique(), "Product ID");
+
 
 		if (newBid.getBidAmount() < 0 || newBid.getBidAmount() > 100000000) {
 			throw new RuntimeException("Bidded amount should be with in the limit of 1 - 100000000");
@@ -33,7 +36,7 @@ public class BidHistoryValidator {
 		}
 
 		if (UserService.findUserByEmail(newBid.getBuyerUnique()) == null) {
-			throw new RuntimeException("Buyer not foung in user table");
+			throw new RuntimeException("Buyer not found in user table");
 		}
 
 	}

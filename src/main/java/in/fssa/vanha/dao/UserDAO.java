@@ -97,7 +97,7 @@ public class UserDAO {
 			rs = pre.executeQuery();
 			if (rs.next()) {
 				value = new User();
-				value.setId(rs.getInt("user_id"));
+				value.setId(rs.getInt("id"));
 	            value.setName(rs.getString("username"));
 	            value.setEmail(rs.getString("email"));
 	            value.setPassword(rs.getString("password"));
@@ -117,29 +117,4 @@ public class UserDAO {
 		}
 		return value;
 	}
-//	
-//	public static boolean findUserById(int id) {
-//		
-//		Connection conn = null;
-//		PreparedStatement pre = null;
-//		ResultSet rs = null;
-//
-//		try {
-//
-//			String query = "Select * From users Where user_id = ?";
-//			conn = ConnectionUtil.getConnection();
-//			pre = conn.prepareStatement(query);
-//			pre.setInt(1, id);
-//			rs = pre.executeQuery();
-//			if (rs.next()) {
-//				return true;
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		} finally {
-//			ConnectionUtil.close(conn, pre, rs);
-//		}
-//		return false;
-//	}
 }

@@ -3,17 +3,21 @@ package in.fssa.vanha.service;
 import java.util.Set;
 
 import in.fssa.vanha.dao.ProductDAO;
+import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.Product;
+import in.fssa.vanha.validator.AssetValidator;
 import in.fssa.vanha.validator.ProductValidator;
 
 public class ProductService {
+	
 	ProductDAO productDao = new ProductDAO();
 
-	public void create(Product newProduct) throws Exception {
+	public void create(Product newProduct, Assets newAsset) throws Exception {
 		ProductValidator.createValidate(newProduct);
-		productDao.create(newProduct);
+		AssetValidator.createValidate(newAsset);
+		productDao.create(newProduct, newAsset);
 	}
-	
+
 	public Set<Product> findAllProductsBySellerId(String sellerId) throws Exception {
 		ProductValidator.findUserValidate(sellerId);
 		Set<Product> productList = productDao.findAllProductsBySellerId(sellerId);
