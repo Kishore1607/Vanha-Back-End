@@ -5,40 +5,67 @@
 - [ ] ER diagram of the database: ![ER diagram of Data Base ](https://iili.io/HDoubSe.png)
 - [ ] Script for creating table : 
 
-      * CREATE TABLE users (  
-           user_id INT AUTO_INCREMENT PRIMARY KEY,  
-           username VARCHAR(100) NOT NULL,  
-           email VARCHAR(100) NOT NULL,  
-           number BIGINT NOT NULL,  
-           password VARCHAR(100) NOT NULL,  
-           location VARCHAR(100) NOT NULL,  
-           status BOOLEAN DEFAULT 1,  
-           created_at DATE,  
-           modified_at DATE  
-      );
-      * CREATE TABLE products (  
-            id INT AUTO_INCREMENT PRIMARY KEY,  
-            product_id VARCHAR(100) UNIQUE NOT NULL,  
-            category VARCHAR(50) NOT NULL,  
-            used_period INT NOT NULL,  
-            used_duration ENUM('year', 'month') NOT NULL,  
-            description TEXT,  
-            name VARCHAR(255) NOT NULL,  
-            price INT(10) NOT NULL,  
-            min price INT(10)NOT NULL,x
-            seller_id INT NOT NULL,  
-            status ENUM('active', 'sold', 'deleted') DEFAULT 'active',  
-            created_at DATETIME,  
-            modified_at DATETIME  
-      );
-      * CREATE TABLE bid_history (  
-            bid_id INT AUTO_INCREMENT PRIMARY KEY,  
-            bid_amount INT NOT NULL,  
-            bid_date DATE NOT NULL,  
-            buyer_id INT NOT NULL,  
-            product_id VARCHAR(100) NOT NULL,  
-            status BOOLEAN DEFAULT 1  
-      );
+      * Create the "users" table
+
+         CREATE TABLE users (
+         id INT AUTO_INCREMENT PRIMARY KEY,
+         username VARCHAR(100) NOT NULL,
+         email VARCHAR(100) NOT NULL UNIQUE,
+         number BIGINT NOT NULL,
+         password VARCHAR(100) NOT NULL,
+         location VARCHAR(100) NOT NULL,
+         status BOOLEAN DEFAULT 1,
+         created_at DATETIME,
+         modified_at DATETIME
+         );
+         
+      * Create the "asserts" table
+
+         CREATE TABLE assets(
+         id INT AUTO_INCREMENT PRIMARY KEY,
+         url VARCHAR(255) NOT NULL
+         ); 
+         
+      * Create the "products" table with foreign key to "users
+
+         CREATE TABLE products (
+         id INT AUTO_INCREMENT PRIMARY KEY,
+         product_id VARCHAR(100) UNIQUE NOT NULL,
+         category VARCHAR(2) NOT NULL,
+         used_period INT,
+         used_duration VARCHAR(2) NOT NULL,
+         description TEXT,
+         name VARCHAR(255) NOT NULL,
+         price INT(10),
+         min_price INT(10),
+         seller_id INT,
+         status CHAR,
+         created_at DATETIME,
+         modified_at DATETIME,
+         FOREIGN KEY (seller_id) REFERENCES users(id)
+         );
+         
+      * Create the "bid_history" table with foreign keys to "users" and "products"
+
+          CREATE TABLE bid_history (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          bid_amount INT,
+          bid_date DATETIME NOT NULL,
+          buyer_id INT,
+          product_id INT,
+          status BOOLEAN DEFAULT 1,
+          FOREIGN KEY (product_id) REFERENCES products(id)
+          );
+          
+      * Create the "product_asserts" table with foreign keys to "products" and "asserts"
+
+          CREATE TABLE product_assets(
+          product_id INT,
+          asset_id INT,
+          status BOOLEAN DEFAULT 1,
+          FOREIGN KEY (product_id) REFERENCES products(id),
+          FOREIGN KEY (asset_id) REFERENCES assets(id)
+          );
   
 
 ## Project Setup
@@ -97,9 +124,9 @@ C -- Invalid --> H(Throw Validation Exception)
 ### Feature: Update User  
 > The update user feature update exists users in the users table of the database.
 #### Pre-requisites:  
-- [ ] Create user table
-- [ ] User entity
-- [ ] User model
+- [ ] create user table
+- [ ] user entity
+- [ ] user model
 - [ ] user DAO (update)
 - [ ] user service 
 #### Validations:  
@@ -142,9 +169,9 @@ C -- Invalid --> F(Throw Validation Exception)
 ### Feature: Create new product  
 > The create new product feature creates product in the products table of the database.
 #### Pre-requisites:
-- [ ] Create product table
-- [ ] Create product entity
-- [ ] Create product model
+- [ ] create product table
+- [ ] create product entity
+- [ ] create product model
 - [ ] product DAO (
 - [ ] product service
 
@@ -189,11 +216,11 @@ C -- Invalid --> F[Throw Validation Error Response]
 ```
 ### Feature: Find All Products
 #### Pre-requisites:  
-- [ ] Product table
-- [ ] Product entity
-- [ ] Product model
-- [ ] Product Dao 
-- [ ] Product service
+- [ ] product table
+- [ ] product entity
+- [ ] product model
+- [ ] product Dao 
+- [ ] product service
 
 #### Validations: 
 * Form Validation 
@@ -211,11 +238,11 @@ B --> C(Get all Products from Database)
 ```
 ### Feature: Update Product details
 #### Pre-requisites:  
-- [ ] Product table
-- [ ] Product entity
-- [ ] Product model
-- [ ] Product Dao
-- [ ] Product service
+- [ ] product table
+- [ ] product entity
+- [ ] product model
+- [ ] product Dao
+- [ ] product service
 
 #### Validations:  
 * Form Validation 
@@ -252,11 +279,11 @@ C -- Invalid --> F(Throw Validation Error Response)
 ``` 
 ### Feature: Delete product
 #### Pre-requisites:  
-- [ ] Product table
-- [ ] Product entity
-- [ ] Product model
-- [ ] Product Dao
-- [ ] Product service
+- [ ] product table
+- [ ] product entity
+- [ ] product model
+- [ ] product Dao
+- [ ] product service
 
 #### Validations:  
 - [ ] product validator 
@@ -283,9 +310,9 @@ C -- Invalid --> F(Throw Validation Error Response)
 ### Feature: Create new bid
 > The create new bid feature creates bid in the bid_history table of the database.
 #### Pre-requisites:
-- [ ] Create bid_history table
-- [ ] Create bid entity
-- [ ] Create bid model
+- [ ] create bid_history table
+- [ ] create bid entity
+- [ ] create bid model
 - [ ] bid DAO(create bid)  
 - [ ] bid service (create(Bid bid) - 1 argument )
 
@@ -321,11 +348,11 @@ C -- Invalid --> F[Throw Validation Error Response]
 ```
 ### Feature: Find All Bids
 #### Pre-requisites:  
-- [ ] Bid table
-- [ ] Bid entity
-- [ ] Bid model
-- [ ] Bid Dao(find all bids) 
-- [ ] Bid service
+- [ ] bid table
+- [ ] bid entity
+- [ ] bid model
+- [ ] bid Dao(find all bids) 
+- [ ] bid service
 #### Validations:  
 
  * Form Validation 
@@ -345,9 +372,9 @@ B --> C(Get all bids from Database)
 ### Feature: Create Asset
 > The create asset feature creates new asset in the asset table of the database.
 #### Pre-requisites:
-- [ ] Create asset table
-- [ ] Create asset entity
-- [ ] Create asset model
+- [ ] create asset table
+- [ ] create asset entity
+- [ ] create asset model
 - [ ] asset DAO (create)
 - [ ] asset service
 #### Validations:  
@@ -397,18 +424,39 @@ B --Invalid--> E(Throw Validation  Exception)
 C --valid--> D(Get all assets from Database)
 C --Invalid--> F(Throw Validation  Exception)
 ```
-## Module: Product Assets
-### Feature: Create Product Asset
-> The create a bridge to connect product  table and asset table in database.
+
+### Feature: Update Asset
+> The update asset feature updates the asset that already exists in tha asset table of the database.
 #### Pre-requisites:
-- [ ] Create product asset table
-- [ ] Create product asset entity
-- [ ] Create product asset model
-- [ ] product asset DAO (create)
-- [ ] product asset service
+- [ ] asset table
+- [ ] asset entity
+- [ ] asset model
+- [ ] asset DAO (update)
+- [ ] asset service
+- [ ] product asset table
+#### Validations:  
+* Form Validation  
+  * old url( null, empty) 
+  * new url( null, empty, pattern )  
+  * product id ( null, empty)  
+* Business Validation 
+   *  product does exists or not
+   * old asset does exists or not
+#### Messages:  
+  * Old Asset value cannot be null or empty
+  * New Asset value cannot be null or empty
+  * Product id cannot be null or empty
+  * Invalid url pattern of new asset
+  * Product does not exists
+  * Old asset does not exists
+  * Old asset and new asset cannot be same
 #### Flow:  
+> Invalid occur When a asset  does not meet the criteria and old asset and new asset are same.
 ```mermaid  
 graph TD;  
-A(Argument Passed to ProductAssetsService - ProductAsset) --> B(Argument Passed to ProductAssetsDAO)  
-B -->C(Store Value in Database)
+A(arugument passes to AssetsService) --> B(Form Validation)  
+B --Valid--> C(Business Validation)
+B --Invalid--> E(Throw Validation  Exception)
+C --valid--> D(Update the new value in asset)
+C --Invalid--> F(Throw Validation  Exception)
 ```
