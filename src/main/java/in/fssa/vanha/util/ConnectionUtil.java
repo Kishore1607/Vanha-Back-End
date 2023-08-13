@@ -43,6 +43,32 @@ public static Connection getConnection() {
 		}
 	}
 	
+	public static void close(Connection conn, PreparedStatement pre1, PreparedStatement pre2, PreparedStatement pre3, PreparedStatement pre4, PreparedStatement pre5) {
+		 
+		try {
+			if(pre1!=null) {
+				pre1.close();
+			}
+			if(pre2!=null) {
+				pre2.close();
+			}
+			if(pre3!=null) {
+				pre3.close();
+			}
+			if(pre4!=null) {
+				pre4.close();
+			}
+			if(pre5!=null) {
+				pre5.close();
+			}
+			if(conn!=null) {
+				conn.close();
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void close(Connection connection, PreparedStatement presta, ResultSet reset) {
 		 
 		try {

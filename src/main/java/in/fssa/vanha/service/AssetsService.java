@@ -20,4 +20,9 @@ public class AssetsService {
 		Set<Assets> assetsList = assetsDao.findAllAssetsByProductId(productId);
 	    return assetsList;
 	}
+	
+	public void updateAssets(Assets newAsset) throws Exception {
+		AssetValidator.updateValidate(newAsset);
+		assetsDao.updateAssetsByAssetId(newAsset);
+	}
 }
