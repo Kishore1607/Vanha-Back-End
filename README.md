@@ -1,3 +1,4 @@
+
 # VANHA  application Checklist
 
 ## Database Design
@@ -104,6 +105,10 @@
   * Email cannot be null or empty
   * Password cannot be null or empty
   * Location cannot be null or empty
+  * Invalid email length
+  * Invalid password length
+  * Invalid name length
+  * Invalid location length
   * Invalid number input
   * Invalid email pattern
   * Invalid name pattern
@@ -124,9 +129,9 @@ C -- Invalid --> H(Throw Validation Exception)
 ### Feature: Update User  
 > The update user feature update exists users in the users table of the database.
 #### Pre-requisites:  
-- [ ] create user table
-- [ ] user entity
-- [ ] user model
+- [ ] Create user table
+- [ ] User entity
+- [ ] User model
 - [ ] user DAO (update)
 - [ ] user service 
 #### Validations:  
@@ -149,6 +154,8 @@ C -- Invalid --> H(Throw Validation Exception)
   * Email cannot be null or empty
   * Password cannot be null or empty
   * Location cannot be null or empty
+  * Name cannot be null or empty
+  * Location cannot be null or empty
   * Invalid number input
   * Invalid email pattern
   * Invalid name pattern
@@ -169,9 +176,9 @@ C -- Invalid --> F(Throw Validation Exception)
 ### Feature: Create new product  
 > The create new product feature creates product in the products table of the database.
 #### Pre-requisites:
-- [ ] create product table
-- [ ] create product entity
-- [ ] create product model
+- [ ] Create product table
+- [ ] Create product entity
+- [ ] Create product model
 - [ ] product DAO (
 - [ ] product service
 
@@ -196,6 +203,10 @@ C -- Invalid --> F(Throw Validation Exception)
   * Product Id can't null or empty
   * Name can't null or empty  
   * Description can't null or empty
+  * Invalid product id length
+  * Invalid category length
+  * Invalid used duration length
+  * Invalid name length
   * Price should between the limit 1 - 100000000
   * Price should between the limit 1 - 100000000
   * Minimum amount price should be lesser than price
@@ -216,11 +227,11 @@ C -- Invalid --> F[Throw Validation Error Response]
 ```
 ### Feature: Find All Products
 #### Pre-requisites:  
-- [ ] product table
-- [ ] product entity
-- [ ] product model
-- [ ] product Dao 
-- [ ] product service
+- [ ] Product table
+- [ ] Product entity
+- [ ] Product model
+- [ ] Product Dao 
+- [ ] Product service
 
 #### Validations: 
 * Form Validation 
@@ -238,11 +249,11 @@ B --> C(Get all Products from Database)
 ```
 ### Feature: Update Product details
 #### Pre-requisites:  
-- [ ] product table
-- [ ] product entity
-- [ ] product model
-- [ ] product Dao
-- [ ] product service
+- [ ] Product table
+- [ ] Product entity
+- [ ] Product model
+- [ ] Product Dao
+- [ ] Product service
 
 #### Validations:  
 * Form Validation 
@@ -263,6 +274,7 @@ B --> C(Get all Products from Database)
   * Product id can't null or empty
   * Description can't null or empty
   * Used duration can't null or empty
+  * Invalid used duration length
   * Price should between the limit 1 - 100000000
   * Used period should between the limit 1 - 100
   * product doesn't exists
@@ -279,11 +291,11 @@ C -- Invalid --> F(Throw Validation Error Response)
 ``` 
 ### Feature: Delete product
 #### Pre-requisites:  
-- [ ] product table
-- [ ] product entity
-- [ ] product model
-- [ ] product Dao
-- [ ] product service
+- [ ] Product table
+- [ ] Product entity
+- [ ] Product model
+- [ ] Product Dao
+- [ ] Product service
 
 #### Validations:  
 - [ ] product validator 
@@ -310,9 +322,9 @@ C -- Invalid --> F(Throw Validation Error Response)
 ### Feature: Create new bid
 > The create new bid feature creates bid in the bid_history table of the database.
 #### Pre-requisites:
-- [ ] create bid_history table
-- [ ] create bid entity
-- [ ] create bid model
+- [ ] Create bid_history table
+- [ ] Create bid entity
+- [ ] Create bid model
 - [ ] bid DAO(create bid)  
 - [ ] bid service (create(Bid bid) - 1 argument )
 
@@ -348,11 +360,11 @@ C -- Invalid --> F[Throw Validation Error Response]
 ```
 ### Feature: Find All Bids
 #### Pre-requisites:  
-- [ ] bid table
-- [ ] bid entity
-- [ ] bid model
-- [ ] bid Dao(find all bids) 
-- [ ] bid service
+- [ ] Bid table
+- [ ] Bid entity
+- [ ] Bid model
+- [ ] Bid Dao(find all bids) 
+- [ ] Bid service
 #### Validations:  
 
  * Form Validation 
@@ -372,9 +384,9 @@ B --> C(Get all bids from Database)
 ### Feature: Create Asset
 > The create asset feature creates new asset in the asset table of the database.
 #### Pre-requisites:
-- [ ] create asset table
-- [ ] create asset entity
-- [ ] create asset model
+- [ ] Create asset table
+- [ ] Create asset entity
+- [ ] Create asset model
 - [ ] asset DAO (create)
 - [ ] asset service
 #### Validations:  
