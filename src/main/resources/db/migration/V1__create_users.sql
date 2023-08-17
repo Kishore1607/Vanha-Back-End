@@ -11,12 +11,6 @@ CREATE TABLE users (
    modified_at DATETIME
 );
 
--- Create the "asserts" table
-CREATE TABLE assets(
-   id INT AUTO_INCREMENT PRIMARY KEY,
-   url VARCHAR(255) NOT NULL
-);
-
 -- Create the "products" table with foreign key to "users"
 CREATE TABLE products (
    id INT AUTO_INCREMENT PRIMARY KEY,
@@ -53,4 +47,11 @@ CREATE TABLE product_assets(
    status BOOLEAN DEFAULT 1,
    FOREIGN KEY (product_id) REFERENCES products(id),
    FOREIGN KEY (asset_id) REFERENCES assets(id)
+);
+
+-- Create the "asserts" table
+CREATE TABLE assets(
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   url VARCHAR(255) NOT NULL,
+   status BOOLEAN DEFAULT 1
 );

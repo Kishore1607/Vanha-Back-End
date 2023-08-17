@@ -40,14 +40,9 @@ public class ProductDAO {
             conn = ConnectionUtil.getConnection();
             pre = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pre.setString(1, newProduct.getProductId());
-
-            char categoryChar = Category.getCate(newProduct.getCategory());
-            pre.setString(2, String.valueOf(categoryChar));
-
+            pre.setString(2, Category.getCate(newProduct.getCategory()));
             pre.setInt(3, newProduct.getUsedPeriod());
-
-            char usedDuration = UsedDuration.used(newProduct.getUsedDuration());
-            pre.setString(4, String.valueOf(usedDuration));
+            pre.setString(4, UsedDuration.used(newProduct.getUsedDuration()));
 
             pre.setString(5, newProduct.getDescription());
             pre.setString(6, newProduct.getName());
@@ -104,7 +99,9 @@ public class ProductDAO {
 
 	    try {
 
-	        String query = "Select * From products Where product_id = ? AND status = 'a'";
+	        String query = "SELECT id, category, used_period, used_duration, description, name, price, seller_id, min_price\r\n"
+	        		+ "FROM products\r\n"
+	        		+ "WHERE product_id = ? AND status = 'a';";
 	        conn = ConnectionUtil.getConnection();
 	        pre = conn.prepareStatement(query);
 	        pre.setString(1, productId);
@@ -120,7 +117,6 @@ public class ProductDAO {
 	            value.setPrice(rs.getInt("price"));
 	            value.setMinPrice(rs.getInt("min_price"));
 	            value.setSellerId(rs.getInt("seller_id"));
-	            value.setStatus(rs.getString("status").charAt(0));
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -145,7 +141,9 @@ public class ProductDAO {
 			
 			int userId = UserService.findUserByEmail(sellerId).getId();
 
-			String query = "Select * From products Where status = 'a' AND seller_id = ?";
+			String query = "SELECT id, product_id, category, used_period, used_duration, description, name, price, seller_id, min_price\r\n"
+					+ "FROM products\r\n"
+					+ "WHERE seller_id = ? AND status = 'a';";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setInt(1, userId);
@@ -162,8 +160,6 @@ public class ProductDAO {
 				product.setPrice(rs.getInt("price"));
 				product.setMinPrice(rs.getInt("min_price"));
 				product.setSellerId(rs.getInt("seller_id"));
-				product.setCreatedAt(rs.getString("created_at"));
-				product.setModifiedAt(rs.getString("modified_at"));
 				productArray.add(product);
 			}
 		}catch (SQLException e) {
@@ -191,10 +187,7 @@ public class ProductDAO {
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setInt(1, updateProduct.getUsedPeriod());
-			
-			char usedDuration = UsedDuration.used(updateProduct.getUsedDuration());
-			pre.setString(2, String.valueOf(usedDuration));
-			
+			pre.setString(2, UsedDuration.used(updateProduct.getUsedDuration()));
 			pre.setString(3, updateProduct.getDescription());
 			pre.setString(4, updateProduct.getName());
 			pre.setInt(5, updateProduct.getPrice());
@@ -251,6 +244,50 @@ public class ProductDAO {
 	    } finally {
 	        ConnectionUtil.close(conn1, pre1);
 	    }
+	}
+
+	public Set<Product> findAllProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet rs = null;
+		
+		Set<Product> productArray = new HashSet<>();
+		
+
+		try {
+			String query = "SELECT id, product_id, used_period, used_duration, description, name, price, seller_id, min_price\r\n"
+					+ "FROM products\r\n"
+					+ "WHERE category = ? AND status = 'a';";
+			conn = ConnectionUtil.getConnection();
+			pre = conn.prepareStatement(query);
+			pre.setString(1, Category.getCate(category));
+			rs = pre.executeQuery();
+			while (rs.next()) {
+				Product product = new Product();
+				product.setId(rs.getInt("id"));
+				product.setProductId(rs.getString("product_id"));
+				product.setUsedPeriod(rs.getInt("used_period"));
+				product.setUsedDuration(rs.getString("used_duration"));
+				product.setDescription(rs.getString("description"));
+				product.setName(rs.getString("name"));
+				product.setPrice(rs.getInt("price"));
+				product.setMinPrice(rs.getInt("min_price"));
+				product.setSellerId(rs.getInt("seller_id"));
+				productArray.add(product);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new RuntimeException();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new RuntimeException();
+		}finally {
+			ConnectionUtil.close(conn, pre, rs);
+		}
+		return productArray;
 	}
 
 

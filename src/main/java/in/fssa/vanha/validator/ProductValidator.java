@@ -20,6 +20,23 @@ public class ProductValidator {
 		StringUtil.RegectIfInvalidString(newProduct.getName(), "Name");
 
 		StringUtil.RegectIfInvalidString(newProduct.getDescription(), "Description");
+		
+		// Length checking
+
+				if (newProduct.getProductId().length() > 50) {
+					throw new RuntimeException("Invalid product id length");
+				}
+				if (newProduct.getCategory().length() > 2) {
+					throw new RuntimeException("Invalid category length");
+				}
+				if (newProduct.getUsedDuration().length() > 2) {
+					throw new RuntimeException("Invalid used duration length");
+
+				}
+				if (newProduct.getName().length() > 255) {
+					throw new RuntimeException("Invalid name length");
+
+				}
 
 
 		// Int checking
@@ -81,6 +98,12 @@ public class ProductValidator {
 		StringUtil.RegectIfInvalidString(updateProduct.getName(), "Name");
 
 		StringUtil.RegectIfInvalidString(updateProduct.getDescription(), "Description");
+		
+		// Length checking
+		if (updateProduct.getName().length() > 255) {
+			throw new RuntimeException("Invalid used duration length");
+
+		}
 
 		// Int checking
 
@@ -106,6 +129,25 @@ public class ProductValidator {
 		if (ProductService.findByProductId(productID) == null) {
 			throw new RuntimeException("Product doesn't exists");
 		}
+	}
+	
+	public static void findAllProductValidate(String category) throws Exception {
+
+		StringUtil.RegectIfInvalidString(category, "category");
+		
+		String input = category.toLowerCase();
+		
+
+        switch (input) {
+            case "car":
+            case "bike":
+            case "computer":
+            case "mobile":
+                break;
+            default:
+                throw new RuntimeException("Input string does not match any of the four options.");
+        }
+		
 	}
 
 

@@ -17,6 +17,10 @@ public class AssetValidator {
 
 		StringUtil.RegectIfInvalidString(newAsste.getValue(), "Asset");
 
+		if (newAsste.getValue().length() > 50) {
+			throw new RuntimeException("Invalid product id length");
+		}
+
 		String urlRegex = "^(http|https)://([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$";
 
 		Pattern urlPattern = Pattern.compile(urlRegex);
@@ -44,6 +48,13 @@ public class AssetValidator {
 		StringUtil.RegectIfInvalidString(updateAsset.getValue(), "New Asset");
 
 		StringUtil.RegectIfInvalidString(updateAsset.getProductId(), "Product id");
+
+		if (updateAsset.getOldValue().length() > 50) {
+			throw new RuntimeException("Invalid product id length");
+		}
+		if (updateAsset.getValue().length() > 50) {
+			throw new RuntimeException("Invalid product id length");
+		}
 
 		String urlRegex = "^(http|https)://([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$";
 

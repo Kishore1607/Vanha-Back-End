@@ -7,17 +7,17 @@ public class StringUtil {
 		}
 	}
 
-	public static boolean IsvalidString(String input, String name) {
-		if (input == null || ("").equals(input.trim())) {
-			return false;
-		}
-		return true;
-	}
-
-	public static boolean IsInvalidString(String input, String name) {
-		if (input == null || ("").equals(input.trim())) {
-			return true;
-		}
-		return false;
-	}
+//	public static boolean IsvalidString(String input, String name) {
+//		if (input == null || ("").equals(input.trim())) {
+//			return false;
+//		}
+//		return true;
+//	}
+//
+//	public static boolean IsInvalidString(String input, String name) {
+//		if (input == null || ("").equals(input.trim())) {
+//			return true;
+//		}
+//		return false;
+//	}
 }

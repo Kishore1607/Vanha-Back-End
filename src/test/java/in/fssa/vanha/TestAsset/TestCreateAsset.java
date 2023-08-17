@@ -41,7 +41,7 @@ public class TestCreateAsset {
 			assetsService.create(newAsset);
 		});
 	}
-
+	
 	@Test
 	public void testCreateValidateWithInvalidInput() {
 		Assets newAsset = new Assets();

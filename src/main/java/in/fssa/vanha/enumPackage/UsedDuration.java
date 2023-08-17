@@ -1,20 +1,20 @@
 package in.fssa.vanha.enumPackage;
 
 public enum UsedDuration {
-    YEAR('y'),
-    MONTH('m');
+    YEAR("y"),
+    MONTH("m");
 
-    private final char value;
+    private final String value;
 
-    UsedDuration(char value) {
+    UsedDuration(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public static char used(String input) {
+    public static String used(String input) {
         String lowerCaseInput = input.toLowerCase();
         switch (lowerCaseInput) {
             case "year":

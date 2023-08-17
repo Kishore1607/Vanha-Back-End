@@ -39,6 +39,22 @@ public class UserValidator {
 			throw new RuntimeException("Invalid number input");
 		}
 
+		// Length checking
+
+		if (newUser.getEmail().length() > 200) {
+			throw new RuntimeException("Invalid email length");
+		}
+		if (newUser.getPassword().length() > 50) {
+			throw new RuntimeException("Invalid password length");
+		}
+		if (newUser.getName().length() > 50) {
+			throw new RuntimeException("Invalid name length");
+
+		}
+		if (newUser.getLocation().length() > 100) {
+			throw new RuntimeException("Invalid location length");
+
+		}
 		// pattern checking
 
 		Matcher emailMatcher = emailPattern.matcher(newUser.getEmail());
@@ -62,8 +78,7 @@ public class UserValidator {
 			throw new RuntimeException("Invalid location pattern");
 		}
 
-		UserService us = new UserService();
-		if(us.findUserByEmail(newUser.getEmail()) != null) {
+		if (UserService.findUserByEmail(newUser.getEmail()) != null) {
 			throw new RuntimeException("User already exists");
 		}
 
@@ -85,6 +100,16 @@ public class UserValidator {
 
 		if (updateUser.getNumber() < 6000000000l || updateUser.getNumber() > 9999999999l) {
 			throw new RuntimeException("Invalid number input");
+		}
+
+		// Length checking
+
+		if (updateUser.getName().length() > 50) {
+			throw new RuntimeException("Invalid name length");
+
+		}
+		if (updateUser.getLocation().length() > 100) {
+			throw new RuntimeException("Invalid location length");
 		}
 
 		// pattern checking
@@ -116,12 +141,12 @@ public class UserValidator {
 		}
 
 	}
-	
+
 	public static void findUserValidate(String email) throws Exception {
 		if (email == null) {
 			throw new RuntimeException("Email can't be null");
 		}
-		
+
 		StringUtil.RegectIfInvalidString(email, "Email");
 	}
 

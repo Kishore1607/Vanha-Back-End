@@ -38,5 +38,11 @@ public class ProductService {
 		ProductValidator.findProductValidate(productId);
 		return ProductDAO.findProductByProductId(productId);
 	}
+	
+	public Set<Product> findAllProductsByCategory(String category) throws Exception {
+		ProductValidator.findAllProductValidate(category);
+		Set<Product> productList = productDao.findAllProductsByCategory(category);
+	    return productList;
+	}
 
 }

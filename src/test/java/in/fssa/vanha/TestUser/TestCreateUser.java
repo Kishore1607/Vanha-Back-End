@@ -15,11 +15,11 @@ public class TestCreateUser {
 	    UserService us = new UserService();
 	    User newUser = new User();
 	    
-	    newUser.setName("Jhon Joe");
-	    newUser.setEmail("jhon.joe@example.com");
+	    newUser.setName("Kkishore Sugumar");
+	    newUser.setEmail("kishore.sugumar@example.com");
 	    newUser.setPassword("Pass#123");
-	    newUser.setNumber(8796487650l);
-	    newUser.setLocation("USA");
+	    newUser.setNumber(8870825039l);
+	    newUser.setLocation("Chennai");
 	    
 	    assertDoesNotThrow(() -> {
 	        us.create(newUser);

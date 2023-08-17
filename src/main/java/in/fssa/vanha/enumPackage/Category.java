@@ -1,22 +1,22 @@
 package in.fssa.vanha.enumPackage;
 
 public enum Category {
-    CAR('c'),
-    BIKE('b'),
-    COMPUTER('s'),
-    MOBILE('m');
+    CAR("c"),
+    BIKE("b"),
+    COMPUTER("s"),
+    MOBILE("m");
 
-    private final char value;
+    private final String value;
 
-    Category(char c) {
-        this.value = c;
+    Category(String value) {
+        this.value = value;
     }
 
-    public char getValue() {
+    public String getValue() {
         return value;
     }
 
-    public static char getCate(String input) {
+    public static String getCate(String input) {
         String lowerCaseInput = input.toLowerCase();
         switch (lowerCaseInput) {
             case "car":
@@ -32,7 +32,7 @@ public enum Category {
         }
     }
     
-    public static String getCategoryString(char input) {
+    public static String getCategoryString(String input) {
         for (Category category : Category.values()) {
             if (category.getValue() == input) {
                 return category.name().toLowerCase();
