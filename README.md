@@ -1,4 +1,3 @@
-
 # VANHA  application Checklist
 
 ## Database Design
@@ -225,7 +224,7 @@ C -- Valid --> D[Value Passed to productDAO]
 D --> E[Store Value in Database] 
 C -- Invalid --> F[Throw Validation Error Response]
 ```
-### Feature: Find All Products
+### Feature: Find All Products using User Id
 #### Pre-requisites:  
 - [ ] Product table
 - [ ] Product entity
@@ -236,7 +235,6 @@ C -- Invalid --> F[Throw Validation Error Response]
 #### Validations: 
 * Form Validation 
       * User ID ( null, empty ) 
-      * 
 #### Message:  
   * User ID can't null or empty
 
@@ -317,6 +315,28 @@ B--Invalid-->I(Throw Validation Exception)
 C -- Valid --> D(Value Passed to ProductDAO to Update status inActive)  
 D --> E(Update status in Database)  
 C -- Invalid --> F(Throw Validation Error Response)  
+```
+### Feature: Find All Products using Category
+#### Pre-requisites:  
+- [ ] Product table
+- [ ] Product entity
+- [ ] Product model
+- [ ] Product Dao 
+- [ ] Product service
+
+#### Validations: 
+* Form Validation 
+      * category ( null, empty, pattern) 
+#### Message:  
+  * Category can't null or empty
+  * Input category does not match any of the four options.
+
+
+ #### Flow:  
+```mermaid  
+graph TD;  
+A(ProductService) --> B(ProductDAO to reterive data)  
+B --> C(Get all Products from Database)  
 ```
 ## Module: Bidding
 ### Feature: Create new bid
