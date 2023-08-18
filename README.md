@@ -296,9 +296,7 @@ C -- Invalid --> F(Throw Validation Error Response)
 - [ ] Product service
 
 #### Validations:  
-- [ ] product validator 
-
- * Form Validation 
+* Form Validation 
      * product id ( null, empty, pattern ) 
 * Business Validation  
    * product does exists or not
