@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.service.ProductService;
+import in.fssa.vanha.exception.*;
 
 public class TestDeleteProduct {
 
@@ -24,7 +25,7 @@ public class TestDeleteProduct {
 	    ProductService productService = new ProductService();
 	    String nonExistentProductID = "P99999"; // Use a product ID that doesn't exist in the database
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        productService.delete(nonExistentProductID);
 	    });
 	}
@@ -34,7 +35,7 @@ public class TestDeleteProduct {
 	    ProductService productService = new ProductService();
 	    String invalidProductID = ""; // Empty product ID
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        productService.delete(invalidProductID);
 	    });
 	}

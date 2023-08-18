@@ -3,6 +3,9 @@ package in.fssa.vanha.service;
 import java.util.Set;
 
 import in.fssa.vanha.dao.ProductDAO;
+import in.fssa.vanha.exception.PersistenceException;
+import in.fssa.vanha.exception.ServiceException;
+import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.Product;
 import in.fssa.vanha.validator.AssetValidator;
@@ -12,34 +15,80 @@ public class ProductService {
 	
 	ProductDAO productDao = new ProductDAO();
 
-	public void create(Product newProduct, Assets newAsset) throws Exception {
+	/**
+	 * 
+	 * @param newProduct
+	 * @param newAsset
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 * @throws ValidationException
+	 */
+	public void create(Product newProduct, Assets newAsset) throws ServiceException, PersistenceException, ValidationException {
 		ProductValidator.createValidate(newProduct);
 		AssetValidator.createValidate(newAsset);
 		productDao.create(newProduct, newAsset);
 	}
 
-	public Set<Product> findAllProductsBySellerId(String sellerId) throws Exception {
+	/**
+	 * 
+	 * @param sellerId
+	 * @return Set<Product>
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 * @throws ValidationException
+	 */
+	public Set<Product> findAllProductsBySellerId(String sellerId) throws ServiceException, PersistenceException, ValidationException {
 		ProductValidator.findUserValidate(sellerId);
 		Set<Product> productList = productDao.findAllProductsBySellerId(sellerId);
 	    return productList;
 	}
 
-	public void update(Product updateProduct) throws Exception {
+	/**
+	 * 
+	 * @param updateProduct
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 * @throws ValidationException
+	 */
+	public void update(Product updateProduct) throws ServiceException, PersistenceException, ValidationException {
 		ProductValidator.updateValidate(updateProduct);
 		productDao.update(updateProduct);
 	}
 
-	public void delete(String productId) throws Exception {
+	/**
+	 * 
+	 * @param productId
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 * @throws ValidationException
+	 */
+	public void delete(String productId) throws ServiceException, PersistenceException, ValidationException {
 		ProductValidator.deleteValidate(productId);
 		productDao.delete(productId);
 	}
 	
-	public static Product findByProductId(String productId) throws Exception {
+	/**
+	 * 
+	 * @param productId
+	 * @return Product
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 * @throws ValidationException
+	 */
+	public static Product findByProductId(String productId) throws ServiceException, PersistenceException, ValidationException {
 		ProductValidator.findProductValidate(productId);
 		return ProductDAO.findProductByProductId(productId);
 	}
 	
-	public Set<Product> findAllProductsByCategory(String category) throws Exception {
+	/**
+	 * 
+	 * @param category
+	 * @return Set<Product>
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 * @throws ValidationException
+	 */
+	public Set<Product> findAllProductsByCategory(String category) throws ServiceException, PersistenceException, ValidationException{
 		ProductValidator.findAllProductValidate(category);
 		Set<Product> productList = productDao.findAllProductsByCategory(category);
 	    return productList;

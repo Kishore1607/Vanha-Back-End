@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.model.*;
+import in.fssa.vanha.exception.*;
 
 public class TestCreateBid {
 	@Test
@@ -15,9 +16,9 @@ public class TestCreateBid {
 	    BidHistory newBid = new BidHistory();
 
 	    // Assume valid data here
-	    newBid.setBidAmount(160);
-	    newBid.setBuyerUnique("nat.dyr@example.com");
-	    newBid.setProductUnique("P12345");
+	    newBid.setBidAmount(30000);
+	    newBid.setBuyerUnique("pravenn.kumar@example.com");
+	    newBid.setProductUnique("P67890");
 	    assertDoesNotThrow(() -> {
 	        bidHistoryService.create(newBid);
 	    });
@@ -31,7 +32,7 @@ public class TestCreateBid {
 	    // Assume invalid bid amount
 	    newBid.setBidAmount(-50);
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        bidHistoryService.create(newBid);
 	    });
 	}
@@ -45,7 +46,7 @@ public class TestCreateBid {
 	    newBid.setBidAmount(90);
 	    newBid.setProductUnique("P12345"); // Assume this product ID exists in the database
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        bidHistoryService.create(newBid);
 	    });
 	}
@@ -58,7 +59,7 @@ public class TestCreateBid {
 	    // Assume invalid buyer ID
 	    newBid.setBuyerId(-1);
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        bidHistoryService.create(newBid);
 	    });
 	}
@@ -71,7 +72,7 @@ public class TestCreateBid {
 	    // Assume nonexistent buyer email
 	    newBid.setBuyerUnique("nonexistent@example.com");
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        bidHistoryService.create(newBid);
 	    });
 	}

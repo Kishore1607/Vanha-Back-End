@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.model.*;
+import in.fssa.vanha.exception.*;
 
 public class TestFindAllBidHisrory {
 	@Test
@@ -30,7 +31,7 @@ public class TestFindAllBidHisrory {
 	    BidHistoryService bidService = new BidHistoryService();
 	    String nonExistentProductId = "P67890"; // Use a product ID that doesn't exist in the database
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        bidService.findAllBidssByProductId(nonExistentProductId);
 	    });
 	}
@@ -49,7 +50,7 @@ public class TestFindAllBidHisrory {
 	public void testFindValidateWithInvalidProductId() {
 	    String invalidProductId = ""; // Invalid product ID
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	    	BidHistoryService bidHistoryService = new BidHistoryService();
 			bidHistoryService.findAllBidssByProductId(invalidProductId);
 	    });

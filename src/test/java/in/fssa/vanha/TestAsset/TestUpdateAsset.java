@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.service.AssetsService;
+import in.fssa.vanha.exception.*;
 
 public class TestUpdateAsset {
 
@@ -33,7 +34,7 @@ public class TestUpdateAsset {
         updateAsset.setValue("https://example.com/new_asset.jpg");
         updateAsset.setProductId("P123");
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(ValidationException.class, () -> {
             assetsService.updateAssets(updateAsset);
         });
     }
@@ -47,7 +48,7 @@ public class TestUpdateAsset {
         updateAsset.setValue("invalid_new_value"); // Invalid URL pattern
         updateAsset.setProductId("P123");
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(ValidationException.class, () -> {
             assetsService.updateAssets(updateAsset);
         });
     }
@@ -61,7 +62,7 @@ public class TestUpdateAsset {
         updateAsset.setValue("https://example.com/new_asset.jpg");
         updateAsset.setProductId("NonExistingProductId");
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(ServiceException.class, () -> {
             assetsService.updateAssets(updateAsset);
         });
     }
@@ -75,7 +76,7 @@ public class TestUpdateAsset {
         updateAsset.setValue("https://www.new-example.com"); // Same as old value
         updateAsset.setProductId("P123");
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(ValidationException.class, () -> {
             assetsService.updateAssets(updateAsset);
         });
     }

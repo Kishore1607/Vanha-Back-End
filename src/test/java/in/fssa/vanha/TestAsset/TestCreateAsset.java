@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.service.AssetsService;
+import in.fssa.vanha.exception.ValidationException;
 
 public class TestCreateAsset {
 	@Test
@@ -14,7 +15,7 @@ public class TestCreateAsset {
 		Assets newAsset = new Assets();
 		newAsset.setValue(null);
 
-		assertThrows(Exception.class, () -> {
+		assertThrows(ValidationException.class, () -> {
 			AssetsService assetsService = new AssetsService();
 			assetsService.create(newAsset);
 		});
@@ -25,7 +26,7 @@ public class TestCreateAsset {
 		Assets newAsset = new Assets();
 		newAsset.setValue("");
 
-		assertThrows(Exception.class, () -> {
+		assertThrows(ValidationException.class, () -> {
 			AssetsService assetsService = new AssetsService();
 			assetsService.create(newAsset);
 		});
@@ -47,7 +48,7 @@ public class TestCreateAsset {
 		Assets newAsset = new Assets();
 		newAsset.setValue("invalid-url");
 
-		assertThrows(Exception.class, () -> {
+		assertThrows(ValidationException.class, () -> {
 			AssetsService assetsService = new AssetsService();
 			assetsService.create(newAsset);
 		});

@@ -8,13 +8,22 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
+import in.fssa.vanha.exception.PersistenceException;
+import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.util.ConnectionUtil;
 
 public class AssetsDAO {
 
-	public int create(Assets newAsset) {
+	/**
+	 * 
+	 * @param newAsset
+	 * @return int
+	 * @throws PersistenceException
+	 * @throws ServiceException
+	 */
+	public int create(Assets newAsset) throws PersistenceException, ServiceException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		int generatedKey = -1; // Initialize to a default value
@@ -34,10 +43,10 @@ public class AssetsDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new PersistenceException(e);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new ServiceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
@@ -45,7 +54,14 @@ public class AssetsDAO {
 		return generatedKey;
 	}
 
-	public Set<Assets> findAllAssetsByProductId(String productId) {
+	/**
+	 * 
+	 * @param productId
+	 * @return Set<Assets>
+	 * @throws PersistenceException
+	 * @throws ServiceException
+	 */
+	public Set<Assets> findAllAssetsByProductId(String productId) throws PersistenceException, ServiceException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -72,18 +88,24 @@ public class AssetsDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new PersistenceException(e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new ServiceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}
 		return assetsArray;
 	}
 
-	public void updateAssetsByAssetId(Assets updateAsset) {
+	/**
+	 * 
+	 * @param updateAsset
+	 * @throws PersistenceException
+	 * @throws ServiceException
+	 */
+	public void updateAssetsByAssetId(Assets updateAsset) throws PersistenceException, ServiceException {
 		Connection conn = null;
 		PreparedStatement pre1 = null;
 		PreparedStatement pre2 = null;
@@ -108,7 +130,7 @@ public class AssetsDAO {
 				if (generatedKeys.next()) {
 					generatedKey = generatedKeys.getInt(1);
 				} else {
-					throw new RuntimeException("Failed to get generated key.");
+					throw new ServiceException("Failed to get generated key.");
 				}
 			}
 
@@ -138,13 +160,15 @@ public class AssetsDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new PersistenceException(e);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new ServiceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre1, pre2, pre3, pre4, pre5);
 		}
 	}
+	
+	
 
 }

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"in.fssa.vanha.dao"},{"l":"in.fssa.vanha.enumPackage"},{"l":"in.fssa.vanha.exception"},{"l":"in.fssa.vanha.model"},{"l":"in.fssa.vanha.service"},{"l":"in.fssa.vanha.util"},{"l":"in.fssa.vanha.validator"}];updateSearchResults();

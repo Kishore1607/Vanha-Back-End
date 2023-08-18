@@ -4,12 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import in.fssa.vanha.exception.PersistenceException;
+import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.model.ProductAsset;
 import in.fssa.vanha.util.ConnectionUtil;
 
 public class ProductAssetDAO {
 
-	public void create(ProductAsset newProductAsset) {
+	/**
+	 * 
+	 * @param newProductAsset
+	 * @throws PersistenceException
+	 * @throws ServiceException
+	 */
+	public void create(ProductAsset newProductAsset) throws PersistenceException, ServiceException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 
@@ -25,10 +33,10 @@ public class ProductAssetDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new PersistenceException(e);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new ServiceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}

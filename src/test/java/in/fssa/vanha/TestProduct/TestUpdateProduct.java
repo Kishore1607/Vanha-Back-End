@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.model.Product;
+import in.fssa.vanha.exception.*;
 
 public class TestUpdateProduct {
 	@Test
@@ -42,7 +43,7 @@ public class TestUpdateProduct {
 	    existingProduct.setPrice(150000000); // Invalid price
 	    existingProduct.setMinPrice(100);
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        productService.update(existingProduct);
 	    });
 	}
@@ -61,7 +62,7 @@ public class TestUpdateProduct {
 	    existingProduct.setPrice(100);
 	    existingProduct.setMinPrice(50);
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        productService.update(existingProduct);
 	    });
 	}
@@ -80,7 +81,7 @@ public class TestUpdateProduct {
 	    nonExistentProduct.setPrice(50);
 	    nonExistentProduct.setMinPrice(30);
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        productService.update(nonExistentProduct);
 	    });
 	}

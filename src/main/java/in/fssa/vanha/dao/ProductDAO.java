@@ -13,6 +13,9 @@ import java.util.Set;
 
 import in.fssa.vanha.enumPackage.Category;
 import in.fssa.vanha.enumPackage.UsedDuration;
+import in.fssa.vanha.exception.PersistenceException;
+import in.fssa.vanha.exception.ServiceException;
+import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.Product;
 import in.fssa.vanha.model.ProductAsset;
@@ -28,7 +31,15 @@ public class ProductDAO {
     DateTimeFormatter targetFormatter = DateTimeFormatter.ofPattern(newDateFormat);
 
 
-    public void create(Product newProduct, Assets newAsset) throws Exception {
+    /**
+     * 
+     * @param newProduct
+     * @param newAsset
+     * @throws PersistenceException
+     * @throws ServiceException
+     * @throws ValidationException
+     */
+    public void create(Product newProduct, Assets newAsset) throws PersistenceException, ServiceException, ValidationException {
         Connection conn = null;
         PreparedStatement pre = null;
         ResultSet generatedKeys = null;
@@ -69,7 +80,7 @@ public class ProductDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new ServiceException(e);
         } finally {
             ConnectionUtil.close(conn, pre, generatedKeys);
         }
@@ -90,7 +101,13 @@ public class ProductDAO {
     }
 
 
-	public static Product findProductByProductId(String productId) {
+    /**
+     * 
+     * @param productId
+     * @return Product
+     * @throws PersistenceException
+     */
+	public static Product findProductByProductId(String productId) throws PersistenceException {
 
 	    Product value = null;
 	    Connection conn = null;
@@ -121,14 +138,21 @@ public class ProductDAO {
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	        System.out.println(e.getMessage());
-	        throw new RuntimeException("Error while running SQL query.");
+	        throw new PersistenceException(e);
 	    } finally {
 	        ConnectionUtil.close(conn, pre, rs);
 	    }
 	    return value;
 	}
 
-	public Set<Product> findAllProductsBySellerId(String sellerId) {
+	/**
+	 * 
+	 * @param sellerId
+	 * @return Set<Product>
+	 * @throws PersistenceException
+	 * @throws ServiceException
+	 */
+	public Set<Product> findAllProductsBySellerId(String sellerId) throws PersistenceException, ServiceException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -165,18 +189,24 @@ public class ProductDAO {
 		}catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new PersistenceException(e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new ServiceException(e);
 		}finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}
 		return productArray;
 	}
 
-	public void update(Product updateProduct) {
+	/**
+	 * 
+	 * @param updateProduct
+	 * @throws PersistenceException
+	 * @throws ServiceException
+	 */
+	public void update(Product updateProduct) throws PersistenceException, ServiceException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -203,14 +233,19 @@ public class ProductDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new PersistenceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
 	}
 	
 
-	public void delete(String productId) {
+	/**
+	 * 
+	 * @param productId
+	 * @throws PersistenceException
+	 */
+	public void delete(String productId) throws PersistenceException {
 	    Connection conn = null;
 	    PreparedStatement pre = null;
 
@@ -222,7 +257,7 @@ public class ProductDAO {
 	        pre.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        throw new RuntimeException(e);
+	        throw new PersistenceException(e);
 	    } finally {
 	        ConnectionUtil.close(conn, pre);
 	    }
@@ -240,13 +275,20 @@ public class ProductDAO {
 	        pre1.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        throw new RuntimeException(e);
+	        throw new PersistenceException(e);
 	    } finally {
 	        ConnectionUtil.close(conn1, pre1);
 	    }
 	}
 
-	public Set<Product> findAllProductsByCategory(String category) {
+	/**
+	 * 
+	 * @param category
+	 * @return Set<Product>
+	 * @throws PersistenceException
+	 * @throws ServiceException
+	 */
+	public Set<Product> findAllProductsByCategory(String category) throws PersistenceException, ServiceException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -279,11 +321,11 @@ public class ProductDAO {
 		}catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new PersistenceException(e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new ServiceException(e);
 		}finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}

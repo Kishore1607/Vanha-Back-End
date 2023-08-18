@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.model.User;
 import in.fssa.vanha.service.UserService;
+import in.fssa.vanha.exception.*;
 
 public class TestUpdateUser {
 
@@ -35,7 +36,7 @@ public class TestUpdateUser {
 	    nonExistentUser.setNumber(9876543210L);
 	    nonExistentUser.setLocation("Paris, France");
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        userService.update(nonExistentUser);
 	    });
 	}
@@ -49,7 +50,7 @@ public class TestUpdateUser {
 	    user.setNumber(9876543210L);
 	    user.setLocation("London, UK");
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        userService.update(user);
 	    });
 	}
@@ -62,7 +63,7 @@ public class TestUpdateUser {
 	    user.setEmail("invalid.number@example.com");
 	    user.setNumber(55555555L); // Invalid number
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        userService.update(user);
 	    });
 	}
@@ -76,7 +77,7 @@ public class TestUpdateUser {
 	    user.setNumber(9876543210L);
 	    user.setLocation("Berlin, Germany");
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        userService.update(user);
 	    });
 	}
@@ -90,7 +91,7 @@ public class TestUpdateUser {
 	    user.setNumber(9876543210L);
 	    user.setLocation("Invalid Location123"); // Invalid location pattern
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        userService.update(user);
 	    });
 	}

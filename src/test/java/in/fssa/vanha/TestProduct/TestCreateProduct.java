@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.model.*;
+import in.fssa.vanha.exception.*;
 
 public class TestCreateProduct {
 
@@ -15,19 +16,19 @@ public class TestCreateProduct {
 		ProductService productService = new ProductService();
 		Product newProduct = new Product();
 
-		newProduct.setProductId("P12345");
-		newProduct.setCategory("computer");
-		newProduct.setUsedPeriod(6);
-		newProduct.setUsedDuration("month");
-		newProduct.setDescription("High-quality laptop");
-		newProduct.setName("Asus");
-		newProduct.setPrice(150);
-		newProduct.setMinPrice(100);
-		newProduct.setSellerUnique("jhon.joe@example.com");
+		newProduct.setProductId("P67890");
+		newProduct.setCategory("bike");
+		newProduct.setUsedPeriod(2);
+		newProduct.setUsedDuration("year");
+		newProduct.setDescription("GOod-quality bike");
+		newProduct.setName("Ns 200");
+		newProduct.setPrice(3500);
+		newProduct.setMinPrice(2000);
+		newProduct.setSellerUnique("pravenn.kumar@example.com");
 
 		Assets newAssets = new Assets();
 
-		newAssets.setValue("https://www.example.com");
+		newAssets.setValue("https://www.bike.com");
 
 		assertDoesNotThrow(() -> {
 			productService.create(newProduct, newAssets);
@@ -54,7 +55,7 @@ public class TestCreateProduct {
 
 		newAssets.setValue("https://www.example.com");
 
-		assertThrows(RuntimeException.class, () -> {
+		assertThrows(ValidationException.class, () -> {
 			productService.create(newProduct, newAssets);
 		});
 	}
@@ -79,7 +80,7 @@ public class TestCreateProduct {
 
 		newAssets.setValue("https://www.example.com");
 
-		assertThrows(RuntimeException.class, () -> {
+		assertThrows(ValidationException.class, () -> {
 			productService.create(newProduct, newAssets);
 		});
 	}
@@ -104,7 +105,7 @@ public class TestCreateProduct {
 
 		newAssets.setValue("https://www.example.com");
 
-		assertThrows(RuntimeException.class, () -> {
+		assertThrows(ServiceException.class, () -> {
 			productService.create(newProduct, newAssets);
 		});
 	}
@@ -129,7 +130,7 @@ public class TestCreateProduct {
 
 		newAssets.setValue("https://www.example.com");
 
-		assertThrows(RuntimeException.class, () -> {
+		assertThrows(ServiceException.class, () -> {
 			productService.create(newProduct, newAssets);
 		});
 	}
@@ -154,7 +155,7 @@ public class TestCreateProduct {
 
 		newAssets.setValue("https://www.example.com");
 
-		assertThrows(RuntimeException.class, () -> {
+		assertThrows(ValidationException.class, () -> {
 			productService.create(newProduct, newAssets);
 		});
 	}
@@ -169,7 +170,7 @@ public class TestCreateProduct {
 
 		newAssets.setValue(null);
 
-		assertThrows(RuntimeException.class, () -> {
+		assertThrows(ValidationException.class, () -> {
 			productService.create(newProduct, newAssets);
 		});
 	}

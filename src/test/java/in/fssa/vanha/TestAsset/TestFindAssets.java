@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.service.AssetsService;
+import in.fssa.vanha.exception.*;
 
 public class TestFindAssets {
 
@@ -32,7 +33,7 @@ public class TestFindAssets {
 	    
 	    String nonExistentProductId = "P99999"; // Use a product ID that doesn't exist in the database
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	    	AssetsService.findAllAssetsByProductId(nonExistentProductId);
 	    });
 	}
@@ -50,7 +51,7 @@ public class TestFindAssets {
 	public void testFindAssetValidateWithNonExistentProductId() {
 	    String nonExistentProductId = "P99999"; // Use a product ID that doesn't exist in the database
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	    	AssetsService.findAllAssetsByProductId(nonExistentProductId);
 	    });
 	}
@@ -59,7 +60,7 @@ public class TestFindAssets {
 	public void testFindAssetValidateWithInvalidProductId() {
 	    String invalidProductId = ""; // Empty product ID
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	    	AssetsService.findAllAssetsByProductId(invalidProductId);
 	    });
 	}

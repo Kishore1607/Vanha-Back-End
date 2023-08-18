@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.model.User;
 import in.fssa.vanha.service.UserService;
+import in.fssa.vanha.exception.*;
 
 public class TestCreateUser {
 	
@@ -15,11 +16,11 @@ public class TestCreateUser {
 	    UserService us = new UserService();
 	    User newUser = new User();
 	    
-	    newUser.setName("Kkishore Sugumar");
-	    newUser.setEmail("kishore.sugumar@example.com");
-	    newUser.setPassword("Pass#123");
-	    newUser.setNumber(8870825039l);
-	    newUser.setLocation("Chennai");
+	    newUser.setName("Jhon Joe");
+	    newUser.setEmail("jhon.joe@example.com");
+	    newUser.setPassword("Pass#789");
+	    newUser.setNumber(9987645371l);
+	    newUser.setLocation("USA");
 	    
 	    assertDoesNotThrow(() -> {
 	        us.create(newUser);
@@ -37,7 +38,7 @@ public class TestCreateUser {
 	    newUser.setNumber(9835467892l);
 	    newUser.setLocation("");
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        us.create(newUser);
 	    });
 	}
@@ -53,7 +54,7 @@ public class TestCreateUser {
 	    newUser.setNumber(9835467892l);
 	    newUser.setLocation("New York, USA");
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        us.create(newUser);
 	    });
 	}
@@ -69,7 +70,7 @@ public class TestCreateUser {
 	    newUser.setNumber(9835467892l);
 	    newUser.setLocation("New York, USA");
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        us.create(newUser);
 	    });
 	}
@@ -85,7 +86,7 @@ public class TestCreateUser {
 	    newUser.setNumber(9835467892l);
 	    newUser.setLocation("New York, USA");
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        us.create(newUser);
 	    });
 	}
@@ -101,7 +102,7 @@ public class TestCreateUser {
 	    newUser.setNumber(9835467892l);
 	    newUser.setLocation("# Invalid lcation");
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        us.create(newUser);
 	    });
 	}
@@ -118,7 +119,7 @@ public class TestCreateUser {
 	    newUser.setLocation("New York, USA");
 
 	    // Assume the email "john.doe@example.com" already exists in the database
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        us.create(newUser);
 	    });
 	}
@@ -134,7 +135,7 @@ public class TestCreateUser {
 	    newUser.setNumber(1234567890l);
 	    newUser.setLocation("New York, USA");
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        us.create(newUser);
 	    });
 	}
@@ -144,7 +145,7 @@ public class TestCreateUser {
 	    UserService us = new UserService();
 	    User newUser = null;
 
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        us.create(newUser);
 	    });
 	}

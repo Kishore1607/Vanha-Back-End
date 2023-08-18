@@ -6,6 +6,9 @@ import java.util.regex.Pattern;
 import in.fssa.vanha.model.User;
 import in.fssa.vanha.service.UserService;
 import in.fssa.vanha.dao.UserDAO;
+import in.fssa.vanha.exception.PersistenceException;
+import in.fssa.vanha.exception.ServiceException;
+import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.util.StringUtil;
 
 public class UserValidator {
@@ -19,12 +22,19 @@ public class UserValidator {
 	static Pattern passwordPattern = Pattern.compile(passwordRegex);
 	static Pattern locationPattern = Pattern.compile(locationRegex);
 
-	public static void createValidate(User newUser) throws Exception {
+	/**
+	 * 
+	 * @param newUser
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 */
+	public static void createValidate(User newUser) throws ValidationException, ServiceException, PersistenceException {
 
 		// null or empty checking
 
 		if (newUser == null) {
-			throw new RuntimeException("Invalid user input");
+			throw new ValidationException("Invalid user input");
 		}
 
 		StringUtil.RegectIfInvalidString(newUser.getEmail(), "Email");
@@ -36,23 +46,23 @@ public class UserValidator {
 		StringUtil.RegectIfInvalidString(newUser.getLocation(), "Location");
 
 		if (newUser.getNumber() < 6000000000l || newUser.getNumber() > 9999999999l) {
-			throw new RuntimeException("Invalid number input");
+			throw new ValidationException("Invalid number input");
 		}
 
 		// Length checking
 
 		if (newUser.getEmail().length() > 200) {
-			throw new RuntimeException("Invalid email length");
+			throw new ValidationException("Invalid email length");
 		}
 		if (newUser.getPassword().length() > 50) {
-			throw new RuntimeException("Invalid password length");
+			throw new ValidationException("Invalid password length");
 		}
 		if (newUser.getName().length() > 50) {
-			throw new RuntimeException("Invalid name length");
+			throw new ValidationException("Invalid name length");
 
 		}
 		if (newUser.getLocation().length() > 100) {
-			throw new RuntimeException("Invalid location length");
+			throw new ValidationException("Invalid location length");
 
 		}
 		// pattern checking
@@ -63,33 +73,40 @@ public class UserValidator {
 		Matcher locationMatcher = locationPattern.matcher(newUser.getLocation());
 
 		if (!emailMatcher.matches()) {
-			throw new RuntimeException("Invalid email pattern");
+			throw new ValidationException("Invalid email pattern");
 		}
 
 		if (!nameMatcher.matches()) {
-			throw new RuntimeException("Invalid name pattern");
+			throw new ValidationException("Invalid name pattern");
 		}
 
 		if (!passwordMatcher.matches()) {
-			throw new RuntimeException("Invalid password pattern");
+			throw new ValidationException("Invalid password pattern");
 		}
 
 		if (!locationMatcher.matches()) {
-			throw new RuntimeException("Invalid location pattern");
+			throw new ValidationException("Invalid location pattern");
 		}
 
 		if (UserService.findUserByEmail(newUser.getEmail()) != null) {
-			throw new RuntimeException("User already exists");
+			throw new ValidationException("User already exists");
 		}
 
 	}
 
-	public static void updateValidate(User updateUser) throws Exception {
+	/**
+	 * 
+	 * @param updateUser
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 */
+	public static void updateValidate(User updateUser) throws ValidationException, ServiceException, PersistenceException {
 
 		// null or empty checking
 
 		if (updateUser == null) {
-			throw new RuntimeException("Invalid user input");
+			throw new ValidationException("Invalid user input");
 		}
 
 		StringUtil.RegectIfInvalidString(updateUser.getEmail(), "Email");
@@ -99,17 +116,17 @@ public class UserValidator {
 		StringUtil.RegectIfInvalidString(updateUser.getLocation(), "Location");
 
 		if (updateUser.getNumber() < 6000000000l || updateUser.getNumber() > 9999999999l) {
-			throw new RuntimeException("Invalid number input");
+			throw new ValidationException("Invalid number input");
 		}
 
 		// Length checking
 
 		if (updateUser.getName().length() > 50) {
-			throw new RuntimeException("Invalid name length");
+			throw new ValidationException("Invalid name length");
 
 		}
 		if (updateUser.getLocation().length() > 100) {
-			throw new RuntimeException("Invalid location length");
+			throw new ValidationException("Invalid location length");
 		}
 
 		// pattern checking
@@ -119,15 +136,15 @@ public class UserValidator {
 		Matcher locationMatcher = locationPattern.matcher(updateUser.getLocation());
 
 		if (!emailMatcher.matches()) {
-			throw new RuntimeException("Invalid email pattern");
+			throw new ValidationException("Invalid email pattern");
 		}
 
 		if (!nameMatcher.matches()) {
-			throw new RuntimeException("Invalid name pattern");
+			throw new ValidationException("Invalid name pattern");
 		}
 
 		if (!locationMatcher.matches()) {
-			throw new RuntimeException("Invalid location pattern");
+			throw new ValidationException("Invalid location pattern");
 		}
 
 		// exists checking
@@ -137,12 +154,17 @@ public class UserValidator {
 		User user = findUser.findUserByEmail(updateUser.getEmail());
 
 		if (user == null) {
-			throw new RuntimeException("User doesn't exists");
+			throw new ValidationException("User doesn't exists");
 		}
 
 	}
 
-	public static void findUserValidate(String email) throws Exception {
+	/**
+	 * 
+	 * @param email
+	 * @throws ValidationException
+	 */
+	public static void findUserValidate(String email) throws ValidationException {
 		if (email == null) {
 			throw new RuntimeException("Email can't be null");
 		}

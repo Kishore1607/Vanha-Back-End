@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.model.Product;
+import in.fssa.vanha.exception.*;
 
 public class TestFindBySellerId {
 	@Test
@@ -30,7 +31,7 @@ public class TestFindBySellerId {
 	    ProductService productService = new ProductService();
 	    String nonExistentSellerId = "nonexistent@example.com"; // Use a seller ID that doesn't exist in the database
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        productService.findAllProductsBySellerId(nonExistentSellerId);
 	    });
 	}
@@ -50,7 +51,7 @@ public class TestFindBySellerId {
 	public void testFindUserValidateWithNonExistentSellerId() {
 	    String nonExistentSellerId = "nonexistent@example.com"; // Use a seller ID that doesn't exist in the database
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ServiceException.class, () -> {
 	        productService.findAllProductsBySellerId(nonExistentSellerId);
 	    });
 	}
@@ -59,7 +60,7 @@ public class TestFindBySellerId {
 	public void testFindUserValidateWithInvalidSellerId() {
 	    String invalidSellerId = ""; // Empty seller ID
 	    
-	    assertThrows(RuntimeException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	        productService.findAllProductsBySellerId(invalidSellerId);
 	    });
 	}

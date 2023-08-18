@@ -1,10 +1,10 @@
 -- Create the "users" table
 CREATE TABLE users (
    id INT AUTO_INCREMENT PRIMARY KEY,
-   username VARCHAR(100) NOT NULL,
-   email VARCHAR(100) NOT NULL UNIQUE,
+   username VARCHAR(50) NOT NULL,
+   email VARCHAR(200) NOT NULL UNIQUE,
    number BIGINT NOT NULL,
-   password VARCHAR(100) NOT NULL,
+   password VARCHAR(50) NOT NULL,
    location VARCHAR(100) NOT NULL,
    status BOOLEAN DEFAULT 1,
    created_at DATETIME,
@@ -14,7 +14,7 @@ CREATE TABLE users (
 -- Create the "products" table with foreign key to "users"
 CREATE TABLE products (
    id INT AUTO_INCREMENT PRIMARY KEY,
-   product_id VARCHAR(100) UNIQUE NOT NULL,
+   product_id VARCHAR(50) UNIQUE NOT NULL,
    category VARCHAR(2) NOT NULL,
    used_period INT,
    used_duration VARCHAR(2) NOT NULL,

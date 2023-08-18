@@ -10,6 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
+import in.fssa.vanha.exception.PersistenceException;
+import in.fssa.vanha.exception.ServiceException;
+import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.BidHistory;
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.util.ConnectionUtil;
@@ -20,7 +23,13 @@ public class BidHistoryDAO {
     SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
     DateTimeFormatter targetFormatter = DateTimeFormatter.ofPattern(newDateFormat);
 
-	public void create(BidHistory newBid) {
+    /**
+     * 
+     * @param newBid
+     * @throws PersistenceException
+     * @throws ServiceException
+     */
+	public void create(BidHistory newBid) throws PersistenceException, ServiceException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -48,16 +57,24 @@ public class BidHistoryDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new PersistenceException(e);
 		}  catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new ServiceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
 	}
-
-	public Set<BidHistory> findAllBidsByProductId(String productId) throws Exception {
+	
+	/**
+	 * 
+	 * @param productId
+	 * @return Set<BidHistory>
+	 * @throws PersistenceException
+	 * @throws ServiceException
+	 * @throws ValidationException
+	 */
+	public Set<BidHistory> findAllBidsByProductId(String productId) throws PersistenceException, ServiceException, ValidationException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -85,11 +102,11 @@ public class BidHistoryDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new PersistenceException(e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new ServiceException(e);
 		}finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}

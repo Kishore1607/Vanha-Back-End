@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.model.User;
 import in.fssa.vanha.util.ConnectionUtil;
 
@@ -17,7 +18,12 @@ public class UserDAO {
      SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
      DateTimeFormatter targetFormatter = DateTimeFormatter.ofPattern(newDateFormat);
 
-	public void create(User newClient) {
+     /**
+      * 
+      * @param newClient
+      * @throws PersistenceException
+      */
+	public void create(User newClient) throws PersistenceException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -44,13 +50,18 @@ public class UserDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new PersistenceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
 	}
 
-	public void update(User updateUser) {
+	/**
+	 * 
+	 * @param updateUser
+	 * @throws PersistenceException
+	 */
+	public void update(User updateUser) throws PersistenceException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -75,13 +86,19 @@ public class UserDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new PersistenceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
 	}
 
-	public User findUserByEmail(String email) {
+	/**
+	 * 
+	 * @param email
+	 * @return User
+	 * @throws PersistenceException
+	 */
+	public User findUserByEmail(String email) throws PersistenceException {
 		// TODO Auto-generated method stub
 		User value = null;
 		Connection conn = null;
@@ -111,7 +128,7 @@ public class UserDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException();
+			throw new PersistenceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}
