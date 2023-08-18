@@ -1,73 +1,10 @@
-
 # VANHA  application Checklist
 
 ## Database Design
 
 - [ ] ER diagram of the database: ![ER diagram of Data Base ](https://iili.io/HDoubSe.png)
-- [ ] Script for creating table : 
+- [ ] Script for creating table : [script](/src/main/resources/db/migration/V1__create_users.sql)
 
-      * Create the "users" table
-
-         CREATE TABLE users (
-         id INT AUTO_INCREMENT PRIMARY KEY,
-         username VARCHAR(100) NOT NULL,
-         email VARCHAR(100) NOT NULL UNIQUE,
-         number BIGINT NOT NULL,
-         password VARCHAR(100) NOT NULL,
-         location VARCHAR(100) NOT NULL,
-         status BOOLEAN DEFAULT 1,
-         created_at DATETIME,
-         modified_at DATETIME
-         );
-         
-      * Create the "asserts" table
-
-         CREATE TABLE assets(
-         id INT AUTO_INCREMENT PRIMARY KEY,
-         url VARCHAR(255) NOT NULL
-         ); 
-         
-      * Create the "products" table with foreign key to "users
-
-         CREATE TABLE products (
-         id INT AUTO_INCREMENT PRIMARY KEY,
-         product_id VARCHAR(100) UNIQUE NOT NULL,
-         category VARCHAR(2) NOT NULL,
-         used_period INT,
-         used_duration VARCHAR(2) NOT NULL,
-         description TEXT,
-         name VARCHAR(255) NOT NULL,
-         price INT(10),
-         min_price INT(10),
-         seller_id INT,
-         status CHAR,
-         created_at DATETIME,
-         modified_at DATETIME,
-         FOREIGN KEY (seller_id) REFERENCES users(id)
-         );
-         
-      * Create the "bid_history" table with foreign keys to "users" and "products"
-
-          CREATE TABLE bid_history (
-          id INT AUTO_INCREMENT PRIMARY KEY,
-          bid_amount INT,
-          bid_date DATETIME NOT NULL,
-          buyer_id INT,
-          product_id INT,
-          status BOOLEAN DEFAULT 1,
-          FOREIGN KEY (product_id) REFERENCES products(id)
-          );
-          
-      * Create the "product_asserts" table with foreign keys to "products" and "asserts"
-
-          CREATE TABLE product_assets(
-          product_id INT,
-          asset_id INT,
-          status BOOLEAN DEFAULT 1,
-          FOREIGN KEY (product_id) REFERENCES products(id),
-          FOREIGN KEY (asset_id) REFERENCES assets(id)
-          );
-  
 
 ## Project Setup
 
@@ -225,7 +162,7 @@ C -- Valid --> D[Value Passed to productDAO]
 D --> E[Store Value in Database] 
 C -- Invalid --> F[Throw Validation Error Response]
 ```
-### Feature: Find All Products
+### Feature: Find All Products using User Id
 #### Pre-requisites:  
 - [ ] Product table
 - [ ] Product entity
@@ -236,7 +173,6 @@ C -- Invalid --> F[Throw Validation Error Response]
 #### Validations: 
 * Form Validation 
       * User ID ( null, empty ) 
-      * 
 #### Message:  
   * User ID can't null or empty
 
@@ -298,9 +234,7 @@ C -- Invalid --> F(Throw Validation Error Response)
 - [ ] Product service
 
 #### Validations:  
-- [ ] product validator 
-
- * Form Validation 
+* Form Validation 
      * product id ( null, empty, pattern ) 
 * Business Validation  
    * product does exists or not
@@ -317,6 +251,28 @@ B--Invalid-->I(Throw Validation Exception)
 C -- Valid --> D(Value Passed to ProductDAO to Update status inActive)  
 D --> E(Update status in Database)  
 C -- Invalid --> F(Throw Validation Error Response)  
+```
+### Feature: Find All Products using Category
+#### Pre-requisites:  
+- [ ] Product table
+- [ ] Product entity
+- [ ] Product model
+- [ ] Product Dao 
+- [ ] Product service
+
+#### Validations: 
+* Form Validation 
+      * category ( null, empty, pattern) 
+#### Message:  
+  * Category can't null or empty
+  * Input category does not match any of the four options.
+
+
+ #### Flow:  
+```mermaid  
+graph TD;  
+A(ProductService) --> B(ProductDAO to reterive data)  
+B --> C(Get all Products from Database)  
 ```
 ## Module: Bidding
 ### Feature: Create new bid
