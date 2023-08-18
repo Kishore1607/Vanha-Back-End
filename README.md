@@ -4,6 +4,8 @@
 
 - [ ] ER diagram of the database: ![ER diagram of Data Base ](https://iili.io/HDoubSe.png)
 - [ ] Script for creating table : [script](/src/main/resources/db/migration/V1__create_users.sql)
+
+
 ## Project Setup
 
 - [ ] Create a new Java project
