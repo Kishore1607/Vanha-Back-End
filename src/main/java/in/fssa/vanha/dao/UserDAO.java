@@ -23,7 +23,7 @@ public class UserDAO {
       * @param newClient
       * @throws PersistenceException
       */
-	public void create(User newClient) throws PersistenceException {
+	public void create(User newClient) throws PersistenceException{
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -61,14 +61,12 @@ public class UserDAO {
 	 * @param updateUser
 	 * @throws PersistenceException
 	 */
-	public void update(User updateUser) throws PersistenceException {
+	public void update(User updateUser) throws PersistenceException{
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
 		
-		
-
-		try {
+			try {
 			String query = "UPDATE users SET username=?, number=? , location=?, modified_at=? WHERE email=?";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
@@ -87,7 +85,7 @@ public class UserDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e);
-		} finally {
+		}finally {
 			ConnectionUtil.close(conn, pre);
 		}
 	}
@@ -98,7 +96,7 @@ public class UserDAO {
 	 * @return User
 	 * @throws PersistenceException
 	 */
-	public User findUserByEmail(String email) throws PersistenceException {
+	public User findUserByEmail(String email) throws PersistenceException{
 		// TODO Auto-generated method stub
 		User value = null;
 		Connection conn = null;
@@ -127,9 +125,8 @@ public class UserDAO {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 			throw new PersistenceException(e);
-		} finally {
+		}finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}
 		return value;

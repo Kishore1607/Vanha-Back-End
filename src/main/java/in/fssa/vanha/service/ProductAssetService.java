@@ -15,6 +15,10 @@ public class ProductAssetService {
 	 * @throws PersistenceException
 	 */
 	public void create(ProductAsset newProductAsset) throws ServiceException, PersistenceException {
+		try {
 		productAssetsDao.create(newProductAsset);
+		}catch (PersistenceException e) {
+			throw new ServiceException("Error while storing id's of product and asset in product_asset table");
+		}
 	}
 }

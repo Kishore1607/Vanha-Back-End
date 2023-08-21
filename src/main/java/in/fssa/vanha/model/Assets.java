@@ -1,5 +1,10 @@
 package in.fssa.vanha.model;
 
+/**
+ * 
+ * @author KishoreSugumar
+ *
+ */
 public class Assets extends AssetsEntity {
 
 	@Override

@@ -18,7 +18,7 @@ public class BidHistoryValidator {
 	 * @throws ServiceException
 	 * @throws PersistenceException
 	 */
-	public static void createValidate(BidHistory newBid) throws ValidationException, ServiceException, PersistenceException  {
+	public static void createValidate(BidHistory newBid) throws ValidationException, ServiceException{
 		
 		if (newBid == null) {
 			throw new ValidationException("Bid input cannot be null");
@@ -26,6 +26,7 @@ public class BidHistoryValidator {
 		
 		StringUtil.RegectIfInvalidString(newBid.getProductUnique(), "Product ID");
 
+		StringUtil.RegectIfInvalidString(newBid.getBuyerUnique(), "Seller email");
 
 		if (newBid.getBidAmount() < 0 || newBid.getBidAmount() > 100000000) {
 			throw new ValidationException("Bidded amount should be with in the limit of 1 - 100000000");
@@ -46,7 +47,7 @@ public class BidHistoryValidator {
 		}
 
 		if (UserService.findUserByEmail(newBid.getBuyerUnique()) == null) {
-			throw new ValidationException("Buyer not found in user table");
+			throw new ServiceException("Buyer not found in user table");
 		}
 
 	}

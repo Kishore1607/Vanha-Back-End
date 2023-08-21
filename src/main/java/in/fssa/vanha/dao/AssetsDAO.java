@@ -10,7 +10,9 @@ import java.util.Set;
 
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
+import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.Assets;
+import in.fssa.vanha.model.Product;
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.util.ConnectionUtil;
 
@@ -23,7 +25,7 @@ public class AssetsDAO {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public int create(Assets newAsset) throws PersistenceException, ServiceException {
+	public int create(Assets newAsset) throws PersistenceException{
 		Connection conn = null;
 		PreparedStatement pre = null;
 		int generatedKey = -1; // Initialize to a default value
@@ -44,9 +46,6 @@ public class AssetsDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ServiceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
@@ -61,7 +60,7 @@ public class AssetsDAO {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public Set<Assets> findAllAssetsByProductId(String productId) throws PersistenceException, ServiceException {
+	public Set<Assets> findAllAssetsByProductId(String productId) throws PersistenceException, ServiceException, ValidationException{
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -71,13 +70,17 @@ public class AssetsDAO {
 
 		try {
 
-			int product = ProductService.findByProductId(productId).getId();
+			Product product = ProductService.findByProductId(productId);
+			if(product == null) {
+				throw new ServiceException("Product doesn't exists in product table");
+			}
+			int id = product.getId();
 
 			String query = "SELECT * FROM product_assets AS pa " + "INNER JOIN assets AS a ON pa.asset_id = a.id "
 					+ "WHERE pa.product_id = ? And pa.status = 1";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
-			pre.setInt(1, product);
+			pre.setInt(1, id);
 			rs = pre.executeQuery();
 			while (rs.next()) {
 				Assets assets = new Assets();
@@ -89,10 +92,6 @@ public class AssetsDAO {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 			throw new PersistenceException(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new ServiceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}
@@ -104,8 +103,9 @@ public class AssetsDAO {
 	 * @param updateAsset
 	 * @throws PersistenceException
 	 * @throws ServiceException
+	 * @throws ValidationException 
 	 */
-	public void updateAssetsByAssetId(Assets updateAsset) throws PersistenceException, ServiceException {
+	public void updateAssetsByAssetId(Assets updateAsset) throws PersistenceException, RuntimeException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre1 = null;
 		PreparedStatement pre2 = null;
@@ -133,11 +133,15 @@ public class AssetsDAO {
 					throw new ServiceException("Failed to get generated key.");
 				}
 			}
-
-			int productId = ProductService.findByProductId(updateAsset.getProductId()).getId();
+			
+			Product product = ProductService.findByProductId(updateAsset.getProductId());
+			if(product == null) {
+				throw new ServiceException("Product doesn't exists in product table");
+			}
+			int id = product.getId();
 
 			// Insert into 'product_assets' table
-			pre2.setInt(1, productId);
+			pre2.setInt(1, id);
 			pre2.setInt(2, generatedKey);
 			pre2.executeUpdate();
 
@@ -146,7 +150,7 @@ public class AssetsDAO {
 			try (ResultSet result1 = pre3.executeQuery()) {
 				if (result1.next()) {
 					int assetId = result1.getInt("id");
-					pre4.setInt(1, productId);
+					pre4.setInt(1, id);
 					pre4.setInt(2, assetId);
 					pre4.executeUpdate();
 				}
@@ -161,10 +165,7 @@ public class AssetsDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ServiceException(e);
-		} finally {
+		}finally {
 			ConnectionUtil.close(conn, pre1, pre2, pre3, pre4, pre5);
 		}
 	}

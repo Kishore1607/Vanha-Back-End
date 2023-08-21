@@ -17,7 +17,7 @@ public class TestFindAllBidHisrory {
 	@Test
 	public void testFindAllBidsByProductIdWithValidProductId() {
 	    BidHistoryService bidService = new BidHistoryService();
-	    String ProductId = "P12345"; // Assume this product ID exists in the database
+	    String ProductId = "P34562"; // Assume this product ID exists in the database
 	    
 	    assertDoesNotThrow(() -> {
 	        Set<BidHistory> bidHistory = bidService.findAllBidssByProductId(ProductId);
@@ -38,7 +38,7 @@ public class TestFindAllBidHisrory {
 
 	@Test
 	public void testFindValidateWithValidProductId() {
-	    String validProductId = "P12345"; // Assume this product ID is valid
+	    String validProductId = "P34562"; // Assume this product ID is valid
 	    
 	    assertDoesNotThrow(() -> {
 	        BidHistoryService bidHistoryService = new BidHistoryService();
@@ -50,7 +50,7 @@ public class TestFindAllBidHisrory {
 	public void testFindValidateWithInvalidProductId() {
 	    String invalidProductId = ""; // Invalid product ID
 	    
-	    assertThrows(ServiceException.class, () -> {
+	    assertThrows(ValidationException.class, () -> {
 	    	BidHistoryService bidHistoryService = new BidHistoryService();
 			bidHistoryService.findAllBidssByProductId(invalidProductId);
 	    });

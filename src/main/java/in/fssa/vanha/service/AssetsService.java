@@ -21,23 +21,34 @@ public class AssetsService {
 	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public int create(Assets newAsset) throws ServiceException, PersistenceException, ValidationException {
-		AssetValidator.createValidate(newAsset);
-		return assetsDao.create(newAsset);
+	public int create(Assets newAsset) throws ServiceException, ValidationException {
+		try {
+			AssetValidator.createValidate(newAsset);
+			return assetsDao.create(newAsset);
+
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error occured in creating asset in asset DAO");
+		}
+
 	}
-	
+
 	/**
 	 * 
 	 * @param productId
 	 * @return Set<List>
 	 * @throws Exception
 	 */
-	public static Set<Assets> findAllAssetsByProductId(String productId) throws Exception {
-		AssetValidator.findAssetValidate(productId);
-		Set<Assets> assetsList = assetsDao.findAllAssetsByProductId(productId);
-	    return assetsList;
+	public static Set<Assets> findAllAssetsByProductId(String productId) throws ServiceException, ValidationException {
+		try {
+			AssetValidator.findAssetValidate(productId);
+			Set<Assets> assetsList = assetsDao.findAllAssetsByProductId(productId);
+			return assetsList;
+
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error occured in finding asset in asset DAO");
+		}
 	}
-	
+
 	/**
 	 * 
 	 * @param newAsset
@@ -45,8 +56,13 @@ public class AssetsService {
 	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public void updateAssets(Assets newAsset) throws ServiceException, PersistenceException, ValidationException {
-		AssetValidator.updateValidate(newAsset);
-		assetsDao.updateAssetsByAssetId(newAsset);
+	public void updateAssets(Assets newAsset) throws ServiceException, ValidationException {
+
+		try {
+			AssetValidator.updateValidate(newAsset);
+			assetsDao.updateAssetsByAssetId(newAsset);
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error occured in updating asset in asset DAO");
+		}
 	}
 }

@@ -16,13 +16,13 @@ public class TestUpdateProduct {
 	    Product existingProduct = new Product();
 
 	    // Assume this product ID exists in the database
-	    existingProduct.setProductId("P12345");
+	    existingProduct.setProductId("P66678");
 	    existingProduct.setUsedPeriod(12);
 	    existingProduct.setUsedDuration("month");
 	    existingProduct.setDescription("Updated description");
 	    existingProduct.setName("Updated Product");
-	    existingProduct.setPrice(200);
-	    existingProduct.setMinPrice(150);
+	    existingProduct.setPrice(40000);
+	    existingProduct.setMinPrice(35000);
 
 	    assertDoesNotThrow(() -> {
 	        productService.update(existingProduct);
@@ -35,12 +35,12 @@ public class TestUpdateProduct {
 	    Product existingProduct = new Product();
 
 	    // Assume this product ID exists in the database
-	    existingProduct.setProductId("P67890");
+	    existingProduct.setProductId("P66678");
 	    existingProduct.setUsedPeriod(6);
-	    existingProduct.setUsedDuration("months");
+	    existingProduct.setUsedDuration("month");
 	    existingProduct.setDescription("Updated description");
 	    existingProduct.setName("Updated Product");
-	    existingProduct.setPrice(150000000); // Invalid price
+	    existingProduct.setPrice(1500000000); // Invalid price
 	    existingProduct.setMinPrice(100);
 
 	    assertThrows(ValidationException.class, () -> {

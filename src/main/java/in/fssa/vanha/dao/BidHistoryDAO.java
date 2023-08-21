@@ -14,6 +14,7 @@ import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.BidHistory;
+import in.fssa.vanha.model.Product;
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.util.ConnectionUtil;
 
@@ -27,9 +28,10 @@ public class BidHistoryDAO {
      * 
      * @param newBid
      * @throws PersistenceException
+     * @throws ValidationException 
      * @throws ServiceException
      */
-	public void create(BidHistory newBid) throws PersistenceException, ServiceException {
+	public void create(BidHistory newBid) throws PersistenceException, ValidationException, ServiceException{
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -58,10 +60,7 @@ public class BidHistoryDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e);
-		}  catch (Exception e) {
-			e.printStackTrace();
-			throw new ServiceException(e);
-		} finally {
+		}finally {
 			ConnectionUtil.close(conn, pre);
 		}
 	}
@@ -74,13 +73,18 @@ public class BidHistoryDAO {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public Set<BidHistory> findAllBidsByProductId(String productId) throws PersistenceException, ServiceException, ValidationException {
+	public Set<BidHistory> findAllBidsByProductId(String productId) throws PersistenceException, ServiceException, ValidationException{
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
 		
-		int product = ProductService.findByProductId(productId).getId();
+	
+		Product product = ProductService.findByProductId(productId);
+		if(product == null) {
+			throw new ServiceException("Product doesn't exists in product table");
+		}
+		int id = product.getId();
 
 		Set<BidHistory> bidHistoryArray = new HashSet<>();
 		
@@ -88,11 +92,11 @@ public class BidHistoryDAO {
 			String query = "Select * From bid_history Where status = 1 AND product_id = ?";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
-			pre.setInt(1, product);
+			pre.setInt(1, id);
 			rs = pre.executeQuery();
 			while (rs.next()) {
 				BidHistory bidHistory = new BidHistory();
-				bidHistory.setBidId(rs.getInt("bid_id"));
+				bidHistory.setBidId(rs.getInt("id"));
 				bidHistory.setBidAmount(rs.getInt("bid_amount"));
 				bidHistory.setBidDate(rs.getString("bid_date"));
 				bidHistory.setBuyerId(rs.getInt("buyer_id"));
@@ -101,13 +105,8 @@ public class BidHistoryDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 			throw new PersistenceException(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new ServiceException(e);
-		}finally {
+		} finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}
 		return bidHistoryArray;

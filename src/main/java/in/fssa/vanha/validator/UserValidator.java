@@ -89,7 +89,7 @@ public class UserValidator {
 		}
 
 		if (UserService.findUserByEmail(newUser.getEmail()) != null) {
-			throw new ValidationException("User already exists");
+			throw new ServiceException("User already exists");
 		}
 
 	}
@@ -154,7 +154,7 @@ public class UserValidator {
 		User user = findUser.findUserByEmail(updateUser.getEmail());
 
 		if (user == null) {
-			throw new ValidationException("User doesn't exists");
+			throw new ServiceException("User doesn't exists");
 		}
 
 	}
@@ -166,7 +166,7 @@ public class UserValidator {
 	 */
 	public static void findUserValidate(String email) throws ValidationException {
 		if (email == null) {
-			throw new RuntimeException("Email can't be null");
+			throw new ValidationException("Email can't be null");
 		}
 
 		StringUtil.RegectIfInvalidString(email, "Email");

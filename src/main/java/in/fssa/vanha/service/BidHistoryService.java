@@ -16,25 +16,36 @@ public class BidHistoryService {
 	 * 
 	 * @param newBid
 	 * @throws ServiceException
-	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public void create(BidHistory newBid) throws ServiceException, PersistenceException, ValidationException {
-		BidHistoryValidator.createValidate(newBid);
-		bidHistoryDao.create(newBid);
+	public void create(BidHistory newBid) throws ServiceException, ValidationException {
+		try {
+			BidHistoryValidator.createValidate(newBid);
+			bidHistoryDao.create(newBid);
+
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error occured in creating asset in asset DAO");
+		}
+
 	}
-	
+
 	/**
 	 * 
 	 * @param productId
-	 * @return
+	 * @return Set<BidHistory>
 	 * @throws ServiceException
-	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public Set<BidHistory> findAllBidssByProductId(String productId) throws ServiceException, PersistenceException, ValidationException {
-		BidHistoryValidator.findValidate(productId);
-		return bidHistoryDao.findAllBidsByProductId(productId);
+	public Set<BidHistory> findAllBidssByProductId(String productId)
+			throws ServiceException, ValidationException {
+		try {
+			BidHistoryValidator.findValidate(productId);
+			return bidHistoryDao.findAllBidsByProductId(productId);
+
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error occured in creating asset in asset DAO");
+		}
+
 	}
 
 }

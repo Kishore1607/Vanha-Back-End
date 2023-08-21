@@ -17,7 +17,7 @@ public class ProductAssetDAO {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public void create(ProductAsset newProductAsset) throws PersistenceException, ServiceException {
+	public void create(ProductAsset newProductAsset) throws PersistenceException{
 		Connection conn = null;
 		PreparedStatement pre = null;
 
@@ -34,9 +34,6 @@ public class ProductAssetDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ServiceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}

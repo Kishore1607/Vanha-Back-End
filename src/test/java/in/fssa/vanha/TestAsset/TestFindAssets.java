@@ -19,7 +19,7 @@ public class TestFindAssets {
 	public void testFindAllAssetsByProductIdWithValidProductId() {
 	    // Assume this product ID exists in the database
 		
-		String existingProductId = "P12345";
+		String existingProductId = "P34562";
 	    
 	    assertDoesNotThrow(() -> {
 	        Set<Assets> assets = AssetsService.findAllAssetsByProductId(existingProductId);
@@ -40,7 +40,7 @@ public class TestFindAssets {
 
 	@Test
 	public void testFindAssetValidateWithValidProductId() {
-	    String existingProductId = "P12345"; // Assume this product ID exists in the database
+	    String existingProductId = "P34562"; // Assume this product ID exists in the database
 	    
 	    assertDoesNotThrow(() -> {
 	    	AssetsService.findAllAssetsByProductId(existingProductId);

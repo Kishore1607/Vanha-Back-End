@@ -16,8 +16,8 @@ public class TestUpdateAsset {
         AssetsService assetsService = new AssetsService();
         Assets updateAsset = new Assets();
 
-        updateAsset.setOldValue("https://www.example.com");
-        updateAsset.setValue("https://www.new-example.com");
+        updateAsset.setOldValue("https://www.bike.com");
+        updateAsset.setValue("https://www.aeroplane.com");
         updateAsset.setProductId("P12345");
 
         assertDoesNotThrow(() -> {
@@ -58,8 +58,8 @@ public class TestUpdateAsset {
         AssetsService assetsService = new AssetsService();
         Assets updateAsset = new Assets();
 
-        updateAsset.setOldValue("old_asset.jpg");
-        updateAsset.setValue("https://example.com/new_asset.jpg");
+        updateAsset.setOldValue("https://www.example.com");
+        updateAsset.setValue("https://www.example3.com");
         updateAsset.setProductId("NonExistingProductId");
 
         assertThrows(ServiceException.class, () -> {
@@ -72,9 +72,9 @@ public class TestUpdateAsset {
         AssetsService assetsService = new AssetsService();
         Assets updateAsset = new Assets();
 
-        updateAsset.setOldValue("https://www.new-example.com");
-        updateAsset.setValue("https://www.new-example.com"); // Same as old value
-        updateAsset.setProductId("P123");
+        updateAsset.setOldValue("http://www.example.com");
+        updateAsset.setValue("http://www.example.com"); // Same as old value
+        updateAsset.setProductId("P12345");
 
         assertThrows(ValidationException.class, () -> {
             assetsService.updateAssets(updateAsset);

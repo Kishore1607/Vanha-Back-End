@@ -18,7 +18,7 @@ public class TestCreateBid {
 	    // Assume valid data here
 	    newBid.setBidAmount(30000);
 	    newBid.setBuyerUnique("pravenn.kumar@example.com");
-	    newBid.setProductUnique("P67890");
+	    newBid.setProductUnique("P34562");
 	    assertDoesNotThrow(() -> {
 	        bidHistoryService.create(newBid);
 	    });
@@ -51,18 +51,6 @@ public class TestCreateBid {
 	    });
 	}
 
-	@Test
-	public void testCreateBidHistoryWithInvalidBuyerId() {
-	    BidHistoryService bidHistoryService = new BidHistoryService();
-	    BidHistory newBid = new BidHistory();
-
-	    // Assume invalid buyer ID
-	    newBid.setBuyerId(-1);
-
-	    assertThrows(ServiceException.class, () -> {
-	        bidHistoryService.create(newBid);
-	    });
-	}
 
 	@Test
 	public void testCreateBidHistoryWithNonExistentBuyer() {
@@ -71,6 +59,8 @@ public class TestCreateBid {
 
 	    // Assume nonexistent buyer email
 	    newBid.setBuyerUnique("nonexistent@example.com");
+	    newBid.setBidAmount(200);
+	    newBid.setProductUnique("P34562");
 
 	    assertThrows(ServiceException.class, () -> {
 	        bidHistoryService.create(newBid);

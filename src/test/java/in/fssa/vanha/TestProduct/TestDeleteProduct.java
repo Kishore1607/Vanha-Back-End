@@ -13,7 +13,7 @@ public class TestDeleteProduct {
 	@Test
 	public void testDeleteValidateWithValidProductID() {
 	    ProductService productService = new ProductService();
-	    String existingProductID = "P12345"; // Assume this product ID exists in the database
+	    String existingProductID = "P67890"; // Assume this product ID exists in the database
 	    
 	    assertDoesNotThrow(() -> {
 	        productService.delete(existingProductID);

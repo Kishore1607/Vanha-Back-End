@@ -48,12 +48,12 @@ public class AssetValidator {
 	 * @throws ServiceException
 	 * @throws PersistenceException
 	 */
-	public static void findAssetValidate(String productId) throws ValidationException, ServiceException, PersistenceException {
+	public static void findAssetValidate(String productId) throws ValidationException, ServiceException{
 
 		StringUtil.RegectIfInvalidString(productId, "Product Id");
 
 		if (ProductService.findByProductId(productId) == null) {
-			throw new ValidationException("Product does not exists");
+			throw new ServiceException("Product does not exists");
 		}
 	}
 
@@ -90,7 +90,7 @@ public class AssetValidator {
 		}
 
 		if (ProductService.findByProductId(updateAsset.getProductId()) == null) {
-			throw new ValidationException("Product does not exists");
+			throw new ServiceException("Product does not exists");
 		}
 
 		Connection conn = null;
@@ -105,7 +105,7 @@ public class AssetValidator {
 			pre.setString(1, updateAsset.getOldValue());
 			rs = pre.executeQuery();
 			if (!rs.next()) {
-				throw new ValidationException("Old asset does not exists");
+				throw new ServiceException("Old asset does not exists");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

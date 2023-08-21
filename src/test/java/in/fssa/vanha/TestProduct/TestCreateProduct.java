@@ -16,19 +16,19 @@ public class TestCreateProduct {
 		ProductService productService = new ProductService();
 		Product newProduct = new Product();
 
-		newProduct.setProductId("P67890");
-		newProduct.setCategory("bike");
+		newProduct.setProductId("P66678");
+		newProduct.setCategory("car");
 		newProduct.setUsedPeriod(2);
-		newProduct.setUsedDuration("year");
+		newProduct.setUsedDuration("month");
 		newProduct.setDescription("GOod-quality bike");
-		newProduct.setName("Ns 200");
-		newProduct.setPrice(3500);
-		newProduct.setMinPrice(2000);
+		newProduct.setName("ferrari");
+		newProduct.setPrice(35000);
+		newProduct.setMinPrice(20000);
 		newProduct.setSellerUnique("pravenn.kumar@example.com");
 
 		Assets newAssets = new Assets();
 
-		newAssets.setValue("https://www.bike.com");
+		newAssets.setValue("https://www.carferrari.com");
 
 		assertDoesNotThrow(() -> {
 			productService.create(newProduct, newAssets);
