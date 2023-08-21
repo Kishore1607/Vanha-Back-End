@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import in.fssa.vanha.model.User;
 import in.fssa.vanha.service.UserService;
 import in.fssa.vanha.exception.*;
+import in.fssa.vanha.UserRandomGenerator;
 
 public class TestCreateUser {
 	
@@ -15,12 +16,12 @@ public class TestCreateUser {
 	public void testCreateUserWithValidData() {
 	    UserService us = new UserService();
 	    User newUser = new User();
-	    
-	    newUser.setName("Jhon Joe");
-	    newUser.setEmail("jhon.joe@example.com");
-	    newUser.setPassword("Pass#789");
-	    newUser.setNumber(9987645371l);
-	    newUser.setLocation("USA");
+	    UserRandomGenerator gene = new UserRandomGenerator();
+	    newUser.setName(gene.nameGenerator());
+	    newUser.setEmail(gene.emailGenerator());
+	    newUser.setPassword(gene.passwordGenerator());
+	    newUser.setNumber(gene.numberGenenrator());
+	    newUser.setLocation(gene.locationGenerator());
 	    
 	    assertDoesNotThrow(() -> {
 	        us.create(newUser);

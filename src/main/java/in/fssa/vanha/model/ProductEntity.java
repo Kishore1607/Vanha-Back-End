@@ -106,6 +106,6 @@ public abstract class ProductEntity implements Comparable<ProductEntity>{
     char status;
     String createdAt;
     String modifiedAt; 
-    String userUnique;     
+    String userUnique;    
 
 }

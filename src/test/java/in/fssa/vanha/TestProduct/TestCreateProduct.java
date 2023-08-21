@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.model.*;
 import in.fssa.vanha.exception.*;
+import in.fssa.vanha.ProductRandomGenerator;
 
 public class TestCreateProduct {
 
@@ -16,19 +17,21 @@ public class TestCreateProduct {
 		ProductService productService = new ProductService();
 		Product newProduct = new Product();
 
-		newProduct.setProductId("P66678");
-		newProduct.setCategory("car");
-		newProduct.setUsedPeriod(2);
-		newProduct.setUsedDuration("month");
-		newProduct.setDescription("GOod-quality bike");
-		newProduct.setName("ferrari");
-		newProduct.setPrice(35000);
-		newProduct.setMinPrice(20000);
-		newProduct.setSellerUnique("pravenn.kumar@example.com");
+		ProductRandomGenerator prod = new ProductRandomGenerator();
+		
+		newProduct.setProductId(prod.idGenerator());
+		newProduct.setCategory(prod.categoryGenerator());
+		newProduct.setUsedPeriod(prod.usedPeriodGenerator());
+		newProduct.setUsedDuration(prod.usedDurationGenerator());
+		newProduct.setDescription(prod.textGenerator());
+		newProduct.setName(prod.nameGenerator());
+		newProduct.setPrice(prod.priceGenerator());
+		newProduct.setMinPrice(prod.minPriceGenerator());
+		newProduct.setSellerUnique("kishore.sugumar@example.com");
 
 		Assets newAssets = new Assets();
 
-		newAssets.setValue("https://www.carferrari.com");
+		newAssets.setValue(ProductRandomGenerator.assetGenerator());
 
 		assertDoesNotThrow(() -> {
 			productService.create(newProduct, newAssets);
@@ -66,7 +69,7 @@ public class TestCreateProduct {
 		ProductService productService = new ProductService();
 		Product newProduct = new Product();
 
-		newProduct.setProductId("P67890");
+		newProduct.setProductId("P456");
 		newProduct.setCategory("bike");
 		newProduct.setUsedPeriod(12);
 		newProduct.setUsedDuration("months");
@@ -116,7 +119,7 @@ public class TestCreateProduct {
 		ProductService productService = new ProductService();
 		Product newProduct = new Product();
 
-		newProduct.setProductId("P12345"); // Assume this product ID already exists
+		newProduct.setProductId("P456"); // Assume this product ID already exists
 		newProduct.setCategory("mobile");
 		newProduct.setUsedPeriod(6);
 		newProduct.setUsedDuration("months");
