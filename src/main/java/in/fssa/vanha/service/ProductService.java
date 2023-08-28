@@ -28,7 +28,6 @@ public class ProductService {
 			AssetValidator.createValidate(newAsset);
 			productDao.create(newProduct, newAsset);
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException("Errro while creating product");
 		}
 
@@ -49,7 +48,6 @@ public class ProductService {
 			Set<Product> productList = productDao.findAllProductsBySellerId(sellerId);
 			return productList;
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException("Errro while finding product by seller id");
 		}
 	}
@@ -66,7 +64,6 @@ public class ProductService {
 			ProductValidator.updateValidate(updateProduct);
 			productDao.update(updateProduct);
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException("Errro while updating product");
 		}
 	}
@@ -78,12 +75,10 @@ public class ProductService {
 	 * @throws ValidationException
 	 */
 	public void delete(String productId) throws ServiceException, ValidationException {
-
 		try {
 			ProductValidator.deleteValidate(productId);
 			productDao.delete(productId);
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException("Errro while deleting product");
 		}
 	}

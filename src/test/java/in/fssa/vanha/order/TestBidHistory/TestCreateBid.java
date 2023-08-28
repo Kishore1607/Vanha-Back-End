@@ -1,24 +1,29 @@
-package in.fssa.vanha.TestBidHistory;
+package in.fssa.vanha.order.TestBidHistory;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.model.*;
 import in.fssa.vanha.exception.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestCreateBid {
+	@Order(9)
 	@Test
 	public void testCreateBidHistoryWithValidData() {
 	    BidHistoryService bidHistoryService = new BidHistoryService();
 	    BidHistory newBid = new BidHistory();
 
 	    // Assume valid data here
-	    newBid.setBidAmount(30000);
-	    newBid.setBuyerUnique("pravenn.kumar@example.com");
-	    newBid.setProductUnique("P34562");
+	    newBid.setBidAmount(70000);
+	    newBid.setBuyerUnique("woau.dhmfts@gmail.com");
+	    newBid.setProductUnique("j0205");
 	    assertDoesNotThrow(() -> {
 	        bidHistoryService.create(newBid);
 	    });
@@ -59,8 +64,8 @@ public class TestCreateBid {
 
 	    // Assume nonexistent buyer email
 	    newBid.setBuyerUnique("nonexistent@example.com");
-	    newBid.setBidAmount(200);
-	    newBid.setProductUnique("P34562");
+	    newBid.setBidAmount(28000);
+	    newBid.setProductUnique("P123");
 
 	    assertThrows(ServiceException.class, () -> {
 	        bidHistoryService.create(newBid);

@@ -1,15 +1,20 @@
-package in.fssa.vanha.TestAsset;
+package in.fssa.vanha.order.TestAsset;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.service.AssetsService;
 import in.fssa.vanha.exception.ValidationException;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestCreateAsset {
+	@Order(8)
 	@Test
 	public void testCreateValidateWithNullInput() {
 		Assets newAsset = new Assets();

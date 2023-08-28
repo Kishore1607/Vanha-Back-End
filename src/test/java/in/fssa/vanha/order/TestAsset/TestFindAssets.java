@@ -1,4 +1,4 @@
-package in.fssa.vanha.TestAsset;
+package in.fssa.vanha.order.TestAsset;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,22 +7,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.service.AssetsService;
+import in.fssa.vanha.MocValue;
 import in.fssa.vanha.exception.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestFindAssets {
 
+	AssetsService assetsService = new AssetsService();
+	@Order(6)
 	@Test
 	public void testFindAllAssetsByProductIdWithValidProductId() {
 	    // Assume this product ID exists in the database
 		
-		String existingProductId = "P34562";
+		String existingProductId = MocValue.id;
 	    
 	    assertDoesNotThrow(() -> {
-	        Set<Assets> assets = AssetsService.findAllAssetsByProductId(existingProductId);
+	        Set<Assets> assets = assetsService.findAllAssetsByProductId(existingProductId);
 	        assertNotNull(assets);
 	        assertTrue(assets.size() >= 0);
 	    });
@@ -34,16 +41,16 @@ public class TestFindAssets {
 	    String nonExistentProductId = "P99999"; // Use a product ID that doesn't exist in the database
 	    
 	    assertThrows(ServiceException.class, () -> {
-	    	AssetsService.findAllAssetsByProductId(nonExistentProductId);
+	    	assetsService.findAllAssetsByProductId(nonExistentProductId);
 	    });
 	}
 
 	@Test
 	public void testFindAssetValidateWithValidProductId() {
-	    String existingProductId = "P34562"; // Assume this product ID exists in the database
+	    String existingProductId = "f1541"; // Assume this product ID exists in the database
 	    
 	    assertDoesNotThrow(() -> {
-	    	AssetsService.findAllAssetsByProductId(existingProductId);
+	    	assetsService.findAllAssetsByProductId(existingProductId);
 	    });
 	}
 
@@ -52,7 +59,7 @@ public class TestFindAssets {
 	    String nonExistentProductId = "P99999"; // Use a product ID that doesn't exist in the database
 	    
 	    assertThrows(ServiceException.class, () -> {
-	    	AssetsService.findAllAssetsByProductId(nonExistentProductId);
+	    	assetsService.findAllAssetsByProductId(nonExistentProductId);
 	    });
 	}
 
@@ -61,7 +68,7 @@ public class TestFindAssets {
 	    String invalidProductId = ""; // Empty product ID
 	    
 	    assertThrows(ValidationException.class, () -> {
-	    	AssetsService.findAllAssetsByProductId(invalidProductId);
+	    	assetsService.findAllAssetsByProductId(invalidProductId);
 	    });
 	}
 

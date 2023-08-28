@@ -1,4 +1,4 @@
-package in.fssa.vanha.TestBidHistory;
+package in.fssa.vanha.order.TestBidHistory;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,20 +7,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.model.*;
 import in.fssa.vanha.exception.*;
 
-public class TestFindAllBidHisrory {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class TestFindAllBid {
+	@Order(10)
 	@Test
 	public void testFindAllBidsByProductIdWithValidProductId() {
 	    BidHistoryService bidService = new BidHistoryService();
-	    String ProductId = "P34562"; // Assume this product ID exists in the database
+	    String ProductId = "j0205"; // Assume this product ID exists in the database
 	    
 	    assertDoesNotThrow(() -> {
-	        Set<BidHistory> bidHistory = bidService.findAllBidssByProductId(ProductId);
+	        Set<BidHistory> bidHistory = bidService.findAllBidsByProductId(ProductId);
 	        assertNotNull(bidHistory);
 	        assertTrue(bidHistory.size() > 0);
 	    });
@@ -32,17 +37,17 @@ public class TestFindAllBidHisrory {
 	    String nonExistentProductId = "P67890"; // Use a product ID that doesn't exist in the database
 	    
 	    assertThrows(ServiceException.class, () -> {
-	        bidService.findAllBidssByProductId(nonExistentProductId);
+	        bidService.findAllBidsByProductId(nonExistentProductId);
 	    });
 	}
 
 	@Test
 	public void testFindValidateWithValidProductId() {
-	    String validProductId = "P34562"; // Assume this product ID is valid
+	    String validProductId = "j0205"; // Assume this product ID is valid
 	    
 	    assertDoesNotThrow(() -> {
 	        BidHistoryService bidHistoryService = new BidHistoryService();
-			bidHistoryService.findAllBidssByProductId(validProductId);
+			bidHistoryService.findAllBidsByProductId(validProductId);
 	    });
 	}
 
@@ -52,7 +57,7 @@ public class TestFindAllBidHisrory {
 	    
 	    assertThrows(ValidationException.class, () -> {
 	    	BidHistoryService bidHistoryService = new BidHistoryService();
-			bidHistoryService.findAllBidssByProductId(invalidProductId);
+			bidHistoryService.findAllBidsByProductId(invalidProductId);
 	    });
 	}
 

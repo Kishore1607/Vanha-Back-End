@@ -38,7 +38,7 @@ public class AssetsService {
 	 * @return Set<List>
 	 * @throws Exception
 	 */
-	public static Set<Assets> findAllAssetsByProductId(String productId) throws ServiceException, ValidationException {
+	public Set<Assets> findAllAssetsByProductId(String productId) throws ServiceException, ValidationException {
 		try {
 			AssetValidator.findAssetValidate(productId);
 			Set<Assets> assetsList = assetsDao.findAllAssetsByProductId(productId);

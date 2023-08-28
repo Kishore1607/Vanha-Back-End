@@ -1,37 +1,40 @@
-package in.fssa.vanha.TestProduct;
+package in.fssa.vanha.order.TestProduct;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.model.*;
 import in.fssa.vanha.exception.*;
-import in.fssa.vanha.ProductRandomGenerator;
+import in.fssa.vanha.MocValue;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestCreateProduct {
 
 	@Test
+	@Order(3)
 	public void testCreateProductWithValidData() {
 		ProductService productService = new ProductService();
 		Product newProduct = new Product();
-
-		ProductRandomGenerator prod = new ProductRandomGenerator();
 		
-		newProduct.setProductId(prod.idGenerator());
-		newProduct.setCategory(prod.categoryGenerator());
-		newProduct.setUsedPeriod(prod.usedPeriodGenerator());
-		newProduct.setUsedDuration(prod.usedDurationGenerator());
-		newProduct.setDescription(prod.textGenerator());
-		newProduct.setName(prod.nameGenerator());
-		newProduct.setPrice(prod.priceGenerator());
-		newProduct.setMinPrice(prod.minPriceGenerator());
-		newProduct.setSellerUnique("kishore.sugumar@example.com");
+		newProduct.setProductId(MocValue.id);
+		newProduct.setCategory(MocValue.category);
+		newProduct.setUsedPeriod(MocValue.usedPeriod);
+		newProduct.setUsedDuration(MocValue.usedDuration);
+		newProduct.setDescription(MocValue.description);
+		newProduct.setName(MocValue.productName);
+		newProduct.setPrice(MocValue.price);
+		newProduct.setMinPrice(MocValue.minPrice);
+		newProduct.setSellerUnique(MocValue.email);
 
 		Assets newAssets = new Assets();
 
-		newAssets.setValue(ProductRandomGenerator.assetGenerator());
+		newAssets.setValue(MocValue.asset);
 
 		assertDoesNotThrow(() -> {
 			productService.create(newProduct, newAssets);

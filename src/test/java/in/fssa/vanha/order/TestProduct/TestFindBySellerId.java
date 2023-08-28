@@ -1,4 +1,4 @@
-package in.fssa.vanha.TestProduct;
+package in.fssa.vanha.order.TestProduct;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,17 +7,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.model.Product;
+import in.fssa.vanha.MocValue;
 import in.fssa.vanha.exception.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestFindBySellerId {
+	@Order(12)
 	@Test
 	public void testFindAllProductsBySellerIdWithValidSellerId() {
 	    ProductService productService = new ProductService();
-	    String existingSellerId = "john.doe@example.com"; // Assume this seller ID exists in the database
+	    String existingSellerId = MocValue.email; // Assume this seller ID exists in the database
 	    
 	    assertDoesNotThrow(() -> {
 	        Set<Product> products = productService.findAllProductsBySellerId(existingSellerId);

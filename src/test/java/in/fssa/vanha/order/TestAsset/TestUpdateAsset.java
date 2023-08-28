@@ -1,24 +1,35 @@
-package in.fssa.vanha.TestAsset;
+package in.fssa.vanha.order.TestAsset;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.service.AssetsService;
+import in.fssa.vanha.MocValue;
+import in.fssa.vanha.ProductRandomGenerator;
 import in.fssa.vanha.exception.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestUpdateAsset {
 
     @Test
+    @Order(5)
     public void testUpdateAssetWithValidData() {
         AssetsService assetsService = new AssetsService();
         Assets updateAsset = new Assets();
 
-        updateAsset.setOldValue("https://www.bike.com");
-        updateAsset.setValue("https://www.aeroplane.com");
-        updateAsset.setProductId("P12345");
+        ProductRandomGenerator prod = new ProductRandomGenerator();
+        String url = prod.assetGenerator();
+        Assets asset = new Assets();
+        asset.setValue(url);
+        updateAsset.setOldValue(MocValue.asset);
+        updateAsset.setValue("https://www.updatedUrl.com");
+        updateAsset.setProductId(MocValue.id);
 
         assertDoesNotThrow(() -> {
             assetsService.updateAssets(updateAsset);
@@ -72,8 +83,8 @@ public class TestUpdateAsset {
         AssetsService assetsService = new AssetsService();
         Assets updateAsset = new Assets();
 
-        updateAsset.setOldValue("http://www.example.com");
-        updateAsset.setValue("http://www.example.com"); // Same as old value
+        updateAsset.setOldValue("https://www.n3c42.com");
+        updateAsset.setValue("https://www.n3c42.com"); // Same as old value
         updateAsset.setProductId("P12345");
 
         assertThrows(ValidationException.class, () -> {

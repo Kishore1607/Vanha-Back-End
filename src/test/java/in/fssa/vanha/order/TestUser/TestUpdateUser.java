@@ -1,24 +1,30 @@
-package in.fssa.vanha.TestUser;
+package in.fssa.vanha.order.TestUser;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.model.User;
 import in.fssa.vanha.service.UserService;
+import in.fssa.vanha.MocValue;
 import in.fssa.vanha.exception.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestUpdateUser {
 
 	@Test
+	@Order(2)
 	public void testUpadeUserWithValidData() {
 
 		UserService us = new UserService();
 		User updateUser = new User();
 		
-		updateUser.setName("John D");
-		updateUser.setEmail("john.doe@example.com");
+		updateUser.setName("Updated Name");
+		updateUser.setEmail(MocValue.email);
 		updateUser.setNumber(9835467892l);
 		updateUser.setLocation("New York, USA");
 		

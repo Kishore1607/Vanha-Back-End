@@ -36,7 +36,7 @@ public class BidHistoryService {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public Set<BidHistory> findAllBidssByProductId(String productId)
+	public Set<BidHistory> findAllBidsByProductId(String productId)
 			throws ServiceException, ValidationException {
 		try {
 			BidHistoryValidator.findValidate(productId);

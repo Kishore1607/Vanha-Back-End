@@ -1,27 +1,31 @@
-package in.fssa.vanha.TestUser;
+package in.fssa.vanha.order.TestUser;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.model.User;
 import in.fssa.vanha.service.UserService;
 import in.fssa.vanha.exception.*;
-import in.fssa.vanha.UserRandomGenerator;
+import in.fssa.vanha.MocValue;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestCreateUser {
 	
 	@Test
+	@Order(1)
 	public void testCreateUserWithValidData() {
 	    UserService us = new UserService();
 	    User newUser = new User();
-	    UserRandomGenerator gene = new UserRandomGenerator();
-	    newUser.setName(gene.nameGenerator());
-	    newUser.setEmail(gene.emailGenerator());
-	    newUser.setPassword(gene.passwordGenerator());
-	    newUser.setNumber(gene.numberGenenrator());
-	    newUser.setLocation(gene.locationGenerator());
+	    newUser.setName(MocValue.userName);
+	    newUser.setEmail(MocValue.email);
+	    newUser.setPassword(MocValue.password);
+	    newUser.setNumber(MocValue.number);
+	    newUser.setLocation(MocValue.location);
 	    
 	    assertDoesNotThrow(() -> {
 	        us.create(newUser);

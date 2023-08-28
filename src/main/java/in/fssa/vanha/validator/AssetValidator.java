@@ -71,6 +71,10 @@ public class AssetValidator {
 		StringUtil.RegectIfInvalidString(updateAsset.getValue(), "New Asset");
 
 		StringUtil.RegectIfInvalidString(updateAsset.getProductId(), "Product id");
+		
+		if (updateAsset.getOldValue().equals(updateAsset.getValue())) {
+			throw new ValidationException("Old asset and new asset cannot be same");
+		}
 
 		if (updateAsset.getOldValue().length() > 50) {
 			throw new ValidationException("Invalid product id length");
@@ -115,8 +119,5 @@ public class AssetValidator {
 			ConnectionUtil.close(conn, pre, rs);
 		}
 
-		if (updateAsset.getOldValue().equals(updateAsset.getValue())) {
-			throw new ValidationException("Old asset and new asset cannot be same");
-		}
 	}
 }

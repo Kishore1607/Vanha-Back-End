@@ -1,28 +1,35 @@
-package in.fssa.vanha.TestProduct;
+package in.fssa.vanha.order.TestProduct;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.model.Product;
+import in.fssa.vanha.MocValue;
 import in.fssa.vanha.exception.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestUpdateProduct {
+	
 	@Test
+	@Order(4)
 	public void testUpdateProductWithValidData() {
 	    ProductService productService = new ProductService();
 	    Product existingProduct = new Product();
 
 	    // Assume this product ID exists in the database
-	    existingProduct.setProductId("P66678");
+	    existingProduct.setProductId(MocValue.id);
 	    existingProduct.setUsedPeriod(12);
 	    existingProduct.setUsedDuration("month");
 	    existingProduct.setDescription("Updated description");
 	    existingProduct.setName("Updated Product");
-	    existingProduct.setPrice(40000);
-	    existingProduct.setMinPrice(35000);
+	    existingProduct.setPrice(6800);
+	    existingProduct.setMinPrice(5800);
 
 	    assertDoesNotThrow(() -> {
 	        productService.update(existingProduct);
@@ -54,7 +61,7 @@ public class TestUpdateProduct {
 	    Product existingProduct = new Product();
 
 	    // Assume this product ID exists in the database
-	    existingProduct.setProductId("P55555");
+	    existingProduct.setProductId("l8947");
 	    existingProduct.setUsedPeriod(-3); // Negative used period
 	    existingProduct.setUsedDuration("months");
 	    existingProduct.setDescription("Updated description");

@@ -111,7 +111,7 @@ public class ProductRandomGenerator {
 		return name;
 	}
 
-	public static String assetGenerator() {
+	public String assetGenerator() {
 		String alpha = "abcdefghijklmnopqrstuvwxyz0987654321";
 		String asset = "https://www.";
 		for (int i = 0; i < 5; i++) {

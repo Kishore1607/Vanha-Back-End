@@ -99,7 +99,6 @@ public class ProductDAO {
 
 		ProductAssetService PaService = new ProductAssetService();
 		PaService.create(productAsset);
-
 	}
 
 	/**
@@ -242,6 +241,8 @@ public class ProductDAO {
 		Connection conn = null;
 		PreparedStatement pre = null;
 
+		int id = ProductService.findByProductId(productId).getId();
+		
 		try {
 			String query = "UPDATE products SET status = 'd' WHERE product_id = ?";
 			conn = ConnectionUtil.getConnection();
@@ -254,9 +255,7 @@ public class ProductDAO {
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
-
-		int id = ProductService.findByProductId(productId).getId();
-
+		
 		Connection conn1 = null;
 		PreparedStatement pre1 = null;
 

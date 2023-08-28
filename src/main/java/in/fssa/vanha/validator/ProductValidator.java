@@ -123,6 +123,9 @@ public class ProductValidator {
 
 		// Int checking
 
+		if(updateProduct.getUsedPeriod() < 0 || updateProduct.getUsedPeriod() > 100) {
+			throw new ValidationException("Used period should between the limit 1 - 100");
+		}
 		if (updateProduct.getPrice() < 0 || updateProduct.getPrice() > 100000000) {
 			throw new ValidationException("Price should between the limit 1 - 100000000");
 		}
