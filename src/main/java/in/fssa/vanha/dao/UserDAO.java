@@ -131,4 +131,36 @@ public class UserDAO {
 		}
 		return value;
 	}
+	
+	public User findUserByEmail(int id) throws PersistenceException{
+		// TODO Auto-generated method stub
+		User value = null;
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet rs = null;
+
+		try {
+
+			String query = "Select * From users Where status = 1 And id = ?";
+			conn = ConnectionUtil.getConnection();
+			pre = conn.prepareStatement(query);
+			pre.setInt(1, id);
+			rs = pre.executeQuery();
+			if (rs.next()) {
+				value = new User();
+	            value.setName(rs.getString("username"));
+	            value.setEmail(rs.getString("email"));
+	            value.setPassword(rs.getString("password"));
+	            value.setNumber(rs.getLong("number"));
+	            value.setLocation(rs.getString("location"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e);
+		}finally {
+			ConnectionUtil.close(conn, pre, rs);
+		}
+		return value;
+	}
 }

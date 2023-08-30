@@ -8,6 +8,7 @@ import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.Product;
+import in.fssa.vanha.model.ProductWithAssets;
 import in.fssa.vanha.validator.AssetValidator;
 import in.fssa.vanha.validator.ProductValidator;
 
@@ -51,6 +52,21 @@ public class ProductService {
 			throw new ServiceException("Errro while finding product by seller id");
 		}
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws ServiceException
+	 */
+	public Set<Product> findAllProducts() throws ServiceException {
+
+		try {
+			Set<Product> productList = productDao.findAllProducts();
+			return productList;
+		} catch (PersistenceException e) {
+			throw new ServiceException("Errro while finding all products");
+		}
+	}
 
 	/**
 	 * 
@@ -90,7 +106,7 @@ public class ProductService {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public static Product findByProductId(String productId) throws ServiceException, ValidationException {
+	public static ProductWithAssets findByProductId(String productId) throws ServiceException, ValidationException {
 
 		try {
 			ProductValidator.findProductValidate(productId);

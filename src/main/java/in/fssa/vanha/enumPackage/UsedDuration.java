@@ -25,5 +25,17 @@ public enum UsedDuration {
                 throw new IllegalArgumentException("Invalid input string for UsedDuration: " + input);
         }
     }
+    
+    public static String getFullValue(String input) {
+        String lowerCaseInput = input.toLowerCase();
+        switch (lowerCaseInput) {
+            case "y":
+                return "year";
+            case "m":
+                return "month";
+            default:
+                throw new IllegalArgumentException("Invalid input string for UsedDuration: " + input);
+        }
+    }
 
 }

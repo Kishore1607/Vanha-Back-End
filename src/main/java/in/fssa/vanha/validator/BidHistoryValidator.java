@@ -4,7 +4,7 @@ import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.BidHistory;
-import in.fssa.vanha.model.Product;
+import in.fssa.vanha.model.ProductWithAssets;
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.service.UserService;
 import in.fssa.vanha.util.StringUtil;
@@ -32,13 +32,13 @@ public class BidHistoryValidator {
 			throw new ValidationException("Bidded amount should be with in the limit of 1 - 100000000");
 		}
 
-		Product productValue = ProductService.findByProductId(newBid.getProductUnique());
+		ProductWithAssets productValue = ProductService.findByProductId(newBid.getProductUnique());
 
-		if (productValue.getMinPrice() > newBid.getBidAmount()) {
+		if (productValue.getProduct().getMinPrice() > newBid.getBidAmount()) {
 			throw new ValidationException("Bidded amount is lesser than minimum amount");
 		}
 
-		if (productValue.getSellerId() == newBid.getBuyerId()) {
+		if (productValue.getProduct().getSellerId() == newBid.getBuyerId()) {
 			throw new ValidationException("Buyer Id cannot be same as Seller Id");
 		}
 

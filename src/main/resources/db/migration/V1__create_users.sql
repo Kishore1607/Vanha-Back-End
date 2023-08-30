@@ -1,3 +1,5 @@
+USE kishore_sugumar_corejava_project;
+
 -- Create the "users" table
 CREATE TABLE users (
    id INT AUTO_INCREMENT PRIMARY KEY,
@@ -40,6 +42,13 @@ CREATE TABLE bid_history (
    FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+-- Create the "asserts" table
+CREATE TABLE assets(
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   url VARCHAR(255) NOT NULL,
+   status BOOLEAN DEFAULT 1
+);
+
 -- Create the "product_asserts" table with foreign keys to "products" and "asserts"
 CREATE TABLE product_assets(
    product_id INT,
@@ -49,9 +58,11 @@ CREATE TABLE product_assets(
    FOREIGN KEY (asset_id) REFERENCES assets(id)
 );
 
--- Create the "asserts" table
-CREATE TABLE assets(
-   id INT AUTO_INCREMENT PRIMARY KEY,
-   url VARCHAR(255) NOT NULL,
-   status BOOLEAN DEFAULT 1
+-- Create the "user_asserts" table with foreign keys to "users" and "asserts"
+CREATE TABLE user_assets(
+   user_id INT,
+   asset_id INT,
+   status BOOLEAN DEFAULT 1,
+   FOREIGN KEY (user_id) REFERENCES users(id),
+   FOREIGN KEY (asset_id) REFERENCES assets(id)
 );

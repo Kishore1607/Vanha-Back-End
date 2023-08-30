@@ -12,7 +12,7 @@ import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.Assets;
-import in.fssa.vanha.model.Product;
+import in.fssa.vanha.model.ProductWithAssets;
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.util.ConnectionUtil;
 
@@ -60,7 +60,7 @@ public class AssetsDAO {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public Set<Assets> findAllAssetsByProductId(String productId) throws PersistenceException, ServiceException, ValidationException{
+	public Set<Assets> findAllAssetsByProductId(int id) throws PersistenceException, ServiceException, ValidationException{
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -70,13 +70,7 @@ public class AssetsDAO {
 
 		try {
 
-			Product product = ProductService.findByProductId(productId);
-			if(product == null) {
-				throw new ServiceException("Product doesn't exists in product table");
-			}
-			int id = product.getId();
-
-			String query = "SELECT * FROM product_assets AS pa " + "INNER JOIN assets AS a ON pa.asset_id = a.id "
+			String query = "SELECT * FROM product_assets AS pa INNER JOIN assets AS a ON pa.asset_id = a.id "
 					+ "WHERE pa.product_id = ? And pa.status = 1";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
@@ -134,11 +128,11 @@ public class AssetsDAO {
 				}
 			}
 			
-			Product product = ProductService.findByProductId(updateAsset.getProductId());
+			ProductWithAssets product = ProductService.findByProductId(updateAsset.getProductId());
 			if(product == null) {
 				throw new ServiceException("Product doesn't exists in product table");
 			}
-			int id = product.getId();
+			int id = product.getProduct().getId();
 
 			// Insert into 'product_assets' table
 			pre2.setInt(1, id);

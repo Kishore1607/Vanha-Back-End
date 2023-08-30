@@ -14,7 +14,7 @@ import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.BidHistory;
-import in.fssa.vanha.model.Product;
+import in.fssa.vanha.model.ProductWithAssets;
 import in.fssa.vanha.service.*;
 import in.fssa.vanha.util.ConnectionUtil;
 
@@ -52,7 +52,7 @@ public class BidHistoryDAO {
 			int buyer = UserService.findUserByEmail(newBid.getBuyerUnique()).getId();
 			pre.setInt(3, buyer);
 			
-			int product = ProductService.findByProductId(newBid.getProductUnique()).getId();
+			int product = ProductService.findByProductId(newBid.getProductUnique()).getProduct().getId();
 			pre.setInt(4, product);
 
 			pre.executeUpdate();
@@ -80,11 +80,11 @@ public class BidHistoryDAO {
 		ResultSet rs = null;
 		
 	
-		Product product = ProductService.findByProductId(productId);
+		ProductWithAssets product = ProductService.findByProductId(productId);
 		if(product == null) {
 			throw new ServiceException("Product doesn't exists in product table");
 		}
-		int id = product.getId();
+		int id = product.getProduct().getId();
 
 		Set<BidHistory> bidHistoryArray = new HashSet<>();
 		

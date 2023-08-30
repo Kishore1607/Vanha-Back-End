@@ -38,10 +38,10 @@ public class AssetsService {
 	 * @return Set<List>
 	 * @throws Exception
 	 */
-	public Set<Assets> findAllAssetsByProductId(String productId) throws ServiceException, ValidationException {
+	public Set<Assets> findAllAssetsByProductId(int id) throws ServiceException, ValidationException {
 		try {
-			AssetValidator.findAssetValidate(productId);
-			Set<Assets> assetsList = assetsDao.findAllAssetsByProductId(productId);
+			AssetValidator.findAssetValidate(id);
+			Set<Assets> assetsList = assetsDao.findAllAssetsByProductId(id);
 			return assetsList;
 
 		} catch (PersistenceException e) {

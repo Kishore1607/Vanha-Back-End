@@ -16,7 +16,7 @@ import in.fssa.vanha.util.ConnectionUtil;
 import in.fssa.vanha.util.StringUtil;
 
 public class AssetValidator {
-	
+
 	/**
 	 * 
 	 * @param newAsste
@@ -48,12 +48,10 @@ public class AssetValidator {
 	 * @throws ServiceException
 	 * @throws PersistenceException
 	 */
-	public static void findAssetValidate(String productId) throws ValidationException, ServiceException{
+	public static void findAssetValidate(int id) throws ValidationException {
 
-		StringUtil.RegectIfInvalidString(productId, "Product Id");
-
-		if (ProductService.findByProductId(productId) == null) {
-			throw new ServiceException("Product does not exists");
+		if (id < 0) {
+			throw new ValidationException("Invalid product ID");
 		}
 	}
 
@@ -64,14 +62,15 @@ public class AssetValidator {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public static void updateValidate(Assets updateAsset) throws ValidationException, PersistenceException, ServiceException {
+	public static void updateValidate(Assets updateAsset)
+			throws ValidationException, PersistenceException, ServiceException {
 
 		StringUtil.RegectIfInvalidString(updateAsset.getOldValue(), "Old Asset value");
 
 		StringUtil.RegectIfInvalidString(updateAsset.getValue(), "New Asset");
 
 		StringUtil.RegectIfInvalidString(updateAsset.getProductId(), "Product id");
-		
+
 		if (updateAsset.getOldValue().equals(updateAsset.getValue())) {
 			throw new ValidationException("Old asset and new asset cannot be same");
 		}

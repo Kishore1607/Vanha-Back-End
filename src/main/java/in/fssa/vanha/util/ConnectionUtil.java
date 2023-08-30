@@ -34,7 +34,7 @@ public class ConnectionUtil {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("e");
+			throw new RuntimeException(e);
 		}
 		return conn;
 	}

@@ -19,6 +19,7 @@ import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.Product;
 import in.fssa.vanha.model.ProductAsset;
+import in.fssa.vanha.model.ProductWithAssets;
 import in.fssa.vanha.service.AssetsService;
 import in.fssa.vanha.service.ProductAssetService;
 import in.fssa.vanha.service.ProductService;
@@ -106,33 +107,96 @@ public class ProductDAO {
 	 * @param productId
 	 * @return Product
 	 * @throws PersistenceException
+	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
-	public static Product findProductByProductId(String productId) throws PersistenceException {
+	public static ProductWithAssets findProductByProductId(String productId)
+	        throws PersistenceException, ServiceException, ValidationException {
 
-		Product value = null;
+	    ProductWithAssets result = null;
+	    Connection conn = null;
+	    PreparedStatement pre = null;
+	    ResultSet rs = null;
+
+	    try {
+	        String query = "SELECT id, category, used_period, used_duration, description, name, price, seller_id, min_price "
+	                + "FROM products "
+	                + "WHERE product_id = ? AND status = 'a';";
+	        
+	        conn = ConnectionUtil.getConnection();
+	        pre = conn.prepareStatement(query);
+	        pre.setString(1, productId);
+	        rs = pre.executeQuery();
+	        
+	        int id = -1;
+	        
+	        if (rs.next()) {
+	            Product product = new Product();
+	            id = rs.getInt("id");
+	            product.setId(id);
+	            String category = Category.getCategoryString(rs.getString("category"));
+	            product.setCategory(category);
+	            product.setUsedPeriod(rs.getInt("used_period"));
+	            String duration = UsedDuration.getFullValue(rs.getString("used_duration"));
+	            product.setUsedDuration(duration);
+	            product.setDescription(rs.getString("description"));
+	            product.setName(rs.getString("name"));
+	            product.setPrice(rs.getInt("price"));
+	            product.setMinPrice(rs.getInt("min_price"));
+	            
+	            
+	            product.setSellerId(rs.getInt("seller_id"));
+
+	            // Fetch assets using a service method
+	            AssetsDAO assetDAO = new AssetsDAO();
+	            Set<Assets> assets = assetDAO.findAllAssetsByProductId(id);
+
+	            result = new ProductWithAssets(product, assets);
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new PersistenceException(e);
+	    } finally {
+	        ConnectionUtil.close(conn, pre, rs);
+	    }
+	    
+	    return result;
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws PersistenceException
+	 */
+	public Set<Product> findAllProducts() throws PersistenceException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
 
+		Set<Product> productArray = new HashSet<>();
+
 		try {
 
-			String query = "SELECT id, category, used_period, used_duration, description, name, price, seller_id, min_price\r\n"
-					+ "FROM products\r\n" + "WHERE product_id = ? AND status = 'a';";
+			String query = "SELECT * FROM products WHERE status = 'a';";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
-			pre.setString(1, productId);
 			rs = pre.executeQuery();
-			if (rs.next()) {
-				value = new Product();
-				value.setId(rs.getInt("id"));
-				value.setCategory(rs.getString("category"));
-				value.setUsedPeriod(rs.getInt("used_period"));
-				value.setUsedDuration(rs.getString("used_duration"));
-				value.setDescription(rs.getString("description"));
-				value.setName(rs.getString("name"));
-				value.setPrice(rs.getInt("price"));
-				value.setMinPrice(rs.getInt("min_price"));
-				value.setSellerId(rs.getInt("seller_id"));
+			while (rs.next()) {
+				Product product = new Product();
+				product.setId(rs.getInt("id"));
+				product.setProductId(rs.getString("product_id"));
+				product.setCategory(rs.getString("category"));
+				product.setUsedPeriod(rs.getInt("used_period"));
+				product.setUsedDuration(rs.getString("used_duration"));
+				product.setDescription(rs.getString("description"));
+				product.setName(rs.getString("name"));
+				product.setPrice(rs.getInt("price"));
+				product.setMinPrice(rs.getInt("min_price"));
+				product.setSellerId(rs.getInt("seller_id"));
+				product.setCreatedAt("" + rs.getDate("created_at"));
+				product.setModifiedAt("" + rs.getDate("modified_at"));
+				productArray.add(product);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -140,7 +204,7 @@ public class ProductDAO {
 		} finally {
 			ConnectionUtil.close(conn, pre, rs);
 		}
-		return value;
+		return productArray;
 	}
 
 	/**
@@ -164,8 +228,7 @@ public class ProductDAO {
 
 			int userId = UserService.findUserByEmail(sellerId).getId();
 
-			String query = "SELECT id, product_id, category, used_period, used_duration, description, name, price, seller_id, min_price\r\n"
-					+ "FROM products\r\n" + "WHERE seller_id = ? AND status = 'a';";
+			String query = "SELECT * FROM products WHERE seller_id = ? AND status = 'a';";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setInt(1, userId);
@@ -241,8 +304,8 @@ public class ProductDAO {
 		Connection conn = null;
 		PreparedStatement pre = null;
 
-		int id = ProductService.findByProductId(productId).getId();
-		
+		int id = ProductService.findByProductId(productId).getProduct().getId();
+
 		try {
 			String query = "UPDATE products SET status = 'd' WHERE product_id = ?";
 			conn = ConnectionUtil.getConnection();
@@ -255,7 +318,7 @@ public class ProductDAO {
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
-		
+
 		Connection conn1 = null;
 		PreparedStatement pre1 = null;
 

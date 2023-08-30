@@ -14,7 +14,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.service.AssetsService;
-import in.fssa.vanha.MocValue;
 import in.fssa.vanha.exception.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -26,7 +25,7 @@ public class TestFindAssets {
 	public void testFindAllAssetsByProductIdWithValidProductId() {
 	    // Assume this product ID exists in the database
 		
-		String existingProductId = MocValue.id;
+		int existingProductId = 11;
 	    
 	    assertDoesNotThrow(() -> {
 	        Set<Assets> assets = assetsService.findAllAssetsByProductId(existingProductId);
@@ -38,7 +37,7 @@ public class TestFindAssets {
 	@Test
 	public void testFindAllAssetsByProductIdWithNonExistentProductId() {
 	    
-	    String nonExistentProductId = "P99999"; // Use a product ID that doesn't exist in the database
+	    int nonExistentProductId = 34; // Use a product ID that doesn't exist in the database
 	    
 	    assertThrows(ServiceException.class, () -> {
 	    	assetsService.findAllAssetsByProductId(nonExistentProductId);
@@ -47,7 +46,7 @@ public class TestFindAssets {
 
 	@Test
 	public void testFindAssetValidateWithValidProductId() {
-	    String existingProductId = "f1541"; // Assume this product ID exists in the database
+	    int existingProductId = 1; // Assume this product ID exists in the database
 	    
 	    assertDoesNotThrow(() -> {
 	    	assetsService.findAllAssetsByProductId(existingProductId);
@@ -56,7 +55,7 @@ public class TestFindAssets {
 
 	@Test
 	public void testFindAssetValidateWithNonExistentProductId() {
-	    String nonExistentProductId = "P99999"; // Use a product ID that doesn't exist in the database
+	    int nonExistentProductId = 35; // Use a product ID that doesn't exist in the database
 	    
 	    assertThrows(ServiceException.class, () -> {
 	    	assetsService.findAllAssetsByProductId(nonExistentProductId);
@@ -65,7 +64,7 @@ public class TestFindAssets {
 
 	@Test
 	public void testFindAssetValidateWithInvalidProductId() {
-	    String invalidProductId = ""; // Empty product ID
+	    int invalidProductId = -10;
 	    
 	    assertThrows(ValidationException.class, () -> {
 	    	assetsService.findAllAssetsByProductId(invalidProductId);

@@ -17,7 +17,7 @@ public class ProductAssetDAO {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public void create(ProductAsset newProductAsset) throws PersistenceException{
+	public void create(ProductAsset newProductAsset) throws PersistenceException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 

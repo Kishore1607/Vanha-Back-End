@@ -28,4 +28,17 @@ public enum ProductStatus {
                 throw new IllegalArgumentException("Invalid input string for ProductStatus: " + input);
         }
     }
+    
+    public static String getFullValue(char input) {
+        switch (input) {
+            case 'a':
+                return "active";
+            case 's':
+                return "sold";
+            case 'd':
+                return "deleted";
+            default:
+                throw new IllegalArgumentException("Invalid input input for UsedDuration: " + input);
+        }
+    }
 }
