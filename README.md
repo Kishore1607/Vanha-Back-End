@@ -183,6 +183,20 @@ graph TD;
 A(ProductService) --> B(ProductDAO to reterive data)  
 B --> C(Get all Products from Database)  
 ```
+### Feature: List All Products
+#### Pre-requisites:  
+- [ ] Product table
+- [ ] Product entity
+- [ ] Product model
+- [ ] Product Dao 
+- [ ] Product service
+
+ #### Flow:  
+```mermaid  
+graph TD;  
+A(ProductService) --> B(ProductDAO to reterive data)  
+B --> C(Get all Products from Database)  
+```
 ### Feature: Update Product details
 #### Pre-requisites:  
 - [ ] Product table
