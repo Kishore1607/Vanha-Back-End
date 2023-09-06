@@ -48,20 +48,6 @@ public abstract class BidHistoryEntity implements Comparable<BidHistoryEntity> {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	public String getBuyerUnique() {
-		return buyerUnique;
-	}
-
-	public void setBuyerUnique(String buyerUnique) {
-		this.buyerUnique = buyerUnique;
-	}
-	public String getProductUnique() {
-		return productUnique;
-	}
-
-	public void setProductUnique(String productUnique) {
-		this.productUnique = productUnique;
-	}
 
 	int bidId;
 	int bidAmount;
@@ -69,6 +55,5 @@ public abstract class BidHistoryEntity implements Comparable<BidHistoryEntity> {
 	int buyerId;
 	int productId;
 	boolean status;
-	String buyerUnique;
-	String productUnique;
+
 }

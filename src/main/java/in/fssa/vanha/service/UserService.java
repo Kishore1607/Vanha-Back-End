@@ -17,7 +17,7 @@ public class UserService {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public void create(User newUser) throws ValidationException, ServiceException{
+	public void create(User newUser) throws ValidationException, ServiceException {
 		try {
 			UserValidator.createValidate(newUser);
 			userDAO.create(newUser);
@@ -32,7 +32,7 @@ public class UserService {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public void update(User updateUser) throws ValidationException, ServiceException{
+	public void update(User updateUser) throws ValidationException, ServiceException {
 
 		try {
 			UserValidator.updateValidate(updateUser);
@@ -50,14 +50,34 @@ public class UserService {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public static User findUserByEmail(String email) throws ValidationException, ServiceException{
+	public static User findUserByEmail(String email) throws ValidationException, ServiceException {
 		try {
 			UserValidator.findUserValidate(email);
-			return userDAO.findUserByEmail(email);
+			return UserDAO.findUser(email);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Error while finding user");
 		}
-		
+
+	}
+
+	/**
+	 * 
+	 * @param updateUser
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
+	public User loginUser(User user) throws ValidationException, ServiceException {
+
+		User userDetail = null;
+		try {
+			UserValidator.loginValidation(user);
+			userDetail = userDAO.loginUser(user);
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error while updating user");
+		}
+
+		return userDetail;
+
 	}
 
 }

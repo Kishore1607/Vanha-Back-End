@@ -21,7 +21,7 @@ public class AssetsService {
 	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public int create(Assets newAsset) throws ServiceException, ValidationException {
+	public int[] create(Set<Assets> newAsset) throws ServiceException, ValidationException {
 		try {
 			AssetValidator.createValidate(newAsset);
 			return assetsDao.create(newAsset);
@@ -56,11 +56,11 @@ public class AssetsService {
 	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public void updateAssets(Assets newAsset) throws ServiceException, ValidationException {
+	public void updateAssets(Set<Assets> newAsset, int id) throws ServiceException, ValidationException {
 
 		try {
-			AssetValidator.updateValidate(newAsset);
-			assetsDao.updateAssetsByAssetId(newAsset);
+			AssetValidator.updateValidate(newAsset, id);
+			assetsDao.updateAssetsByAssetId(newAsset, id);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Error occured in updating asset in asset DAO");
 		}

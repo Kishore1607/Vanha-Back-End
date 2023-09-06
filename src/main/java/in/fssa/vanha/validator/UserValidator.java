@@ -16,11 +16,13 @@ public class UserValidator {
 	static String nameRegex = "^(?!\\s)[a-zA-Z\\s]+$";
 	static String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,24}$";
 	static String locationRegex = "^(?!\\s)[a-zA-Z\\s,]+\\.?$";
+	static String imageRegex = "^(https?://).*";
 
 	static Pattern emailPattern = Pattern.compile(emailRegex);
 	static Pattern namePattern = Pattern.compile(nameRegex);
 	static Pattern passwordPattern = Pattern.compile(passwordRegex);
 	static Pattern locationPattern = Pattern.compile(locationRegex);
+	static Pattern imagePattern = Pattern.compile(imageRegex);
 
 	/**
 	 * 
@@ -51,17 +53,17 @@ public class UserValidator {
 
 		// Length checking
 
-		if (newUser.getEmail().length() > 200) {
+		if (newUser.getEmail().length() > 100) {
 			throw new ValidationException("Invalid email length");
 		}
-		if (newUser.getPassword().length() > 50) {
+		if (newUser.getPassword().length() > 8) {
 			throw new ValidationException("Invalid password length");
 		}
-		if (newUser.getName().length() > 50) {
+		if (newUser.getName().length() > 25) {
 			throw new ValidationException("Invalid name length");
 
 		}
-		if (newUser.getLocation().length() > 100) {
+		if (newUser.getLocation().length() > 50) {
 			throw new ValidationException("Invalid location length");
 
 		}
@@ -71,6 +73,13 @@ public class UserValidator {
 		Matcher nameMatcher = namePattern.matcher(newUser.getName());
 		Matcher passwordMatcher = passwordPattern.matcher(newUser.getPassword());
 		Matcher locationMatcher = locationPattern.matcher(newUser.getLocation());
+
+		if (newUser.getImage() != null) {
+			Matcher imageMatcher = imagePattern.matcher(newUser.getImage());
+			if (!imageMatcher.matches()) {
+				throw new ValidationException("Invalid image pattern");
+			}
+		}
 
 		if (!emailMatcher.matches()) {
 			throw new ValidationException("Invalid email pattern");
@@ -101,7 +110,8 @@ public class UserValidator {
 	 * @throws ServiceException
 	 * @throws PersistenceException
 	 */
-	public static void updateValidate(User updateUser) throws ValidationException, ServiceException, PersistenceException {
+	public static void updateValidate(User updateUser)
+			throws ValidationException, ServiceException, PersistenceException {
 
 		// null or empty checking
 
@@ -125,7 +135,7 @@ public class UserValidator {
 			throw new ValidationException("Invalid name length");
 
 		}
-		if (updateUser.getLocation().length() > 100) {
+		if (updateUser.getLocation().length() > 50) {
 			throw new ValidationException("Invalid location length");
 		}
 
@@ -134,6 +144,13 @@ public class UserValidator {
 		Matcher emailMatcher = emailPattern.matcher(updateUser.getEmail());
 		Matcher nameMatcher = namePattern.matcher(updateUser.getName());
 		Matcher locationMatcher = locationPattern.matcher(updateUser.getLocation());
+
+		if (updateUser.getImage() != null) {
+			Matcher imageMatcher = imagePattern.matcher(updateUser.getImage());
+			if (!imageMatcher.matches()) {
+				throw new ValidationException("Invalid image pattern");
+			}
+		}
 
 		if (!emailMatcher.matches()) {
 			throw new ValidationException("Invalid email pattern");
@@ -149,9 +166,7 @@ public class UserValidator {
 
 		// exists checking
 
-		UserDAO findUser = new UserDAO();
-
-		User user = findUser.findUserByEmail(updateUser.getEmail());
+		User user = UserDAO.findUser(updateUser.getEmail());
 
 		if (user == null) {
 			throw new ServiceException("User doesn't exists");
@@ -170,6 +185,33 @@ public class UserValidator {
 		}
 
 		StringUtil.RegectIfInvalidString(email, "Email");
+	}
+
+	/**
+	 * 
+	 * @param email
+	 * @throws ValidationException
+	 */
+	public static void loginValidation(User user) throws ValidationException {
+		if (user == null) {
+			throw new ValidationException("input can't be null");
+		}
+
+		StringUtil.RegectIfInvalidString(user.getEmail(), "Email");
+		StringUtil.RegectIfInvalidString(user.getPassword(), "password");
+
+		// pattern checking
+
+		Matcher emailMatcher = emailPattern.matcher(user.getEmail());
+		Matcher passwordMatcher = passwordPattern.matcher(user.getPassword());
+
+		if (!emailMatcher.matches()) {
+			throw new ValidationException("Invalid email pattern");
+		}
+
+		if (!passwordMatcher.matches()) {
+			throw new ValidationException("Invalid password pattern");
+		}
 	}
 
 }

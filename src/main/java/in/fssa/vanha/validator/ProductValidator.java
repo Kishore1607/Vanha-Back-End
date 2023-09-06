@@ -1,5 +1,6 @@
 package in.fssa.vanha.validator;
 
+import in.fssa.vanha.enumPackage.Category;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.Product;
@@ -15,10 +16,10 @@ public class ProductValidator {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public static void createValidate(Product newProduct) throws ValidationException, ServiceException {
+	public static void createValidate(Product newProduct, String userEmail)
+			throws ValidationException, ServiceException {
 
 		// null or empty checking
-
 		if (newProduct == null) {
 			throw new ValidationException("Invalid product input");
 		}
@@ -29,14 +30,22 @@ public class ProductValidator {
 
 		StringUtil.RegectIfInvalidString(newProduct.getDescription(), "Description");
 
+		StringUtil.RegectIfInvalidString(userEmail, "User Email");
+
 		// Length checking
 
 		if (newProduct.getProductId().length() > 50) {
 			throw new ValidationException("Invalid product id length");
 		}
-		if (newProduct.getName().length() > 255) {
+		if (newProduct.getName().length() > 100) {
 			throw new ValidationException("Invalid name length");
 
+		}
+
+		// Category Checking
+
+		if (Category.getCate(newProduct.getCategory()).equals("non")) {
+			throw new ValidationException("Invalid input string for Category type");
 		}
 
 		// Int checking
@@ -53,30 +62,16 @@ public class ProductValidator {
 		if (newProduct.getUsedPeriod() < 0 || newProduct.getUsedPeriod() > 100) {
 			throw new ValidationException("Used period should between the limit 1 - 100");
 		}
-		if (newProduct.getSellerId() < 0) {
-			throw new ValidationException("Invalid Seller Id");
-		}
 
 		// Product exists checking
-		if (ProductService.findByProductId(newProduct.getProductId()) != null) {
-			throw new ServiceException("Product already exists");
+		if (ProductService.ifExistsOrNot(newProduct.getProductId()) != null) {
+			throw new ServiceException("product already exists");
 		}
 
 		// Seller exists checking
-		if (UserService.findUserByEmail(newProduct.getSellerUnique()) == null) {
+		if (UserService.findUserByEmail(userEmail) == null) {
 			throw new ServiceException("User does not exists");
 		}
-	}
-
-	/**
-	 * 
-	 * @param productId
-	 * @throws ValidationException
-	 */
-	public static void findProductValidate(String productId) throws ValidationException {
-
-		StringUtil.RegectIfInvalidString(productId, "Product ID");
-
 	}
 
 	/**
@@ -116,14 +111,21 @@ public class ProductValidator {
 		StringUtil.RegectIfInvalidString(updateProduct.getDescription(), "Description");
 
 		// Length checking
-		if (updateProduct.getName().length() > 255) {
-			throw new ValidationException("Invalid used duration length");
+		if (updateProduct.getName().length() > 50) {
+			throw new ValidationException("Invalid product name length");
 
+		}
+
+		// Duration Checking
+
+		if (!updateProduct.getUsedDuration().equalsIgnoreCase("month")
+				&& !updateProduct.getUsedDuration().equalsIgnoreCase("year")) {
+			throw new ValidationException("Invalid used duration");
 		}
 
 		// Int checking
 
-		if(updateProduct.getUsedPeriod() < 0 || updateProduct.getUsedPeriod() > 100) {
+		if (updateProduct.getUsedPeriod() < 0 || updateProduct.getUsedPeriod() > 100) {
 			throw new ValidationException("Used period should between the limit 1 - 100");
 		}
 		if (updateProduct.getPrice() < 0 || updateProduct.getPrice() > 100000000) {
@@ -136,10 +138,8 @@ public class ProductValidator {
 			throw new ValidationException("Minimum amount price should be lesser than price");
 		}
 
-		// Product exists checking
-
-		if (ProductService.findByProductId(updateProduct.getProductId()) == null) {
-			throw new ServiceException("product doesn't exists");
+		if (ProductService.ifExistsOrNot(updateProduct.getProductId()) == null) {
+			throw new ServiceException("Product does not exists");
 		}
 	}
 
@@ -149,13 +149,13 @@ public class ProductValidator {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public static void deleteValidate(String productID) throws ValidationException, ServiceException {
+	public static void productIdValidate(String productID) throws ValidationException, ServiceException {
 
 		StringUtil.RegectIfInvalidString(productID, "Product ID");
 
 		// Product exists checking
-		if (ProductService.findByProductId(productID) == null) {
-			throw new ServiceException("Product doesn't exists");
+		if (ProductService.ifExistsOrNot(productID) == null) {
+			throw new ServiceException("Product does not exists");
 		}
 	}
 
@@ -165,22 +165,25 @@ public class ProductValidator {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public static void findAllProductValidate(String category) throws ValidationException, ServiceException {
+	public static void findAllProductValidate(String category, String userEmail)
+			throws ValidationException, ServiceException {
 
-		StringUtil.RegectIfInvalidString(category, "category");
+		StringUtil.RegectIfInvalidString(category, "Category");
+		StringUtil.RegectIfInvalidString(userEmail, "User Email");
 
 		String input = category.toLowerCase();
 
-		switch (input) {
-		case "car":
-		case "bike":
-		case "computer":
-		case "mobile":
-			break;
-		default:
-			throw new ValidationException("Input category does not match any of the four options.");
+		// Category Checking
+
+		if (Category.getCate(input).equals("non")) {
+			throw new ValidationException("Invalid input string for Category type");
 		}
 
+		// User checking
+
+		if (UserService.findUserByEmail(userEmail) == null) {
+			throw new ServiceException("User does not exists");
+		}
 	}
 
 }

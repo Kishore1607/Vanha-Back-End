@@ -22,7 +22,7 @@ public class ProductAssetDAO {
 		PreparedStatement pre = null;
 
 		try {
-			String query = "Insert Into product_assets (product_id, asset_id) " + "Values(?, ?)";
+			String query = "Insert Into product_assets (product_id, asset_id) value (?, ?)";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 

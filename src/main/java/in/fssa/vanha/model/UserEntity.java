@@ -48,6 +48,14 @@ public abstract class UserEntity implements Comparable<UserEntity> {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 	public boolean getStatus() {
 		return status;
@@ -73,12 +81,18 @@ public abstract class UserEntity implements Comparable<UserEntity> {
 		this.modifiedAt = modifieddAt;
 	}
 
+	@Override
+	public String toString() {
+		return "UserEntity [name=" + name + ", email=" + email + ", number=" + number + ", location=" + location + ", image=" + image + "]";
+	}
+
 	int id;
 	String name;
 	String email;
 	String password;
 	long number;
 	String location;
+	String image;
 	boolean status = true;
 	String createdAt;
 	String modifiedAt;

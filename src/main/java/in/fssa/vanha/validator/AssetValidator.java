@@ -1,122 +1,77 @@
 package in.fssa.vanha.validator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.Assets;
-import in.fssa.vanha.util.ConnectionUtil;
 import in.fssa.vanha.util.StringUtil;
 
 public class AssetValidator {
 
 	/**
 	 * 
-	 * @param newAsste
+	 * @param newAsset
 	 * @throws ValidationException
 	 */
-	public static void createValidate(Assets newAsste) throws ValidationException {
+	public static void createValidate(Set<Assets> newAssets) throws ValidationException {
+		for (Assets asset : newAssets) {
+			String assetValue = asset.getValue();
 
-		StringUtil.RegectIfInvalidString(newAsste.getValue(), "Asset");
+			StringUtil.RegectIfInvalidString(assetValue, "Url");
 
-		if (newAsste.getValue().length() > 50) {
-			throw new ValidationException("Invalid product id length");
-		}
+			if (assetValue.length() > 50) {
+				throw new ValidationException("Invalid asset value length");
+			}
 
-		String urlRegex = "^(http|https)://([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$";
+			String urlRegex = "^(https?://).*";
+			Pattern urlPattern = Pattern.compile(urlRegex);
 
-		Pattern urlPattern = Pattern.compile(urlRegex);
-
-		Matcher urlMatcher = urlPattern.matcher(newAsste.getValue());
-
-		if (!urlMatcher.matches()) {
-			throw new ValidationException("Invalid url pattern");
+			Matcher urlMatcher = urlPattern.matcher(assetValue);
+			if (!urlMatcher.matches()) {
+				throw new ValidationException("Invalid URL pattern");
+			}
 		}
 	}
 
 	/**
 	 * 
-	 * @param productId
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 * @throws PersistenceException
-	 */
-	public static void findAssetValidate(int id) throws ValidationException {
-
-		if (id < 0) {
-			throw new ValidationException("Invalid product ID");
-		}
-	}
-
-	/**
-	 * 
+	 * @param id
 	 * @param updateAsset
 	 * @throws ValidationException
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public static void updateValidate(Assets updateAsset)
+	public static void updateValidate(Set<Assets> updateAssets, int id)
 			throws ValidationException, PersistenceException, ServiceException {
 
-		StringUtil.RegectIfInvalidString(updateAsset.getOldValue(), "Old Asset value");
+		for (Assets asset : updateAssets) {
+			String assetValue = asset.getValue();
+			StringUtil.RegectIfInvalidString(assetValue, "Url");
 
-		StringUtil.RegectIfInvalidString(updateAsset.getValue(), "New Asset");
-
-		StringUtil.RegectIfInvalidString(updateAsset.getProductId(), "Product id");
-
-		if (updateAsset.getOldValue().equals(updateAsset.getValue())) {
-			throw new ValidationException("Old asset and new asset cannot be same");
-		}
-
-		if (updateAsset.getOldValue().length() > 50) {
-			throw new ValidationException("Invalid product id length");
-		}
-		if (updateAsset.getValue().length() > 50) {
-			throw new ValidationException("Invalid product id length");
-		}
-
-		String urlRegex = "^(http|https)://([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$";
-
-		Pattern urlPattern = Pattern.compile(urlRegex);
-
-		Matcher urlMatcher = urlPattern.matcher(updateAsset.getValue());
-
-		if (!urlMatcher.matches()) {
-			throw new ValidationException("Invalid url pattern of new asset");
-		}
-
-		if (ProductService.findByProductId(updateAsset.getProductId()) == null) {
-			throw new ServiceException("Product does not exists");
-		}
-
-		Connection conn = null;
-		PreparedStatement pre = null;
-		ResultSet rs = null;
-
-		try {
-
-			String query = "SELECT * FROM assets where url = ? AND status = 1";
-			conn = ConnectionUtil.getConnection();
-			pre = conn.prepareStatement(query);
-			pre.setString(1, updateAsset.getOldValue());
-			rs = pre.executeQuery();
-			if (!rs.next()) {
-				throw new ServiceException("Old asset does not exists");
+			if (assetValue.length() > 50) {
+				throw new ValidationException("Invalid asset value length");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new PersistenceException(e);
-		} finally {
-			ConnectionUtil.close(conn, pre, rs);
+
+			String urlRegex = "^(https?://).*";
+			Pattern urlPattern = Pattern.compile(urlRegex);
+
+			Matcher urlMatcher = urlPattern.matcher(assetValue);
+			if (!urlMatcher.matches()) {
+				throw new ValidationException("Invalid URL pattern of the asset");
+			}
+		}
+	}
+
+	public static void findAssetValidate(int id) throws ValidationException {
+
+		if (id <= 0) {
+			throw new ValidationException("Invalid Product id");
 		}
 
 	}
+
 }

@@ -1,10 +1,10 @@
 package in.fssa.vanha.validator;
 
+import in.fssa.vanha.dao.ProductDAO;
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
-import in.fssa.vanha.model.BidHistory;
-import in.fssa.vanha.model.ProductWithAssets;
+import in.fssa.vanha.model.Product;
 import in.fssa.vanha.service.ProductService;
 import in.fssa.vanha.service.UserService;
 import in.fssa.vanha.util.StringUtil;
@@ -18,36 +18,29 @@ public class BidHistoryValidator {
 	 * @throws ServiceException
 	 * @throws PersistenceException
 	 */
-	public static void createValidate(BidHistory newBid) throws ValidationException, ServiceException{
-		
-		if (newBid == null) {
-			throw new ValidationException("Bid input cannot be null");
+	public static void createValidate(int amount, String buyerId, String productId)
+			throws ValidationException, ServiceException {
+
+		StringUtil.RegectIfInvalidString(productId, "Product ID");
+
+		StringUtil.RegectIfInvalidString(buyerId, "Buyer email");
+
+		if (UserService.findUserByEmail(buyerId) == null) {
+			throw new ServiceException("Invalid Buyer");
 		}
-		
-		StringUtil.RegectIfInvalidString(newBid.getProductUnique(), "Product ID");
 
-		StringUtil.RegectIfInvalidString(newBid.getBuyerUnique(), "Seller email");
-
-		if (newBid.getBidAmount() < 0 || newBid.getBidAmount() > 100000000) {
+		if (amount < 0 || amount > 100000000) {
 			throw new ValidationException("Bidded amount should be with in the limit of 1 - 100000000");
 		}
 
-		ProductWithAssets productValue = ProductService.findByProductId(newBid.getProductUnique());
+		Product productValue = ProductService.ifExistsOrNot(productId);
 
-		if (productValue.getProduct().getMinPrice() > newBid.getBidAmount()) {
-			throw new ValidationException("Bidded amount is lesser than minimum amount");
-		}
-
-		if (productValue.getProduct().getSellerId() == newBid.getBuyerId()) {
+		int user = UserService.findUserByEmail(buyerId).getId();
+		if (productValue.getSellerId() == user) {
 			throw new ValidationException("Buyer Id cannot be same as Seller Id");
 		}
-
-		if (newBid.getBuyerId() < 0) {
-			throw new ValidationException("Invalid Buyer Id");
-		}
-
-		if (UserService.findUserByEmail(newBid.getBuyerUnique()) == null) {
-			throw new ServiceException("Buyer not found in user table");
+		if (productValue.getMinPrice() > amount) {
+			throw new ValidationException("Bidded amount is lesser than minimum amount");
 		}
 
 	}
@@ -56,10 +49,17 @@ public class BidHistoryValidator {
 	 * 
 	 * @param productId
 	 * @throws ValidationException
+	 * @throws PersistenceException
 	 */
-	public static void findValidate(String productId) throws ValidationException {
+	public static void findValidate(int productId) throws ValidationException, ServiceException, PersistenceException {
 
-		StringUtil.RegectIfInvalidString(productId, "Product Id");
+		if (productId < 0) {
+			throw new ValidationException("Invalid Product Id");
+		}
+		if (ProductDAO.isActive(productId) == false) {
+			throw new ServiceException("product not found in product table");
+		}
+
 	}
 
 }

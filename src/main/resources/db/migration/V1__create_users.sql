@@ -57,12 +57,3 @@ CREATE TABLE product_assets(
    FOREIGN KEY (product_id) REFERENCES products(id),
    FOREIGN KEY (asset_id) REFERENCES assets(id)
 );
-
--- Create the "user_asserts" table with foreign keys to "users" and "asserts"
-CREATE TABLE user_assets(
-   user_id INT,
-   asset_id INT,
-   status BOOLEAN DEFAULT 1,
-   FOREIGN KEY (user_id) REFERENCES users(id),
-   FOREIGN KEY (asset_id) REFERENCES assets(id)
-);

@@ -60,26 +60,15 @@ public class ConnectionUtil {
 	 * @param pre2
 	 * @param pre3
 	 * @param pre4
-	 * @param pre5
 	 */
-	public static void close(Connection conn, PreparedStatement pre1, PreparedStatement pre2, PreparedStatement pre3,
-			PreparedStatement pre4, PreparedStatement pre5) {
+	public static void close(Connection conn, PreparedStatement pre1, PreparedStatement pre2) {
 
 		try {
-			if (pre1 != null) {
-				pre1.close();
-			}
 			if (pre2 != null) {
 				pre2.close();
 			}
-			if (pre3 != null) {
-				pre3.close();
-			}
-			if (pre4 != null) {
-				pre4.close();
-			}
-			if (pre5 != null) {
-				pre5.close();
+			if (pre1 != null) {
+				pre1.close();
 			}
 			if (conn != null) {
 				conn.close();

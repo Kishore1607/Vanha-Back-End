@@ -1,6 +1,5 @@
 package in.fssa.vanha.model;
 
-
 public class User extends UserEntity {
 
 	@Override
@@ -12,6 +11,5 @@ public class User extends UserEntity {
 		}
 		return -1;
 	}
-
 
 }

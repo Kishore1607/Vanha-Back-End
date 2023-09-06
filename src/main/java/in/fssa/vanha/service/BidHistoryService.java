@@ -6,7 +6,7 @@ import in.fssa.vanha.dao.BidHistoryDAO;
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
-import in.fssa.vanha.model.BidHistory;
+import in.fssa.vanha.model.BidDTO;
 import in.fssa.vanha.validator.BidHistoryValidator;
 
 public class BidHistoryService {
@@ -18,10 +18,11 @@ public class BidHistoryService {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public void create(BidHistory newBid) throws ServiceException, ValidationException {
+	public void create(int amount, String buyerId, String productId)
+			throws ServiceException, ValidationException {
 		try {
-			BidHistoryValidator.createValidate(newBid);
-			bidHistoryDao.create(newBid);
+			BidHistoryValidator.createValidate(amount, buyerId, productId);
+			bidHistoryDao.create(amount, buyerId, productId);
 
 		} catch (PersistenceException e) {
 			throw new ServiceException("Error occured in creating asset in asset DAO");
@@ -36,11 +37,10 @@ public class BidHistoryService {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public Set<BidHistory> findAllBidsByProductId(String productId)
-			throws ServiceException, ValidationException {
+	public Set<BidDTO> findAllBidsByProductId(int productId) throws ServiceException, ValidationException {
 		try {
 			BidHistoryValidator.findValidate(productId);
-			return bidHistoryDao.findAllBidsByProductId(productId);
+			return BidHistoryDAO.findAllBidsByProductId(productId);
 
 		} catch (PersistenceException e) {
 			throw new ServiceException("Error occured in creating asset in asset DAO");

@@ -46,7 +46,7 @@ public class ProductRandomGenerator {
 	public int usedPeriodGenerator() {
 
 		int min = 1;
-		int max = 80;
+		int max = 25;
 
 		int randomValue = min + (int) (Math.random() * (max - min + 1));
 
@@ -76,10 +76,10 @@ public class ProductRandomGenerator {
 	}
 
 	public String textGenerator() {
-		String alpha = "abcdefghijklmnopqrstuvwyz0987654321#$%^&*#@!";
+		String alpha = "abcdefghijklmnopqrstuvwyz";
 		String text = "";
 		for (int i = 0; i < 100; i++) {
-			if (i % 5 == 0) {
+			if (i % 6 == 0) {
 				text += " ";
 			} else {
 				int alph = (int) (Math.random() * alpha.length());
@@ -90,36 +90,37 @@ public class ProductRandomGenerator {
 		return text;
 	}
 
-	public String nameGenerator() {
-		String alpha = "abcdefghijklmnopqrstuvwyz";
-		String number = "0987654321";
-
-		String name = "";
-		for (int i = 0; i < 10; i++) {
-			if (i < 5) {
-				int alph = (int) (Math.random() * alpha.length());
-				char value = alpha.charAt(alph);
-				name += value;
-			} else if (i == 5) {
-				name += " - ";
-			} else {
-				int alph = (int) (Math.random() * number.length());
-				char value = number.charAt(alph);
-				name += value;
-			}
-		}
+	public String nameGenerator(String category) {
+		String name = null;
+		 if (category == "bike") {
+			 name = "New Bike";
+			  }
+			  if (category == "car") {
+				  name = "New Car";
+			  }
+			  if (category == "computer") {
+				  name = "New Laptop";
+			  }
+			  if (category == "mobile") {
+				  name = "New Mobile Phone";
+			  }
 		return name;
 	}
 
-	public String assetGenerator() {
-		String alpha = "abcdefghijklmnopqrstuvwxyz0987654321";
-		String asset = "https://www.";
-		for (int i = 0; i < 5; i++) {
-			int alph = (int) (Math.random() * alpha.length());
-			char value = alpha.charAt(alph);
-			asset += value;
-		}
-		asset += ".com";
-		return asset;
+	public String assetGenerator(String category) {
+		String image = null;
+		 if (category == "bike") {
+			    image = "https://source.unsplash.com/featured/?motorcycle";
+			  }
+			  if (category == "car") {
+			    image = "https://source.unsplash.com/featured/?car";
+			  }
+			  if (category == "computer") {
+			    image = "https://source.unsplash.com/featured/?laptop";
+			  }
+			  if (category == "mobile") {
+			    image = "https://source.unsplash.com/featured/?mobile-phone";
+			  }
+		return image;
 	}
 }
