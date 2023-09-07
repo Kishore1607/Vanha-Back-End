@@ -43,11 +43,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>in.kishoresugumar</groupId>
-			<artifactId>vanha</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-runner</artifactId>
 			<version>1.7.0</version>
