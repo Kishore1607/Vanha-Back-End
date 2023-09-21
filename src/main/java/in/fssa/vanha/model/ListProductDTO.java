@@ -58,12 +58,12 @@ public class ListProductDTO {
 		this.SellerImage = SellerImage;
 	}
 
-	@Override
-	public String toString() {
-		return "ListProductDTO [productId=" + productId + ", ProductName=" + ProductName + ", price=" + price
-				+ ", asset=" + asset + ", sellerName=" + sellerName + ", sellerLocation=" + sellerLocation
-				+ ", SellerImage=" + SellerImage + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "ListProductDTO [productId=" + productId + ", ProductName=" + ProductName + ", price=" + price
+//				+ ", asset=" + asset + ", sellerName=" + sellerName + ", sellerLocation=" + sellerLocation
+//				+ ", SellerImage=" + SellerImage + "]";
+//	}
 
 	// Product
 	String productId;

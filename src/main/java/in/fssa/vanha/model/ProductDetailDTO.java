@@ -1,6 +1,6 @@
 package in.fssa.vanha.model;
 
-import java.util.Set;
+import java.util.List;
 
 public class ProductDetailDTO {
 
@@ -100,19 +100,19 @@ public class ProductDetailDTO {
 		SellerLocation = sellerLocation;
 	}
 
-	public Set<Assets> getAssets() {
+	public List<Assets> getAssets() {
 		return assets;
 	}
 
-	public void setAssets(Set<Assets> assets) {
-		this.assets = assets;
+	public void setAssets(List<Assets> assets2) {
+		this.assets = assets2;
 	}
 
-	public Set<BidDTO> getBids() {
+	public List<BidDTO> getBids() {
 		return bids;
 	}
 
-	public void setBids(Set<BidDTO> bids) {
+	public void setBids(List<BidDTO> bids) {
 		this.bids = bids;
 	}
 
@@ -176,8 +176,8 @@ public class ProductDetailDTO {
 	String SellerLocation;
 
 	// Asset
-	Set<Assets> assets;
+	List<Assets> assets;
 
 	// Bid
-	Set<BidDTO> bids;
+	List<BidDTO> bids;
 }

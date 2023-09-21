@@ -8,7 +8,9 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import in.fssa.vanha.enumPackage.Category;
@@ -40,7 +42,7 @@ public class ProductDAO {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public void create(Product newProduct, Set<Assets> newAsset, String userEmail)
+	public void create(Product newProduct, List<Assets> newAsset, String userEmail)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -147,10 +149,10 @@ public class ProductDAO {
 				result.setSellerImage(rs.getString("image"));
 
 				AssetsDAO assetDAO = new AssetsDAO();
-				Set<Assets> assets = assetDAO.findAllAssetsByProductId(id);
+				List<Assets> assets = assetDAO.findAllAssetsByProductId(id);
 				result.setAssets(assets);
 
-				Set<BidDTO> bids = BidHistoryDAO.findAllBidsByProductId(id);
+				List<BidDTO> bids = BidHistoryDAO.findAllBidsByProductId(id);
 				result.setBids(bids);
 
 			}
@@ -181,9 +183,9 @@ public class ProductDAO {
 
 		try {
 
-			String query = "SELECT p.id, p.product_id, p.name, p.price, \r\n"
-					+ "       p.seller_id, u.username, u.location, u.image\r\n" + "FROM products p\r\n"
-					+ "INNER JOIN users u ON p.seller_id = u.id\r\n" + "WHERE p.status = 'a' AND NOT u.email = ?;";
+			String query = "SELECT p.id, p.product_id, p.name, p.price, "
+					+ "       p.seller_id, u.username, u.location, u.image " + "FROM products p "
+					+ "INNER JOIN users u ON p.seller_id = u.id " + "WHERE p.status = 'a' AND NOT u.email = ?;";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setString(1, userEmail);
@@ -274,13 +276,13 @@ public class ProductDAO {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public Set<ListProductDTO> findAllProductsBySellerId(String userEmail)
+	public List<ListProductDTO> findAllProductsBySellerId(String userEmail)
 			throws PersistenceException, ValidationException, ServiceException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
 
-		Set<ListProductDTO> productArray = new HashSet<>();
+		List<ListProductDTO> productArray = new ArrayList<>();
 
 		try {
 
@@ -320,7 +322,7 @@ public class ProductDAO {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public void update(Product updateProduct, Set<Assets> assets)
+	public void update(Product updateProduct)
 			throws PersistenceException, ServiceException, ValidationException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
@@ -346,9 +348,6 @@ public class ProductDAO {
 			pre.setString(8, updateProduct.getProductId());
 			pre.executeUpdate();
 
-			int id = ProductDAO.methodForValidation(updateProduct.getProductId()).getId();
-			AssetsService as = new AssetsService();
-			as.updateAssets(assets, id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e);
@@ -433,6 +432,52 @@ public class ProductDAO {
 			pre = conn.prepareStatement(query);
 			pre.setString(1, cate);
 			pre.setInt(2, id);
+			rs = pre.executeQuery();
+
+			while (rs.next()) {
+
+				int productId = rs.getInt("id");
+
+				ListProductDTO product = new ListProductDTO();
+
+				product.setProductId(rs.getString("product_id"));
+				product.setProductName(rs.getString("name"));
+				product.setPrice(rs.getInt("price"));
+
+				product.setSellerName(rs.getString("username"));
+				product.setSellerLocation(rs.getString("location"));
+				product.setSellerImage(rs.getString("image"));
+
+				product.setAsset(AssetsDAO.findFirstAssetByProductId(productId));
+
+				productArray.add(product);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e);
+		} finally {
+			ConnectionUtil.close(conn, pre, rs);
+		}
+		return productArray;
+	}
+
+	public Set<ListProductDTO> findAllProductsByCategory(String category)
+			throws PersistenceException, ServiceException, ValidationException {
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet rs = null;
+
+		Set<ListProductDTO> productArray = new HashSet<>();
+
+		String cate = Category.getCate(category);
+
+		try {
+			String query = "SELECT p.id, p.product_id, p.name, p.price,\r\n"
+					+ "       p.seller_id, u.username, u.location, u.image\r\n" + "FROM products p\r\n"
+					+ "INNER JOIN users u ON p.seller_id = u.id\r\n" + "WHERE p.status = 'a' AND p.category = ?";
+			conn = ConnectionUtil.getConnection();
+			pre = conn.prepareStatement(query);
+			pre.setString(1, cate);
 			rs = pre.executeQuery();
 
 			while (rs.next()) {

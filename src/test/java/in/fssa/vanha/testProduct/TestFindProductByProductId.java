@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
-import in.fssa.vanha.model.ProductDetailDTO;
 import in.fssa.vanha.service.ProductService;
 
 public class TestFindProductByProductId {

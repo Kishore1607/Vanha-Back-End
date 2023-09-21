@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
@@ -71,13 +71,13 @@ public class BidHistoryDAO {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public static Set<BidDTO> findAllBidsByProductId(int productId)
+	public static List<BidDTO> findAllBidsByProductId(int productId)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
 
-		Set<BidDTO> bidHistoryArray = new HashSet<>();
+		List<BidDTO> bidHistoryArray = new ArrayList<>();
 
 		try {
 			String query = "SELECT b.id, b.bid_amount, u.username, u.image, u.number " + "FROM bid_history b "
@@ -106,13 +106,13 @@ public class BidHistoryDAO {
 		return bidHistoryArray;
 	}
 
-	public static Set<BidDTO> findAllBids(int productId)
+	public static List<BidDTO> findAllBids(int productId)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
 
-		Set<BidDTO> bidHistoryArray = new HashSet<>();
+		List<BidDTO> bidHistoryArray = new ArrayList<>();
 
 		try {
 			String query = "SELECT b.id, b.bid_amount " + "u.username, u.image " + "FROM bid_history b "

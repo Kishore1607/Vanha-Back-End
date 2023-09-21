@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Set;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ public class TestFindAsset {
 		int existingProductId = 1;
 
 		assertDoesNotThrow(() -> {
-			Set<Assets> assets = assetsService.findAllAssetsByProductId(existingProductId);
+			List<Assets> assets = assetsService.findAllAssetsByProductId(existingProductId);
 			assertNotNull(assets);
 			assertTrue(assets.size() > 0);
 		});

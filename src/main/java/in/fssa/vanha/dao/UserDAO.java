@@ -23,7 +23,7 @@ public class UserDAO {
 	 * @param newClient
 	 * @throws PersistenceException
 	 */
-	public void create(User newClient) throws PersistenceException {
+	public User create(User newClient) throws PersistenceException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -55,6 +55,7 @@ public class UserDAO {
 		} finally {
 			ConnectionUtil.close(conn, pre);
 		}
+		return newClient;
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class UserDAO {
 		PreparedStatement pre = null;
 
 		try {
-			String query = "UPDATE users SET username=?, number=? , location=?, modified_at=?, image=? WHERE email=?";
+			String query = "UPDATE users SET username=?, number=? , location=?, modified_at=? WHERE email=?";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setString(1, updateUser.getName());
@@ -80,8 +81,41 @@ public class UserDAO {
 			String formattedDateTime = targetFormatter.format(dateTime);
 
 			pre.setString(4, formattedDateTime);
-			pre.setString(5, updateUser.getImage());
-			pre.setString(6, updateUser.getEmail());
+			pre.setString(5, updateUser.getEmail());
+			pre.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e);
+		} finally {
+			ConnectionUtil.close(conn, pre);
+		}
+	}
+
+	/**
+	 * 
+	 * @param email 
+	 * @param updateUser
+	 * @throws PersistenceException
+	 */
+	public void updateImage(User updateImage) throws PersistenceException {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		PreparedStatement pre = null;
+
+		try {
+			String query = "UPDATE users SET image=?, modified_at=? WHERE email=?";
+
+			conn = ConnectionUtil.getConnection();
+			pre = conn.prepareStatement(query);
+			pre.setString(1, updateImage.getImage());
+			
+			String nowDate = "" + LocalDateTime.now();
+			LocalDateTime dateTime = LocalDateTime.parse(nowDate);
+			String formattedDateTime = targetFormatter.format(dateTime);
+
+			pre.setString(2, formattedDateTime);
+			pre.setString(3, updateImage.getEmail());
 			pre.executeUpdate();
 
 		} catch (SQLException e) {
@@ -158,7 +192,12 @@ public class UserDAO {
 				value.setEmail(rs.getString("email"));
 				value.setNumber(rs.getLong("number"));
 				value.setLocation(rs.getString("location"));
-				value.setImage(rs.getString("image"));
+				
+				if (rs.getString("image") == null) {
+			       value.setImage("null");
+			    } else {
+			    	value.setImage(rs.getString("image"));
+			    }
 			}
 
 		} catch (SQLException e) {

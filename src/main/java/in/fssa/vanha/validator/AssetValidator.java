@@ -1,6 +1,6 @@
 package in.fssa.vanha.validator;
 
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,8 +17,8 @@ public class AssetValidator {
 	 * @param newAsset
 	 * @throws ValidationException
 	 */
-	public static void createValidate(Set<Assets> newAssets) throws ValidationException {
-		for (Assets asset : newAssets) {
+	public static void createValidate(List<Assets> newAsset) throws ValidationException {
+		for (Assets asset : newAsset) {
 			String assetValue = asset.getValue();
 
 			StringUtil.RegectIfInvalidString(assetValue, "Url");
@@ -45,24 +45,18 @@ public class AssetValidator {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public static void updateValidate(Set<Assets> updateAssets, int id)
+	public static void updateValidate(Assets newAsset, int id)
 			throws ValidationException, PersistenceException, ServiceException {
 
-		for (Assets asset : updateAssets) {
-			String assetValue = asset.getValue();
-			StringUtil.RegectIfInvalidString(assetValue, "Url");
+		String assetValue = newAsset.getValue();
+		StringUtil.RegectIfInvalidString(assetValue, "Url");
 
-			if (assetValue.length() > 50) {
-				throw new ValidationException("Invalid asset value length");
-			}
+		String urlRegex = "^(https?://).*";
+		Pattern urlPattern = Pattern.compile(urlRegex);
 
-			String urlRegex = "^(https?://).*";
-			Pattern urlPattern = Pattern.compile(urlRegex);
-
-			Matcher urlMatcher = urlPattern.matcher(assetValue);
-			if (!urlMatcher.matches()) {
-				throw new ValidationException("Invalid URL pattern of the asset");
-			}
+		Matcher urlMatcher = urlPattern.matcher(assetValue);
+		if (!urlMatcher.matches()) {
+			throw new ValidationException("Invalid URL pattern of the asset");
 		}
 	}
 

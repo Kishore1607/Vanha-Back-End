@@ -174,6 +174,29 @@ public class UserValidator {
 
 	}
 
+	public static void updateImageValidate(User updateUser)
+			throws ValidationException, ServiceException, PersistenceException {
+
+		// null or empty checking
+
+		if (updateUser == null) {
+			throw new ValidationException("Invalid user input");
+		}
+
+		StringUtil.RegectIfInvalidString(updateUser.getEmail(), "Email");
+
+		StringUtil.RegectIfInvalidString(updateUser.getImage(), "Image");
+
+		// exists checking
+
+		User user = UserDAO.findUser(updateUser.getEmail());
+
+		if (user == null) {
+			throw new ServiceException("User doesn't exists");
+		}
+
+	}
+
 	/**
 	 * 
 	 * @param email

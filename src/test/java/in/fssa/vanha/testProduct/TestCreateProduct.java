@@ -3,8 +3,8 @@ package in.fssa.vanha.testProduct;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,13 +27,13 @@ public class TestCreateProduct {
 		newProduct.setUsedPeriod(MocValue.usedPeriod);
 		newProduct.setUsedDuration(MocValue.usedDuration);
 		newProduct.setDescription(MocValue.description);
-		newProduct.setName(MocValue.productName);
+		newProduct.setName("Tommy");
 		newProduct.setPrice(MocValue.price);
 		newProduct.setMinPrice(MocValue.minPrice);
 
 		String email = "karukvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -51,7 +51,7 @@ public class TestCreateProduct {
 
 		String email = null;
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -77,7 +77,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -103,7 +103,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -129,7 +129,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -155,7 +155,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -181,7 +181,7 @@ public class TestCreateProduct {
 
 		String email = "";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -208,7 +208,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -235,7 +235,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -261,7 +261,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -287,7 +287,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -313,7 +313,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -339,7 +339,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -365,7 +365,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -391,7 +391,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -417,7 +417,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -443,7 +443,7 @@ public class TestCreateProduct {
 
 		String email = "notexists@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();
@@ -469,7 +469,7 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
 			Assets asset = new Assets();

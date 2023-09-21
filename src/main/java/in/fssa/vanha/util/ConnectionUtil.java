@@ -18,13 +18,13 @@ public class ConnectionUtil {
 		String userName;
 		String passWord;
 
-		url = System.getenv("DATABASE_HOST");
-		userName = System.getenv("DATABASE_USERNAME");
-		passWord = System.getenv("DATABASE_PASSWORD");
+//		url = System.getenv("DATABASE_HOST");
+//		userName = System.getenv("DATABASE_USERNAME");
+//		passWord = System.getenv("DATABASE_PASSWORD");
 
-//		url = "jdbc:mysql://164.52.216.41:3306/kishore_sugumar_corejava_project";
-//		userName = "UCqdEGfN4Qv8";
-//		passWord = "11167b76-bd97-4ba1-8a6d-68129cfbf600";
+		url = "jdbc:mysql://127.0.0.1:3306/kishore";
+		userName = "root";
+		passWord = "123456";
 
 		Connection conn = null;
 

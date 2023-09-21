@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Set;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ public class TestFindAllBid {
 		int ProductId = 1; // Assume this product ID exists in the database
 
 		assertDoesNotThrow(() -> {
-			Set<BidDTO> bidHistory = bidService.findAllBidsByProductId(ProductId);
+			List<BidDTO> bidHistory = bidService.findAllBidsByProductId(ProductId);
 			assertNotNull(bidHistory);
 			assertTrue(bidHistory.size() > 0);
 		});

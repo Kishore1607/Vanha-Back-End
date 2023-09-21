@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
@@ -25,7 +23,7 @@ public class AssetsDAO {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public int[] create(Set<Assets> newAssets) throws PersistenceException {
+	public int[] create(List<Assets> newAssets) throws PersistenceException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		int[] generatedKeysArray = new int[newAssets.size()];
@@ -65,14 +63,14 @@ public class AssetsDAO {
 	 * @throws PersistenceException
 	 * @throws ServiceException
 	 */
-	public Set<Assets> findAllAssetsByProductId(int id)
+	public List<Assets> findAllAssetsByProductId(int id)
 			throws PersistenceException, ServiceException, ValidationException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
 
-		Set<Assets> assetsArray = new HashSet<>();
+		List<Assets> assetsArray = new ArrayList<>();
 
 		try {
 
@@ -106,65 +104,61 @@ public class AssetsDAO {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public void updateAssetsByAssetId(Set<Assets> updateAsset, int id)
+	public void updateAssetsByAssetId(Assets updateAsset, int id)
 			throws PersistenceException, RuntimeException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre1 = null;
 		PreparedStatement pre2 = null;
 		PreparedStatement pre3 = null;
 
-		Set<Assets> updateAssetsSet = updateAsset;
-		List<Assets> updateAssetsList = new ArrayList<>(updateAssetsSet);
+		if (updateAsset.getId() == 0) {
+			try {
+				System.out.println(1);
+				conn = ConnectionUtil.getConnection();
+				pre1 = conn.prepareStatement("INSERT INTO assets (url) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+				pre2 = conn.prepareStatement("INSERT INTO product_assets (product_id, asset_id) VALUES (?, ?)");
 
-		for (Assets asset : updateAssetsList) {
+				// Insert into 'assets' table
+				pre1.setString(1, updateAsset.getValue());
+				pre1.executeUpdate();
 
-			if (asset.getId() == 0) {
-				try {
-					conn = ConnectionUtil.getConnection();
-					pre1 = conn.prepareStatement("INSERT INTO assets (url) VALUES (?)",
-							Statement.RETURN_GENERATED_KEYS);
-					pre2 = conn.prepareStatement("INSERT INTO product_assets (product_id, asset_id) VALUES (?, ?)");
-
-					// Insert into 'assets' table
-					pre1.setString(1, asset.getValue());
-					pre1.executeUpdate();
-
-					int generatedKey;
-					try (ResultSet generatedKeys = pre1.getGeneratedKeys()) {
-						if (generatedKeys.next()) {
-							generatedKey = generatedKeys.getInt(1);
-						} else {
-							throw new ServiceException("Failed to get generated key.");
-						}
+				int generatedKey;
+				try (ResultSet generatedKeys = pre1.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						generatedKey = generatedKeys.getInt(1);
+					} else {
+						throw new ServiceException("Failed to get generated key.");
 					}
-
-					// Insert into 'product_assets' table
-					pre2.setInt(1, id);
-					pre2.setInt(2, generatedKey);
-					pre2.executeUpdate();
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-					throw new PersistenceException(e);
-				} finally {
-					ConnectionUtil.close(conn, pre1, pre2);
 				}
 
-			} else {
+				// Insert into 'product_assets' table
+				pre2.setInt(1, id);
+				pre2.setInt(2, generatedKey);
+				pre2.executeUpdate();
 
-				try {
-					conn = ConnectionUtil.getConnection();
-					pre3 = conn.prepareStatement("UPDATE assets SET url = ? WHERE id = ?");
-					pre3.setString(1, asset.getValue());
-					pre3.setInt(2, asset.getId());
-				} catch (SQLException e) {
-					e.printStackTrace();
-					throw new PersistenceException(e);
-				} finally {
-					ConnectionUtil.close(conn, pre3);
-				}
-
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new PersistenceException(e);
+			} finally {
+				ConnectionUtil.close(conn, pre1, pre2);
 			}
+
+		} else {
+
+			try {
+				conn = ConnectionUtil.getConnection();
+				pre3 = conn.prepareStatement("UPDATE assets SET url = ? WHERE id = ?");
+				pre3.setString(1, updateAsset.getValue());
+				pre3.setInt(2, updateAsset.getId());
+				pre3.executeUpdate();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new PersistenceException(e);
+			} finally {
+				ConnectionUtil.close(conn, pre3);
+			}
+
 		}
 	}
 

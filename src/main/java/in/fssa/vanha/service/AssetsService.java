@@ -1,6 +1,6 @@
 package in.fssa.vanha.service;
 
-import java.util.Set;
+import java.util.List;
 
 import in.fssa.vanha.dao.AssetsDAO;
 import in.fssa.vanha.exception.PersistenceException;
@@ -21,10 +21,10 @@ public class AssetsService {
 	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public int[] create(Set<Assets> newAsset) throws ServiceException, ValidationException {
+	public int[] create(List<Assets> newAsset) throws ServiceException, ValidationException {
 		try {
 			AssetValidator.createValidate(newAsset);
-			return assetsDao.create(newAsset);
+			return assetsDao.create((List<Assets>) newAsset);
 
 		} catch (PersistenceException e) {
 			throw new ServiceException("Error occured in creating asset in asset DAO");
@@ -38,10 +38,10 @@ public class AssetsService {
 	 * @return Set<List>
 	 * @throws Exception
 	 */
-	public Set<Assets> findAllAssetsByProductId(int id) throws ServiceException, ValidationException {
+	public List<Assets> findAllAssetsByProductId(int id) throws ServiceException, ValidationException {
 		try {
 			AssetValidator.findAssetValidate(id);
-			Set<Assets> assetsList = assetsDao.findAllAssetsByProductId(id);
+			List<Assets> assetsList = assetsDao.findAllAssetsByProductId(id);
 			return assetsList;
 
 		} catch (PersistenceException e) {
@@ -56,7 +56,7 @@ public class AssetsService {
 	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public void updateAssets(Set<Assets> newAsset, int id) throws ServiceException, ValidationException {
+	public void updateAssets(Assets newAsset, int id) throws ServiceException, ValidationException {
 
 		try {
 			AssetValidator.updateValidate(newAsset, id);
@@ -65,4 +65,16 @@ public class AssetsService {
 			throw new ServiceException("Error occured in updating asset in asset DAO");
 		}
 	}
+
+	public static String findAssetByProductId(int id) throws ServiceException, ValidationException {
+		try {
+			AssetValidator.findAssetValidate(id);
+			String asset = AssetsDAO.findFirstAssetByProductId(id);
+			return asset;
+
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error occured in finding asset in asset DAO");
+		}
+	}
+
 }

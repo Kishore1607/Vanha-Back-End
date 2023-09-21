@@ -1,6 +1,6 @@
 package in.fssa.vanha.service;
 
-import java.util.Set;
+import java.util.List;
 
 import in.fssa.vanha.dao.BidHistoryDAO;
 import in.fssa.vanha.exception.PersistenceException;
@@ -37,7 +37,7 @@ public class BidHistoryService {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public Set<BidDTO> findAllBidsByProductId(int productId) throws ServiceException, ValidationException {
+	public List<BidDTO> findAllBidsByProductId(int productId) throws ServiceException, ValidationException {
 		try {
 			BidHistoryValidator.findValidate(productId);
 			return BidHistoryDAO.findAllBidsByProductId(productId);

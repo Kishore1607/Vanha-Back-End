@@ -186,4 +186,15 @@ public class ProductValidator {
 		}
 	}
 
+	public static void findAllProductValidate(String category) throws ValidationException {
+
+		StringUtil.RegectIfInvalidString(category, "Category");
+
+		String input = category.toLowerCase();
+
+		if (Category.getCate(input).equals("non")) {
+			throw new ValidationException("Invalid input string for Category type");
+		}
+	}
+
 }

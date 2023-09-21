@@ -17,13 +17,15 @@ public class UserService {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public void create(User newUser) throws ValidationException, ServiceException {
+	public User create(User newUser) throws ValidationException, ServiceException {
+		User user;
 		try {
 			UserValidator.createValidate(newUser);
-			userDAO.create(newUser);
+			user = userDAO.create(newUser);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Error while creating user");
 		}
+		return user;
 	}
 
 	/**
@@ -43,6 +45,17 @@ public class UserService {
 
 	}
 
+	public void updateImage(User updateImage) throws ValidationException, ServiceException {
+
+		try {
+			UserValidator.updateImageValidate(updateImage);
+			userDAO.updateImage(updateImage);
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error while updating image");
+		}
+
+	}
+	
 	/**
 	 * 
 	 * @param email
