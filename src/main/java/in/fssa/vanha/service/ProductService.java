@@ -25,12 +25,11 @@ public class ProductService {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public void create(Product newProduct, List<Assets> newAsset, String userEmail)
+	public void create(Product newProduct, String userEmail)
 			throws ServiceException, ValidationException {
 		try {
 			ProductValidator.createValidate(newProduct, userEmail);
-			AssetValidator.createValidate(newAsset);
-			productDao.create(newProduct, newAsset, userEmail);
+			productDao.create(newProduct, userEmail);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Errro while creating product");
 		}

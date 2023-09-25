@@ -105,12 +105,12 @@ public abstract class ProductEntity implements Comparable<ProductEntity> {
 		this.modifiedAt = modifiedAt;
 	}
 
-//	@Override
-//	public String toString() {
-//		return "ProductEntity [id=" + id + ", productId=" + productId + ", usedPeriod=" + usedPeriod + ", usedDuration="
-//				+ usedDuration + ", description=" + description + ", name=" + name + ", price=" + price + ", sellerId="
-//				+ sellerId + "]";
-//	}
+	@Override
+	public String toString() {
+		return "ProductEntity [id=" + id + ", productId=" + productId + ", usedPeriod=" + usedPeriod + ", usedDuration="
+				+ usedDuration + ", description=" + description + ", name=" + name + ", price=" + price + ", sellerId="
+				+ sellerId + "]";
+	}
 
 	int id;
 	String productId;
@@ -126,14 +126,4 @@ public abstract class ProductEntity implements Comparable<ProductEntity> {
 	String createdAt;
 	String modifiedAt;
 
-//	// Additional Properties
-//	String userUnique;
-//
-//	public String getSellerUnique() {
-//		return userUnique;
-//	}
-//
-//	public void setSellerUnique(String userUnique) {
-//		this.userUnique = userUnique;
-//	}
 }

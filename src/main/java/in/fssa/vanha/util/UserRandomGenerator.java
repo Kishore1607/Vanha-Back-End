@@ -1,4 +1,4 @@
-package in.fssa.vanha;
+package in.fssa.vanha.util;
 
 import java.util.Random;
 

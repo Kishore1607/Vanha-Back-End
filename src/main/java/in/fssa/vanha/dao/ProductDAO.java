@@ -42,12 +42,12 @@ public class ProductDAO {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public void create(Product newProduct, List<Assets> newAsset, String userEmail)
+	public void create(Product newProduct, String userEmail)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet generatedKeys = null;
-		int generatedProductId = -1;
+//		int generatedProductId = -1;
 
 		try {
 			String query = "INSERT INTO products (product_id,  name,  description, price, used_period, used_duration, category, min_price, seller_id, status, created_at, modified_at) "
@@ -76,10 +76,10 @@ public class ProductDAO {
 
 			pre.executeUpdate();
 
-			generatedKeys = pre.getGeneratedKeys();
-			if (generatedKeys.next()) {
-				generatedProductId = generatedKeys.getInt(1);
-			}
+//			generatedKeys = pre.getGeneratedKeys();
+//			if (generatedKeys.next()) {
+//				generatedProductId = generatedKeys.getInt(1);
+//			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,19 +88,19 @@ public class ProductDAO {
 			ConnectionUtil.close(conn, pre, generatedKeys);
 		}
 
-		int pId = generatedProductId;
+//		int pId = generatedProductId;
 
-		AssetsService assetsService = new AssetsService();
-
-		int[] sId = assetsService.create(newAsset);
-
-		for (int assetId : sId) {
-			ProductAsset productAsset = new ProductAsset();
-			productAsset.setProductId(pId);
-			productAsset.setAssetId(assetId);
-			ProductAssetService PaService = new ProductAssetService();
-			PaService.create(productAsset);
-		}
+//		AssetsService assetsService = new AssetsService();
+//
+//		int[] sId = assetsService.create(newAsset);
+//
+//		for (int assetId : sId) {
+//			ProductAsset productAsset = new ProductAsset();
+//			productAsset.setProductId(pId);
+//			productAsset.setAssetId(assetId);
+//			ProductAssetService PaService = new ProductAssetService();
+//			PaService.create(productAsset);
+//		}
 
 	}
 
@@ -424,14 +424,28 @@ public class ProductDAO {
 		String cate = Category.getCate(category);
 
 		try {
-			String query = "SELECT p.id, p.product_id, p.name, p.price,\r\n"
-					+ "       p.seller_id, u.username, u.location, u.image\r\n" + "FROM products p\r\n"
-					+ "INNER JOIN users u ON p.seller_id = u.id\r\n"
-					+ "WHERE p.status = 'a' AND p.category = ? AND NOT u.email = ?;";
+			String query = "SELECT " +
+				    "p.id, " +
+				    "p.product_id, " +
+				    "p.name, " +
+				    "p.price, " +
+				    "p.seller_id, " +
+				    "u.username, " +
+				    "u.location, " +
+				    "u.image " +
+				    "FROM " +
+				    "products AS p " +
+				    "INNER JOIN " +
+				    "users AS u ON p.seller_id = u.id " +
+				    "WHERE " +
+				    "p.status = ? " +
+				    "AND p.category = ? " +
+				    "AND u.id <> ?";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
-			pre.setString(1, cate);
-			pre.setInt(2, id);
+			pre.setString(1, "a");
+			pre.setString(2, cate);
+			pre.setInt(3, id);
 			rs = pre.executeQuery();
 
 			while (rs.next()) {

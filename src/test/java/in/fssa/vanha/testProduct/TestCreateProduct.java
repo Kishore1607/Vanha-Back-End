@@ -3,15 +3,12 @@ package in.fssa.vanha.testProduct;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import in.fssa.vanha.MocValue;
+import in.fssa.vanha.util.MocValue;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
-import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.Product;
 import in.fssa.vanha.service.ProductService;
 
@@ -33,15 +30,8 @@ public class TestCreateProduct {
 
 		String email = "karukvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertDoesNotThrow(() -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -51,15 +41,8 @@ public class TestCreateProduct {
 
 		String email = null;
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue(null);
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -77,18 +60,11 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
-	
+
 	@Test
 	public void testCreateProductWithMoreMinPrice() {
 		Product newProduct = new Product();
@@ -103,15 +79,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -129,15 +98,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -155,15 +117,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -181,15 +136,8 @@ public class TestCreateProduct {
 
 		String email = "";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -208,15 +156,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -235,15 +176,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -261,15 +195,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -287,15 +214,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -313,15 +233,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -339,15 +252,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -365,15 +271,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -391,15 +290,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -417,15 +309,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ValidationException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -443,15 +328,8 @@ public class TestCreateProduct {
 
 		String email = "notexists@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ServiceException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 
@@ -469,15 +347,8 @@ public class TestCreateProduct {
 
 		String email = "karkuvel@gmail.com";
 
-		List<Assets> assetsArray = new ArrayList<>();
-
-		for (int i = 0; i < 4; i++) {
-			Assets asset = new Assets();
-			asset.setValue("https://source.unsplash.com/featured/?motorcycle");
-			assetsArray.add(asset);
-		}
 		assertThrows(ServiceException.class, () -> {
-			productService.create(newProduct, assetsArray, email);
+			productService.create(newProduct, email);
 		});
 	}
 }

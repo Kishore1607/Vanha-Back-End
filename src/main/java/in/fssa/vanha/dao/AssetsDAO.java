@@ -88,7 +88,6 @@ public class AssetsDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 			throw new PersistenceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre, rs);
@@ -113,7 +112,6 @@ public class AssetsDAO {
 
 		if (updateAsset.getId() == 0) {
 			try {
-				System.out.println(1);
 				conn = ConnectionUtil.getConnection();
 				pre1 = conn.prepareStatement("INSERT INTO assets (url) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 				pre2 = conn.prepareStatement("INSERT INTO product_assets (product_id, asset_id) VALUES (?, ?)");

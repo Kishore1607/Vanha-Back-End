@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.model.User;
 import in.fssa.vanha.util.ConnectionUtil;
+import in.fssa.vanha.util.PasswordUtil;
 
 public class UserDAO {
 
@@ -34,7 +35,10 @@ public class UserDAO {
 			pre = conn.prepareStatement(query);
 			pre.setString(1, newClient.getName());
 			pre.setString(2, newClient.getEmail());
-			pre.setString(3, newClient.getPassword());
+
+			String password = PasswordUtil.hashPassword(newClient.getPassword());
+
+			pre.setString(3, password);
 			pre.setLong(4, newClient.getNumber());
 			pre.setString(5, newClient.getLocation());
 			pre.setString(6, newClient.getImage());
@@ -94,7 +98,7 @@ public class UserDAO {
 
 	/**
 	 * 
-	 * @param email 
+	 * @param email
 	 * @param updateUser
 	 * @throws PersistenceException
 	 */
@@ -109,7 +113,7 @@ public class UserDAO {
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setString(1, updateImage.getImage());
-			
+
 			String nowDate = "" + LocalDateTime.now();
 			LocalDateTime dateTime = LocalDateTime.parse(nowDate);
 			String formattedDateTime = targetFormatter.format(dateTime);
@@ -180,27 +184,33 @@ public class UserDAO {
 
 		try {
 
-			String query = "SELECT username, email, location, number, image FROM users WHERE status = 1 AND email = ? AND password = ?";
+			String query = "SELECT username, email, location, number, image, password FROM users WHERE status = 1 AND email = ?";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setString(1, user.getEmail());
-			pre.setString(2, user.getPassword());
 			rs = pre.executeQuery();
+
 			if (rs.next()) {
-				value = new User();
-				value.setName(rs.getString("username"));
-				value.setEmail(rs.getString("email"));
-				value.setNumber(rs.getLong("number"));
-				value.setLocation(rs.getString("location"));
-				
-				if (rs.getString("image") == null) {
-			       value.setImage("null");
-			    } else {
-			    	value.setImage(rs.getString("image"));
-			    }
+				String hashedPasswordFromDB = rs.getString("password");
+				boolean passwordMatches = PasswordUtil.checkPassword(user.getPassword(), hashedPasswordFromDB);
+
+				if (passwordMatches) {
+					value = new User();
+					value.setName(rs.getString("username"));
+					value.setEmail(rs.getString("email"));
+					value.setNumber(rs.getLong("number"));
+					value.setLocation(rs.getString("location"));
+					if (rs.getString("image") == null) {
+						value.setImage("null");
+					} else {
+						value.setImage(rs.getString("image"));
+					}
+				}
 			}
 
-		} catch (SQLException e) {
+		} catch (
+
+		SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e);
 		} finally {
