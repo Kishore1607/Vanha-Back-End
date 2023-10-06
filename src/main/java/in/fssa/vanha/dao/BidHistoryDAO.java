@@ -8,12 +8,16 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.BidDTO;
+import in.fssa.vanha.model.Product;
+import in.fssa.vanha.model.YourListDTO;
 import in.fssa.vanha.util.ConnectionUtil;
 
 public class BidHistoryDAO {
@@ -138,6 +142,50 @@ public class BidHistoryDAO {
 			ConnectionUtil.close(conn, pre, rs);
 		}
 		return bidHistoryArray;
+	}
+
+	public static List<YourListDTO> myProductList(String userEmail)
+			throws PersistenceException, ValidationException, ServiceException {
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet rs = null;
+
+		List<YourListDTO> productArray = new ArrayList<>();
+
+		try {
+
+			String query = "SELECT product_id FROM bid_history WHERE buyer_id = ?";
+			conn = ConnectionUtil.getConnection();
+			pre = conn.prepareStatement(query);
+			int id = UserDAO.findUser(userEmail).getId();
+			pre.setInt(1, id);
+			rs = pre.executeQuery();
+
+			Set<Integer> ids = new HashSet<Integer>();
+
+			while (rs.next()) {
+				ids.add(rs.getInt("product_id"));
+			}
+
+			for (int i : ids) {
+				YourListDTO product = new YourListDTO();
+
+				Product cardProduct = ProductDAO.list(i);
+
+				product.setProductId(cardProduct.getProductId());
+				product.setName(cardProduct.getName());
+				product.setImage(AssetsDAO.findFirstAssetByProductId(i));
+				productArray.add(product);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e);
+		} finally {
+			ConnectionUtil.close(conn, pre, rs);
+		}
+		return productArray;
 	}
 
 }

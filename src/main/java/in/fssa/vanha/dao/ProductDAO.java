@@ -621,5 +621,36 @@ public class ProductDAO {
 		}
 		return false;
 	}
+	
+	public static Product list(int productId)
+			throws PersistenceException, ServiceException, ValidationException {
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet rs = null;
+		Product product = null;
+
+		try {
+			String query = "SELECT product_id, name FROM products WHERE id = ? ;";
+
+			conn = ConnectionUtil.getConnection();
+			pre = conn.prepareStatement(query);
+			pre.setInt(1, productId);
+			rs = pre.executeQuery();
+
+			if (rs.next()) {
+				product = new Product();
+				product.setProductId(rs.getString("product_id"));
+				product.setName(rs.getString("name"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e);
+		} finally {
+			ConnectionUtil.close(conn, pre, rs);
+		}
+
+		return product;
+	}
 
 }

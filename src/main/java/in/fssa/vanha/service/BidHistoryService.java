@@ -7,7 +7,9 @@ import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
 import in.fssa.vanha.model.BidDTO;
+import in.fssa.vanha.model.YourListDTO;
 import in.fssa.vanha.validator.BidHistoryValidator;
+import in.fssa.vanha.validator.ProductValidator;
 
 public class BidHistoryService {
 	BidHistoryDAO bidHistoryDao = new BidHistoryDAO();
@@ -44,6 +46,16 @@ public class BidHistoryService {
 
 		} catch (PersistenceException e) {
 			throw new ServiceException("Error occured in creating asset in asset DAO");
+		}
+
+	}
+	
+	public List<YourListDTO> listProductCards(String userEmail) throws ServiceException, ValidationException {
+		try {
+			ProductValidator.findUserValidate(userEmail);
+			return BidHistoryDAO.myProductList(userEmail);
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error occured in fetching the list");
 		}
 
 	}
