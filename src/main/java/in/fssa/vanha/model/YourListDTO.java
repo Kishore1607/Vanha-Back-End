@@ -26,13 +26,23 @@ public class YourListDTO {
 		this.productId = productId;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
-		return "YourListDTO [image=" + image + ", name=" + name + ", productId=" + productId + "]";
+		return "YourListDTO [image=" + image + ", name=" + name + ", productId=" + productId + ", status=" + status
+				+ "]";
 	}
 
 	String image;
 	String name;
 	String productId;
+	String status;
 
 }

@@ -26,6 +26,14 @@ public class BidDTO {
 		this.buyerName = buyerName;
 	}
 
+	public String getBuyerEmail() {
+		return buyerEmail;
+	}
+
+	public void setBuyerEmail(String buyerEmail) {
+		this.buyerEmail = buyerEmail;
+	}
+
 	public String getBuyerImage() {
 		return buyerImage;
 	}
@@ -33,25 +41,34 @@ public class BidDTO {
 	public void setBuyerImage(String buyerImage) {
 		this.buyerImage = buyerImage;
 	}
-	
-	public Long getBuyerNumber() {
-		return buyerNumber;
+
+	public void setDate(String date) {
+		this.date = date;
 	}
-	public void setBuyerNumber(Long buyerNumber) {
-		this.buyerNumber = buyerNumber;
+
+	public String getDate() {
+		return date;
+	}
+
+	public int getListNo() {
+		return listNo;
+	}
+
+	public void setListNo(int listNo) {
+		this.listNo = listNo;
 	}
 
 	@Override
 	public String toString() {
 		return "BidDTO [id=" + id + ", amount=" + amount + ", buyerName=" + buyerName + ", buyerImage=" + buyerImage
-				+ "]";
+				+ ", buyerEmail=" + buyerEmail + ", date=" + date + ", listNo=" + listNo + "]";
 	}
 
 	int id;
 	int amount;
 	String buyerName;
 	String buyerImage;
-	Long buyerNumber;
-
-
+	String buyerEmail;
+	String date;
+	int listNo;
 }

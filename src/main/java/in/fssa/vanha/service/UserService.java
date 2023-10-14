@@ -92,5 +92,15 @@ public class UserService {
 		return userDetail;
 
 	}
+	
+	public static User userdetail(int id) throws ValidationException, ServiceException {
+		try {
+			return UserDAO.userDetail(id);
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error while finding user");
+		}
+
+	}
+
 
 }

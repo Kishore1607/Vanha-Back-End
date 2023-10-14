@@ -18,6 +18,22 @@ public class ListProductDTO {
 		ProductName = productName;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public int getBid_id() {
+		return bid_id;
+	}
+
+	public void setBid_id(int bid_id) {
+		this.bid_id = bid_id;
+	}
+
 	public int getPrice() {
 		return price;
 	}
@@ -69,6 +85,8 @@ public class ListProductDTO {
 	String productId;
 	String ProductImage;
 	String ProductName;
+	String status;
+	int bid_id;
 	int price;
 
 	// Asset

@@ -1,5 +1,9 @@
 package in.fssa.vanha.validator;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,6 +13,7 @@ import in.fssa.vanha.dao.UserDAO;
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
+import in.fssa.vanha.util.ConnectionUtil;
 import in.fssa.vanha.util.StringUtil;
 
 public class UserValidator {

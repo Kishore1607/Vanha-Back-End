@@ -151,6 +151,8 @@ public class ProductDetailDTO {
 			sb.append("      amount=").append(bid.getAmount()).append(",\n");
 			sb.append("      buyerName='").append(bid.getBuyerName()).append("',\n");
 			sb.append("      buyerImage='").append(bid.getBuyerImage()).append("'\n");
+			sb.append("      buyerEmail='").append(bid.getBuyerEmail()).append("'\n");
+			sb.append("      date='").append(bid.getDate()).append("'\n");
 			sb.append("    },\n");
 		}
 		sb.append("  ]\n");

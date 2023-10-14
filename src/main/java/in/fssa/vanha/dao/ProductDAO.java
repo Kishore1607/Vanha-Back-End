@@ -22,10 +22,7 @@ import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.BidDTO;
 import in.fssa.vanha.model.ListProductDTO;
 import in.fssa.vanha.model.Product;
-import in.fssa.vanha.model.ProductAsset;
 import in.fssa.vanha.model.ProductDetailDTO;
-import in.fssa.vanha.service.AssetsService;
-import in.fssa.vanha.service.ProductAssetService;
 import in.fssa.vanha.util.ConnectionUtil;
 
 public class ProductDAO {
@@ -47,7 +44,6 @@ public class ProductDAO {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet generatedKeys = null;
-//		int generatedProductId = -1;
 
 		try {
 			String query = "INSERT INTO products (product_id,  name,  description, price, used_period, used_duration, category, min_price, seller_id, status, created_at, modified_at) "
@@ -76,31 +72,12 @@ public class ProductDAO {
 
 			pre.executeUpdate();
 
-//			generatedKeys = pre.getGeneratedKeys();
-//			if (generatedKeys.next()) {
-//				generatedProductId = generatedKeys.getInt(1);
-//			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e);
 		} finally {
 			ConnectionUtil.close(conn, pre, generatedKeys);
 		}
-
-//		int pId = generatedProductId;
-
-//		AssetsService assetsService = new AssetsService();
-//
-//		int[] sId = assetsService.create(newAsset);
-//
-//		for (int assetId : sId) {
-//			ProductAsset productAsset = new ProductAsset();
-//			productAsset.setProductId(pId);
-//			productAsset.setAssetId(assetId);
-//			ProductAssetService PaService = new ProductAssetService();
-//			PaService.create(productAsset);
-//		}
 
 	}
 
@@ -286,7 +263,7 @@ public class ProductDAO {
 
 		try {
 
-			String query = "SELECT id, product_id, name, price  FROM products WHERE seller_id = ? AND status = 'a';";
+			String query = "SELECT id, product_id, name, price, status, bid_id FROM products WHERE seller_id = ? AND status IN ('a', 's');";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			int id = UserDAO.findUser(userEmail).getId();
@@ -301,6 +278,8 @@ public class ProductDAO {
 				product.setProductId(rs.getString("product_id"));
 				product.setProductName(rs.getString("name"));
 				product.setPrice(rs.getInt("price"));
+				product.setStatus(rs.getString("status"));
+				product.setBid_id(rs.getInt("bid_id"));
 
 				product.setAsset(AssetsDAO.findFirstAssetByProductId(productId));
 
@@ -356,6 +335,29 @@ public class ProductDAO {
 		}
 	}
 
+	public void sell(int productId, int bidId)
+			throws PersistenceException, ServiceException, ValidationException {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		PreparedStatement pre = null;
+
+		try {
+			String query = "UPDATE products SET bid_id=?, status = 's' "
+					+ "WHERE id=?";
+			conn = ConnectionUtil.getConnection();
+			pre = conn.prepareStatement(query);
+			pre.setInt(1, bidId);
+			pre.setInt(2, productId);
+			pre.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e);
+		} finally {
+			ConnectionUtil.close(conn, pre);
+		}
+	}
+	
 	/**
 	 * 
 	 * @param productId
@@ -536,7 +538,7 @@ public class ProductDAO {
 		int id = -1;
 
 		try {
-			String query = "SELECT id" + " FROM products " + "WHERE product_id = ? AND status = 'a';";
+			String query = "SELECT id FROM products WHERE product_id = ? AND status = 'a';";
 
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
@@ -630,7 +632,7 @@ public class ProductDAO {
 		Product product = null;
 
 		try {
-			String query = "SELECT product_id, name FROM products WHERE id = ? ;";
+			String query = "SELECT product_id, name, price, status FROM products WHERE id = ? AND status IN ('a', 's');";
 
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
@@ -641,6 +643,9 @@ public class ProductDAO {
 				product = new Product();
 				product.setProductId(rs.getString("product_id"));
 				product.setName(rs.getString("name"));
+				product.setStatus(rs.getString("status"));
+				product.setPrice(rs.getInt("price"));
+				
 			}
 
 		} catch (SQLException e) {
@@ -652,5 +657,5 @@ public class ProductDAO {
 
 		return product;
 	}
-
+	
 }

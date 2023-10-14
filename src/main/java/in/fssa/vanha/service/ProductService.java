@@ -7,11 +7,9 @@ import in.fssa.vanha.dao.ProductDAO;
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
-import in.fssa.vanha.model.Assets;
 import in.fssa.vanha.model.ListProductDTO;
 import in.fssa.vanha.model.Product;
 import in.fssa.vanha.model.ProductDetailDTO;
-import in.fssa.vanha.validator.AssetValidator;
 import in.fssa.vanha.validator.ProductValidator;
 
 public class ProductService {
@@ -25,8 +23,7 @@ public class ProductService {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public void create(Product newProduct, String userEmail)
-			throws ServiceException, ValidationException {
+	public void create(Product newProduct, String userEmail) throws ServiceException, ValidationException {
 		try {
 			ProductValidator.createValidate(newProduct, userEmail);
 			productDao.create(newProduct, userEmail);
@@ -44,7 +41,8 @@ public class ProductService {
 	 * @throws PersistenceException
 	 * @throws ValidationException
 	 */
-	public List<ListProductDTO> findAllProductsBySellerId(String sellerId) throws ServiceException, ValidationException {
+	public List<ListProductDTO> findAllProductsBySellerId(String sellerId)
+			throws ServiceException, ValidationException {
 
 		try {
 			ProductValidator.findUserValidate(sellerId);
@@ -68,7 +66,7 @@ public class ProductService {
 			ProductValidator.productIdValidate(productId);
 			ProductDAO productDAO = new ProductDAO();
 			ProductDetailDTO product = productDAO.findProductByProductId(productId);
-			
+
 			return product;
 		} catch (PersistenceException e) {
 			throw new ServiceException("Errro while finding products");
@@ -86,6 +84,15 @@ public class ProductService {
 		try {
 			ProductValidator.updateValidate(updateProduct);
 			productDao.update(updateProduct);
+		} catch (PersistenceException e) {
+			throw new ServiceException("Errro while updating product");
+		}
+	}
+
+	public void sellProduct(int productId, int bidId) throws ServiceException, ValidationException {
+
+		try {
+			productDao.sell(productId, bidId);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Errro while updating product");
 		}
@@ -124,9 +131,8 @@ public class ProductService {
 			throw new ServiceException("Errro while products by category");
 		}
 	}
-	
-	public Set<ListProductDTO> findAllProductsByCategory(String category)
-			throws ServiceException, ValidationException {
+
+	public Set<ListProductDTO> findAllProductsByCategory(String category) throws ServiceException, ValidationException {
 
 		try {
 			ProductValidator.findAllProductValidate(category);
@@ -187,4 +193,13 @@ public class ProductService {
 		}
 	}
 
+	public Product productDetail(int id) throws ServiceException, ValidationException {
+
+		try {
+			Product product = ProductDAO.list(id);
+			return product;
+		} catch (PersistenceException e) {
+			throw new ServiceException("Errro while finding all products");
+		}
+	}
 }

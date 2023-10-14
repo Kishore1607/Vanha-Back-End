@@ -81,11 +81,11 @@ public abstract class ProductEntity implements Comparable<ProductEntity> {
 		this.sellerId = seller_id;
 	}
 
-	public char getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(char status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -122,7 +122,7 @@ public abstract class ProductEntity implements Comparable<ProductEntity> {
 	int price;
 	int minPrice;
 	int sellerId;
-	char status;
+	String status;
 	String createdAt;
 	String modifiedAt;
 

@@ -59,5 +59,14 @@ public class BidHistoryService {
 		}
 
 	}
+	
+	public String findBuyerProductIDs(int bidId)throws ServiceException, ValidationException {
+		try {
+			BidHistoryDAO bh = new BidHistoryDAO();
+			return bh.findRow(bidId);
+		} catch (PersistenceException e) {
+			throw new ServiceException("Error occured in creating asset in asset DAO");
+		}
+	}
 
 }

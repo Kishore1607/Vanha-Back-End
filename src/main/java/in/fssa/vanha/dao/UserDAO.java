@@ -218,4 +218,36 @@ public class UserDAO {
 		}
 		return value;
 	}
+	
+	public static User userDetail(int id) throws PersistenceException {
+	    User value = null;
+	    Connection conn = null;
+	    PreparedStatement pre = null;
+	    ResultSet rs = null;
+
+	    try {
+	        conn = ConnectionUtil.getConnection();
+	        String query = "SELECT username, email, location, number, image FROM users WHERE id = ?";
+	        pre = conn.prepareStatement(query);
+	        pre.setInt(1, id);
+	        rs = pre.executeQuery();
+
+	        if (rs.next()) {
+	            value = new User();
+	            value.setName(rs.getString("username"));
+	            value.setEmail(rs.getString("email"));
+	            value.setNumber(rs.getLong("number"));
+	            value.setLocation(rs.getString("location"));
+	            value.setImage(rs.getString("image"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new PersistenceException(e);
+	    } finally {
+	        ConnectionUtil.close(conn, pre, rs);
+	    }
+	    return value;
+	}
+
+	
 }

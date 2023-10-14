@@ -66,7 +66,7 @@ public class AssetsService {
 		}
 	}
 
-	public static String findAssetByProductId(int id) throws ServiceException, ValidationException {
+	public String findAssetByProductId(int id) throws ServiceException, ValidationException {
 		try {
 			AssetValidator.findAssetValidate(id);
 			String asset = AssetsDAO.findFirstAssetByProductId(id);
