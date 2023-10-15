@@ -120,23 +120,24 @@ public class ProductService {
 	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
+	
+	public Set<ListProductDTO> findAllProductsByCategoryWithoutEmail(String category) throws ServiceException, ValidationException {
+
+		try {
+			ProductValidator.findAllProductValidateWithoutEmail(category);
+			Set<ListProductDTO> productList = productDao.findAllProductsByCategoryWithoutEmail(category);
+			return productList;
+		} catch (PersistenceException e) {
+			throw new ServiceException("Errro while products by category");
+		}
+	}
+	
 	public Set<ListProductDTO> findAllProductsByCategory(String category, String userEmail)
 			throws ServiceException, ValidationException {
 
 		try {
 			ProductValidator.findAllProductValidate(category, userEmail);
 			Set<ListProductDTO> productList = productDao.findAllProductsByCategory(category, userEmail);
-			return productList;
-		} catch (PersistenceException e) {
-			throw new ServiceException("Errro while products by category");
-		}
-	}
-
-	public Set<ListProductDTO> findAllProductsByCategory(String category) throws ServiceException, ValidationException {
-
-		try {
-			ProductValidator.findAllProductValidate(category);
-			Set<ListProductDTO> productList = productDao.findAllProductsByCategory(category);
 			return productList;
 		} catch (PersistenceException e) {
 			throw new ServiceException("Errro while products by category");

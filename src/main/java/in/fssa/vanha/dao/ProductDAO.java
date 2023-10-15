@@ -124,7 +124,7 @@ public class ProductDAO {
 				result.setSellerName(rs.getString("username"));
 				result.setSellerLocation(rs.getString("location"));
 				result.setSellerImage(rs.getString("image"));
-
+				
 				AssetsDAO assetDAO = new AssetsDAO();
 				List<Assets> assets = assetDAO.findAllAssetsByProductId(id);
 				result.setAssets(assets);
@@ -477,7 +477,7 @@ public class ProductDAO {
 		return productArray;
 	}
 
-	public Set<ListProductDTO> findAllProductsByCategory(String category)
+	public Set<ListProductDTO> findAllProductsByCategoryWithoutEmail(String category)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;

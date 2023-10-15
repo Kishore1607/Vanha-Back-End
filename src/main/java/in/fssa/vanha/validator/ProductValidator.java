@@ -186,7 +186,7 @@ public class ProductValidator {
 		}
 	}
 
-	public static void findAllProductValidate(String category) throws ValidationException {
+	public static void findAllProductValidateWithoutEmail(String category) throws ValidationException {
 
 		StringUtil.RegectIfInvalidString(category, "Category");
 
