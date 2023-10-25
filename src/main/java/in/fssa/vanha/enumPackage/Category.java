@@ -15,6 +15,13 @@ public enum Category {
 		return value;
 	}
 
+	/**
+	 * Converts a category input string to its corresponding value.
+	 *
+	 * @param input The input string representing a category (e.g., "car", "bike").
+	 * @return The value associated with the input category.
+	 * @throws ValidationException If the input category is not valid.
+	 */
 	public static String getCate(String input) throws ValidationException {
 		String lowerCaseInput = input.toLowerCase();
 		switch (lowerCaseInput) {
@@ -31,6 +38,13 @@ public enum Category {
 		}
 	}
 
+	/**
+	 * Converts a category value to its corresponding string representation.
+	 *
+	 * @param input The value of a category.
+	 * @return The lowercase string representation of the category.
+	 * @throws ValidationException If the input value is not valid.
+	 */
 	public static String getCategoryString(String input) throws ValidationException {
 		for (Category category : Category.values()) {
 			if (category.getValue().equals(input)) {

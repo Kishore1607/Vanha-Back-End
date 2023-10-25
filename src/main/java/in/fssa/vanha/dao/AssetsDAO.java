@@ -17,11 +17,13 @@ import in.fssa.vanha.util.ConnectionUtil;
 public class AssetsDAO {
 
 	/**
-	 * 
-	 * @param newAsset
-	 * @return int
-	 * @throws PersistenceException
-	 * @throws ServiceException
+	 * Inserts a list of new assets into the database, returning an array of
+	 * generated keys for each asset.
+	 *
+	 * @param newAssets A list of Assets objects to be inserted.
+	 * @return An array of generated keys corresponding to the inserted assets.
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              connection or SQL operations.
 	 */
 	public int[] create(List<Assets> newAssets) throws PersistenceException {
 		Connection conn = null;
@@ -57,11 +59,15 @@ public class AssetsDAO {
 	}
 
 	/**
-	 * 
-	 * @param productId
-	 * @return Set<Assets>
-	 * @throws PersistenceException
-	 * @throws ServiceException
+	 * Retrieves a list of Assets objects associated with a specific product by its
+	 * ID.
+	 *
+	 * @param id The ID of the product for which assets need to be retrieved.
+	 * @return A list of Assets objects associated with the product.
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              connection or SQL operations.
+	 * @throws ServiceException     If a service-level issue occurs.
+	 * @throws ValidationException  If there is an issue with input validation.
 	 */
 	public List<Assets> findAllAssetsByProductId(int id)
 			throws PersistenceException, ServiceException, ValidationException {
@@ -96,12 +102,16 @@ public class AssetsDAO {
 	}
 
 	/**
-	 * 
-	 * @param updateAsset
-	 * @param id
-	 * @throws PersistenceException
-	 * @throws ServiceException
-	 * @throws ValidationException
+	 * Updates an asset by either inserting a new asset or updating an existing one,
+	 * based on the asset's ID.
+	 *
+	 * @param updateAsset The Asset object to be updated or inserted.
+	 * @param id          The ID of the product associated with the asset.
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              connection or SQL operations.
+	 * @throws RuntimeException     If a runtime issue occurs.
+	 * @throws ServiceException     If a service-level issue occurs.
+	 * @throws ValidationException  If there is an issue with input validation.
 	 */
 	public void updateAssetsByAssetId(Assets updateAsset, int id)
 			throws PersistenceException, RuntimeException, ServiceException, ValidationException {
@@ -149,7 +159,7 @@ public class AssetsDAO {
 				pre3.setString(1, updateAsset.getValue());
 				pre3.setInt(2, updateAsset.getId());
 				pre3.executeUpdate();
-				
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new PersistenceException(e);
@@ -160,7 +170,20 @@ public class AssetsDAO {
 		}
 	}
 
-	public static String findFirstAssetByProductId(int productId)
+	/**
+	 * Retrieves the URL of the first asset associated with a specific product by
+	 * its ID.
+	 *
+	 * @param productId The ID of the product for which the first asset URL needs to
+	 *                  be retrieved.
+	 * @return The URL of the first asset associated with the product, or null if
+	 *         none is found.
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              connection or SQL operations.
+	 * @throws ServiceException     If a service-level issue occurs.
+	 * @throws ValidationException  If there is an issue with input validation.
+	 */
+	public String findFirstAssetByProductId(int productId)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;

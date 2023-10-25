@@ -26,12 +26,12 @@ public class ListProductDTO {
 		this.status = status;
 	}
 
-	public int getBid_id() {
-		return bid_id;
+	public String getDate() {
+		return date;
 	}
 
-	public void setBid_id(int bid_id) {
-		this.bid_id = bid_id;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	public int getPrice() {
@@ -81,18 +81,18 @@ public class ListProductDTO {
 //				+ ", SellerImage=" + SellerImage + "]";
 //	}
 
-	// Product
+	// Product deatil
 	String productId;
 	String ProductImage;
 	String ProductName;
 	String status;
-	int bid_id;
+	String date;
 	int price;
 
-	// Asset
+	// Product image
 	String asset;
 
-	// Seller
+	// Seller detail
 	String sellerName;
 	String sellerLocation;
 	String SellerImage;

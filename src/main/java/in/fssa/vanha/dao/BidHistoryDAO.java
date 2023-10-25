@@ -29,11 +29,19 @@ public class BidHistoryDAO {
 	DateTimeFormatter targetFormatter = DateTimeFormatter.ofPattern(newDateFormat);
 
 	/**
-	 * 
-	 * @param newBid
-	 * @throws PersistenceException
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Creates a new bid entry in the bid history for a specified amount and
+	 * product.
+	 *
+	 * @param amount    The bid amount to be placed.
+	 * @param email     The email of the user placing the bid.
+	 * @param productID The unique identifier of the product being bid on.
+	 *
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              persistence.
+	 * @throws ValidationException  If there is a validation error in the input
+	 *                              data.
+	 * @throws ServiceException     If a service-level error occurs during bid
+	 *                              creation.
 	 */
 	public void create(int amount, String eamil, String productID)
 			throws PersistenceException, ValidationException, ServiceException {
@@ -53,13 +61,16 @@ public class BidHistoryDAO {
 
 			pre.setString(2, formattedDateTime);
 
-			int buyer = UserDAO.findUser(eamil).getId();
+			UserDAO userDAO = new UserDAO();
+			int buyer = userDAO.findUser(eamil).getId();
 			pre.setInt(3, buyer);
 
-			int product = ProductDAO.findId(productID);
+			ProductDAO productDAO = new ProductDAO();
+			int product = productDAO.findId(productID);
 			pre.setInt(4, product);
 
-			int num = BidHistoryDAO.findListNo(product);
+			BidHistoryDAO bidHistoryDAO = new BidHistoryDAO();
+			int num = bidHistoryDAO.findListNo(product);
 			pre.setInt(5, num + 1);
 
 			pre.executeUpdate();
@@ -73,14 +84,21 @@ public class BidHistoryDAO {
 	}
 
 	/**
-	 * 
-	 * @param productId
-	 * @return Set<BidHistory>
-	 * @throws PersistenceException
-	 * @throws ServiceException
-	 * @throws ValidationException
+	 * Retrieves a list of bid history entries for a specific product by its product
+	 * ID.
+	 *
+	 * @param productId The unique identifier of the product.
+	 * @return A list of BidDTO objects representing bid history entries for the
+	 *         specified product.
+	 *
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              persistence.
+	 * @throws ServiceException     If a service-level error occurs during data
+	 *                              retrieval.
+	 * @throws ValidationException  If there is a validation error in the input
+	 *                              data.
 	 */
-	public static List<BidDTO> findAllBidsByProductId(int productId)
+	public List<BidDTO> findAllBidsByProductId(int productId)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -121,8 +139,23 @@ public class BidHistoryDAO {
 		return bidHistoryArray;
 	}
 
-	public static List<BidDTO> findAllBids(int productId)
-			throws PersistenceException, ServiceException, ValidationException {
+	/**
+	 * Retrieves a list of bid history entries for a specific product by its product
+	 * ID, including essential bid details.
+	 *
+	 * @param productId The unique identifier of the product.
+	 * @return A list of BidDTO objects representing bid history entries for the
+	 *         specified product, including bid amount, buyer username, and buyer
+	 *         image.
+	 *
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              persistence.
+	 * @throws ServiceException     If a service-level error occurs during data
+	 *                              retrieval.
+	 * @throws ValidationException  If there is a validation error in the input
+	 *                              data.
+	 */
+	public List<BidDTO> findAllBids(int productId) throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
@@ -155,7 +188,22 @@ public class BidHistoryDAO {
 		return bidHistoryArray;
 	}
 
-	public static List<YourListDTO> myProductList(String userEmail)
+	/**
+	 * Retrieves a list of products that a user has placed bids on, based on their
+	 * email.
+	 *
+	 * @param userEmail The email of the user.
+	 * @return A list of YourListDTO objects representing products the user has
+	 *         placed bids on.
+	 *
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              persistence.
+	 * @throws ValidationException  If there is a validation error in the input
+	 *                              data.
+	 * @throws ServiceException     If a service-level error occurs during data
+	 *                              retrieval.
+	 */
+	public List<YourListDTO> myProductList(String userEmail)
 			throws PersistenceException, ValidationException, ServiceException {
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -168,7 +216,8 @@ public class BidHistoryDAO {
 			String query = "SELECT product_id FROM bid_history WHERE buyer_id = ?";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
-			int id = UserDAO.findUser(userEmail).getId();
+			UserDAO userDAO = new UserDAO();
+			int id = userDAO.findUser(userEmail).getId();
 			pre.setInt(1, id);
 			rs = pre.executeQuery();
 
@@ -181,11 +230,14 @@ public class BidHistoryDAO {
 			for (int i : ids) {
 				YourListDTO product = new YourListDTO();
 
-				Product cardProduct = ProductDAO.list(i);
+				ProductDAO productDAO = new ProductDAO();
+				Product cardProduct = productDAO.list(i);
 				if (cardProduct != null) {
 					product.setProductId(cardProduct.getProductId());
 					product.setName(cardProduct.getName());
-					product.setImage(AssetsDAO.findFirstAssetByProductId(i));
+
+					AssetsDAO assetDAO = new AssetsDAO();
+					product.setImage(assetDAO.findFirstAssetByProductId(i));
 					product.setStatus(cardProduct.getStatus());
 					productArray.add(product);
 				}
@@ -201,7 +253,21 @@ public class BidHistoryDAO {
 		return productArray;
 	}
 
-	public static int findListNo(int productId) throws PersistenceException, ServiceException, ValidationException {
+	/**
+	 * Finds the highest list number (list_no) associated with a specific product.
+	 *
+	 * @param productId The unique identifier of the product.
+	 * @return The highest list number for the product, or 0 if no entries are
+	 *         found.
+	 *
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              persistence.
+	 * @throws ServiceException     If a service-level error occurs during data
+	 *                              retrieval.
+	 * @throws ValidationException  If there is a validation error in the input
+	 *                              data.
+	 */
+	public int findListNo(int productId) throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
@@ -225,6 +291,20 @@ public class BidHistoryDAO {
 		return 0;
 	}
 
+	/**
+	 * Finds the product and buyer associated with a specific bid entry.
+	 *
+	 * @param bidID The unique identifier of the bid entry.
+	 * @return A string containing the product ID and buyer ID in the format
+	 *         "productID/buyerID".
+	 *
+	 * @throws PersistenceException If there is an issue with the database
+	 *                              persistence.
+	 * @throws ServiceException     If a service-level error occurs during data
+	 *                              retrieval.
+	 * @throws ValidationException  If there is a validation error in the input
+	 *                              data.
+	 */
 	public String findRow(int bidID) throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;

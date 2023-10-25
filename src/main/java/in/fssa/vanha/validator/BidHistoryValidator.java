@@ -11,13 +11,6 @@ import in.fssa.vanha.util.StringUtil;
 
 public class BidHistoryValidator {
 
-	/**
-	 * 
-	 * @param newBid
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 * @throws PersistenceException
-	 */
 	public static void createValidate(int amount, String buyerId, String productId)
 			throws ValidationException, ServiceException {
 
@@ -45,18 +38,13 @@ public class BidHistoryValidator {
 
 	}
 
-	/**
-	 * 
-	 * @param productId
-	 * @throws ValidationException
-	 * @throws PersistenceException
-	 */
 	public static void findValidate(int productId) throws ValidationException, ServiceException, PersistenceException {
 
 		if (productId < 0) {
 			throw new ValidationException("Invalid Product Id");
 		}
-		if (ProductDAO.isActive(productId) == false) {
+		ProductDAO productDAO = new ProductDAO();
+		if (productDAO.isActive(productId) == false) {
 			throw new ServiceException("product not found in product table");
 		}
 

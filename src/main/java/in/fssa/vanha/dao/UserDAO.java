@@ -20,12 +20,15 @@ public class UserDAO {
 	DateTimeFormatter targetFormatter = DateTimeFormatter.ofPattern(newDateFormat);
 
 	/**
-	 * 
-	 * @param newClient
-	 * @throws PersistenceException
+	 * Creates a new user by inserting their information into the database.
+	 *
+	 * @param newClient The User object containing the new user's information.
+	 * @return The User object with the newly generated user ID.
+	 * @throws PersistenceException if there is an issue with the database
+	 *                              connection or SQL execution.
 	 */
 	public User create(User newClient) throws PersistenceException {
-		// TODO Auto-generated method stub
+
 		Connection conn = null;
 		PreparedStatement pre = null;
 
@@ -63,12 +66,15 @@ public class UserDAO {
 	}
 
 	/**
-	 * 
-	 * @param updateUser
-	 * @throws PersistenceException
+	 * Updates user information in the database, including their username, phone
+	 * number, and location.
+	 *
+	 * @param updateUser The User object containing the updated user information.
+	 * @throws PersistenceException if there is an issue with the database
+	 *                              connection or SQL execution.
 	 */
 	public void update(User updateUser) throws PersistenceException {
-		// TODO Auto-generated method stub
+
 		Connection conn = null;
 		PreparedStatement pre = null;
 
@@ -97,13 +103,14 @@ public class UserDAO {
 	}
 
 	/**
-	 * 
-	 * @param email
-	 * @param updateUser
-	 * @throws PersistenceException
+	 * Updates a user's profile image in the database.
+	 *
+	 * @param updateImage The User object containing the updated user image and
+	 *                    email.
+	 * @throws PersistenceException if there is an issue with the database
+	 *                              connection or SQL execution.
 	 */
 	public void updateImage(User updateImage) throws PersistenceException {
-		// TODO Auto-generated method stub
 		Connection conn = null;
 		PreparedStatement pre = null;
 
@@ -131,13 +138,16 @@ public class UserDAO {
 	}
 
 	/**
-	 * 
-	 * @param email
-	 * @return User
-	 * @throws PersistenceException
+	 * Retrieves user information from the database based on their email address.
+	 *
+	 * @param email The email address of the user to retrieve.
+	 * @return The User object containing the user's information, or null if the
+	 *         user is not found.
+	 * @throws PersistenceException if there is an issue with the database
+	 *                              connection or SQL execution.
 	 */
-	public static User findUser(String email) throws PersistenceException {
-		// TODO Auto-generated method stub
+	public User findUser(String email) throws PersistenceException {
+
 		User value = null;
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -170,13 +180,17 @@ public class UserDAO {
 	}
 
 	/**
-	 * 
-	 * @param email
-	 * @return User
-	 * @throws PersistenceException
+	 * Authenticates a user by checking their email and password against the
+	 * database records.
+	 *
+	 * @param user The User object containing the user's email and password for
+	 *             authentication.
+	 * @return The User object with authenticated user information, or null if
+	 *         authentication fails.
+	 * @throws PersistenceException if there is an issue with the database
+	 *                              connection or SQL execution.
 	 */
 	public User loginUser(User user) throws PersistenceException {
-		// TODO Auto-generated method stub
 		User value = null;
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -218,36 +232,45 @@ public class UserDAO {
 		}
 		return value;
 	}
-	
-	public static User userDetail(int id) throws PersistenceException {
-	    User value = null;
-	    Connection conn = null;
-	    PreparedStatement pre = null;
-	    ResultSet rs = null;
 
-	    try {
-	        conn = ConnectionUtil.getConnection();
-	        String query = "SELECT username, email, location, number, image FROM users WHERE id = ?";
-	        pre = conn.prepareStatement(query);
-	        pre.setInt(1, id);
-	        rs = pre.executeQuery();
+	/**
+	 * Retrieves detailed user information from the database based on their unique
+	 * user ID.
+	 *
+	 * @param id The unique identifier of the user to retrieve.
+	 * @return The User object containing the user's detailed information, or null
+	 *         if the user is not found.
+	 * @throws PersistenceException if there is an issue with the database
+	 *                              connection or SQL execution.
+	 */
+	public User userDetail(int id) throws PersistenceException {
+		User value = null;
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet rs = null;
 
-	        if (rs.next()) {
-	            value = new User();
-	            value.setName(rs.getString("username"));
-	            value.setEmail(rs.getString("email"));
-	            value.setNumber(rs.getLong("number"));
-	            value.setLocation(rs.getString("location"));
-	            value.setImage(rs.getString("image"));
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        throw new PersistenceException(e);
-	    } finally {
-	        ConnectionUtil.close(conn, pre, rs);
-	    }
-	    return value;
+		try {
+			conn = ConnectionUtil.getConnection();
+			String query = "SELECT username, email, location, number, image FROM users WHERE id = ?";
+			pre = conn.prepareStatement(query);
+			pre.setInt(1, id);
+			rs = pre.executeQuery();
+
+			if (rs.next()) {
+				value = new User();
+				value.setName(rs.getString("username"));
+				value.setEmail(rs.getString("email"));
+				value.setNumber(rs.getLong("number"));
+				value.setLocation(rs.getString("location"));
+				value.setImage(rs.getString("image"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e);
+		} finally {
+			ConnectionUtil.close(conn, pre, rs);
+		}
+		return value;
 	}
 
-	
 }

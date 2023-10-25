@@ -17,7 +17,8 @@ public class TestFindProductByProductId {
 	public void testFindProductByValidId() {
 
 		assertDoesNotThrow(() -> {
-			ProductService.productdetail("458d1");
+			ProductService productService = new ProductService();
+			productService.productdetail("458d1");
 		});
 
 	}
@@ -26,7 +27,8 @@ public class TestFindProductByProductId {
 	public void testFindProductByInValidId() {
 
 		assertThrows(ServiceException.class, () -> {
-			ProductService.productdetail("invalid.ID");
+			ProductService productService = new ProductService();
+			productService.productdetail("invalid.ID");
 		});
 
 	}
@@ -35,7 +37,8 @@ public class TestFindProductByProductId {
 	public void testFindProductByEmptyId() {
 
 		assertThrows(ValidationException.class, () -> {
-			ProductService.productdetail("");
+			ProductService productService = new ProductService();
+			productService.productdetail("");
 		});
 
 	}

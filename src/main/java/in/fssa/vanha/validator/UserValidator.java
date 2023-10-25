@@ -1,9 +1,5 @@
 package in.fssa.vanha.validator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +9,6 @@ import in.fssa.vanha.dao.UserDAO;
 import in.fssa.vanha.exception.PersistenceException;
 import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.exception.ValidationException;
-import in.fssa.vanha.util.ConnectionUtil;
 import in.fssa.vanha.util.StringUtil;
 
 public class UserValidator {
@@ -29,13 +24,7 @@ public class UserValidator {
 	static Pattern locationPattern = Pattern.compile(locationRegex);
 	static Pattern imagePattern = Pattern.compile(imageRegex);
 
-	/**
-	 * 
-	 * @param newUser
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 * @throws PersistenceException
-	 */
+	
 	public static void createValidate(User newUser) throws ValidationException, ServiceException, PersistenceException {
 
 		// null or empty checking
@@ -108,13 +97,6 @@ public class UserValidator {
 
 	}
 
-	/**
-	 * 
-	 * @param updateUser
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 * @throws PersistenceException
-	 */
 	public static void updateValidate(User updateUser)
 			throws ValidationException, ServiceException, PersistenceException {
 
@@ -171,7 +153,8 @@ public class UserValidator {
 
 		// exists checking
 
-		User user = UserDAO.findUser(updateUser.getEmail());
+		UserDAO userDAO = new UserDAO();
+		User user = userDAO.findUser(updateUser.getEmail());
 
 		if (user == null) {
 			throw new ServiceException("User doesn't exists");
@@ -194,7 +177,8 @@ public class UserValidator {
 
 		// exists checking
 
-		User user = UserDAO.findUser(updateUser.getEmail());
+		UserDAO userDAO = new UserDAO();
+		User user = userDAO.findUser(updateUser.getEmail());
 
 		if (user == null) {
 			throw new ServiceException("User doesn't exists");
@@ -202,11 +186,6 @@ public class UserValidator {
 
 	}
 
-	/**
-	 * 
-	 * @param email
-	 * @throws ValidationException
-	 */
 	public static void findUserValidate(String email) throws ValidationException {
 		if (email == null) {
 			throw new ValidationException("Email can't be null");
@@ -215,11 +194,6 @@ public class UserValidator {
 		StringUtil.RegectIfInvalidString(email, "Email");
 	}
 
-	/**
-	 * 
-	 * @param email
-	 * @throws ValidationException
-	 */
 	public static void loginValidation(User user) throws ValidationException {
 		if (user == null) {
 			throw new ValidationException("input can't be null");

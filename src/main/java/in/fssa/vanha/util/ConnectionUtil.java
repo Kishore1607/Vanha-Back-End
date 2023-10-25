@@ -9,8 +9,10 @@ import java.sql.SQLException;
 public class ConnectionUtil {
 
 	/**
-	 * 
-	 * @return
+	 * Establishes a database connection to a MySQL database.
+	 *
+	 * @return A {@link Connection} object representing the database connection.
+	 * @throws RuntimeException If any error occurs during the connection process.
 	 */
 	public static Connection getConnection() {
 
@@ -39,6 +41,17 @@ public class ConnectionUtil {
 		return conn;
 	}
 
+	/**
+	 * Closes the provided database connection and prepared statement.
+	 *
+	 * This method is used to safely close a database connection and a prepared
+	 * statement. It ensures that both the connection and prepared statement are
+	 * properly closed and any potential SQLExceptions are caught and printed to the
+	 * standard error stream.
+	 *
+	 * @param connection The database connection to be closed. It can be null.
+	 * @param presta     The prepared statement to be closed. It can be null.
+	 */
 	public static void close(Connection connection, PreparedStatement presta) {
 
 		try {
@@ -54,12 +67,16 @@ public class ConnectionUtil {
 	}
 
 	/**
+	 * Closes the provided database connection and prepared statements.
 	 * 
-	 * @param conn
-	 * @param pre1
-	 * @param pre2
-	 * @param pre3
-	 * @param pre4
+	 * This method safely closes the provided resources (Connection,
+	 * PreparedStatement) to release any associated database connections and free up
+	 * resources. It ensures that each resource is closed if it is not null and
+	 * handles any SQLExceptions that may occur during the closing process.
+	 *
+	 * @param conn The database Connection to be closed.
+	 * @param pre1 The first PreparedStatement to be closed.
+	 * @param pre2 The second PreparedStatement to be closed.
 	 */
 	public static void close(Connection conn, PreparedStatement pre1, PreparedStatement pre2) {
 
@@ -79,10 +96,14 @@ public class ConnectionUtil {
 	}
 
 	/**
-	 * 
-	 * @param connection
-	 * @param presta
-	 * @param reset
+	 * Closes the database resources, including the database connection, prepared
+	 * statement, and result set.
+	 *
+	 * @param connection The database connection to be closed. If null, no action is
+	 *                   taken.
+	 * @param presta     The prepared statement to be closed. If null, no action is
+	 *                   taken.
+	 * @param reset      The result set to be closed. If null, no action is taken.
 	 */
 	public static void close(Connection connection, PreparedStatement presta, ResultSet reset) {
 

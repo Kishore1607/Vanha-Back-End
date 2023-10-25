@@ -32,12 +32,13 @@ public class ProductDAO {
 	DateTimeFormatter targetFormatter = DateTimeFormatter.ofPattern(newDateFormat);
 
 	/**
-	 * 
-	 * @param newProduct
-	 * @param newAsset
-	 * @throws PersistenceException
-	 * @throws ServiceException
-	 * @throws ValidationException
+	 * Creates a new product in the database associated with the given user.
+	 *
+	 * @param newProduct The Product to be created.
+	 * @param userEmail  The email of the user creating the product.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
 	 */
 	public void create(Product newProduct, String userEmail)
 			throws PersistenceException, ServiceException, ValidationException {
@@ -60,7 +61,8 @@ public class ProductDAO {
 
 			pre.setInt(8, newProduct.getMinPrice());
 
-			int id = UserDAO.findUser(userEmail).getId();
+			UserDAO userDAO = new UserDAO();
+			int id = userDAO.findUser(userEmail).getId();
 			pre.setInt(9, id);
 
 			String nowDate = "" + LocalDateTime.now();
@@ -82,12 +84,13 @@ public class ProductDAO {
 	}
 
 	/**
-	 * 
-	 * @param productId
-	 * @return Product
-	 * @throws PersistenceException
-	 * @throws ServiceException
-	 * @throws ValidationException
+	 * Retrieves a ProductDetailDTO for a product based on its product ID.
+	 *
+	 * @param productId The product ID to search for.
+	 * @return A ProductDetailDTO containing detailed product information.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
 	 */
 	public ProductDetailDTO findProductByProductId(String productId)
 			throws PersistenceException, ServiceException, ValidationException {
@@ -124,12 +127,13 @@ public class ProductDAO {
 				result.setSellerName(rs.getString("username"));
 				result.setSellerLocation(rs.getString("location"));
 				result.setSellerImage(rs.getString("image"));
-				
+
 				AssetsDAO assetDAO = new AssetsDAO();
 				List<Assets> assets = assetDAO.findAllAssetsByProductId(id);
 				result.setAssets(assets);
 
-				List<BidDTO> bids = BidHistoryDAO.findAllBidsByProductId(id);
+				BidHistoryDAO bidHistoryDAO = new BidHistoryDAO();
+				List<BidDTO> bids = bidHistoryDAO.findAllBidsByProductId(id);
 				result.setBids(bids);
 
 			}
@@ -144,11 +148,15 @@ public class ProductDAO {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @throws PersistenceException
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Retrieves a set of ListProductDTO objects for all products associated with a
+	 * user (excluding their own products).
+	 *
+	 * @param userEmail The email of the user.
+	 * @return A set of ListProductDTO representing products associated with the
+	 *         user.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
 	 */
 	public Set<ListProductDTO> findAllProducts(String userEmail)
 			throws PersistenceException, ServiceException, ValidationException {
@@ -182,7 +190,8 @@ public class ProductDAO {
 				product.setSellerLocation(rs.getString("location"));
 				product.setSellerImage(rs.getString("image"));
 
-				product.setAsset(AssetsDAO.findFirstAssetByProductId(productId));
+				AssetsDAO assetsDAO = new AssetsDAO();
+				product.setAsset(assetsDAO.findFirstAssetByProductId(productId));
 
 				productArray.add(product);
 			}
@@ -196,11 +205,12 @@ public class ProductDAO {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @throws PersistenceException
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Retrieves a set of ListProductDTO objects for all products in the database.
+	 *
+	 * @return A set of ListProductDTO representing all products in the database.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
 	 */
 	public Set<ListProductDTO> findAllProducts() throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
@@ -211,7 +221,7 @@ public class ProductDAO {
 
 		try {
 
-			String query = "SELECT p.id, p.product_id, p.name, p.price, \r\n"
+			String query = "SELECT p.id, p.product_id, p.name, p.price, p.created_at, \r\n"
 					+ "       p.seller_id, u.username, u.location, u.image\r\n" + "FROM products p\r\n"
 					+ "INNER JOIN users u ON p.seller_id = u.id\r\n" + "WHERE p.status = 'a';";
 			conn = ConnectionUtil.getConnection();
@@ -227,12 +237,14 @@ public class ProductDAO {
 				product.setProductId(rs.getString("product_id"));
 				product.setProductName(rs.getString("name"));
 				product.setPrice(rs.getInt("price"));
+				product.setDate(rs.getString("created_at"));
 
 				product.setSellerName(rs.getString("username"));
 				product.setSellerLocation(rs.getString("location"));
 				product.setSellerImage(rs.getString("image"));
 
-				product.setAsset(AssetsDAO.findFirstAssetByProductId(productId));
+				AssetsDAO assetsDAO = new AssetsDAO();
+				product.setAsset(assetsDAO.findFirstAssetByProductId(productId));
 
 				productArray.add(product);
 			}
@@ -246,12 +258,15 @@ public class ProductDAO {
 	}
 
 	/**
-	 * 
-	 * @param sellerId
-	 * @return Set<Product>
-	 * @throws PersistenceException
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Retrieves a list of ListProductDTO objects for all products associated with a
+	 * user.
+	 *
+	 * @param userEmail The email of the user.
+	 * @return A list of ListProductDTO representing products associated with the
+	 *         user.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ValidationException  If validation of the input data fails.
+	 * @throws ServiceException     If a service-related issue occurs.
 	 */
 	public List<ListProductDTO> findAllProductsBySellerId(String userEmail)
 			throws PersistenceException, ValidationException, ServiceException {
@@ -263,10 +278,11 @@ public class ProductDAO {
 
 		try {
 
-			String query = "SELECT id, product_id, name, price, status, bid_id FROM products WHERE seller_id = ? AND status IN ('a', 's');";
+			String query = "SELECT id, product_id, name, price, status, created_at FROM products WHERE seller_id = ? AND status IN ('a', 's');";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
-			int id = UserDAO.findUser(userEmail).getId();
+			UserDAO userDAO = new UserDAO();
+			int id = userDAO.findUser(userEmail).getId();
 			pre.setInt(1, id);
 			rs = pre.executeQuery();
 			while (rs.next()) {
@@ -279,9 +295,10 @@ public class ProductDAO {
 				product.setProductName(rs.getString("name"));
 				product.setPrice(rs.getInt("price"));
 				product.setStatus(rs.getString("status"));
-				product.setBid_id(rs.getInt("bid_id"));
+				product.setDate(rs.getString("created_at"));
 
-				product.setAsset(AssetsDAO.findFirstAssetByProductId(productId));
+				AssetsDAO assetsDAO = new AssetsDAO();
+				product.setAsset(assetsDAO.findFirstAssetByProductId(productId));
 
 				productArray.add(product);
 			}
@@ -295,15 +312,14 @@ public class ProductDAO {
 	}
 
 	/**
-	 * 
-	 * @param updateProduct
-	 * @throws PersistenceException
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Updates a product in the database with the provided product details.
+	 *
+	 * @param updateProduct The updated product information.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
 	 */
-	public void update(Product updateProduct)
-			throws PersistenceException, ServiceException, ValidationException {
-		// TODO Auto-generated method stub
+	public void update(Product updateProduct) throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 
@@ -335,15 +351,21 @@ public class ProductDAO {
 		}
 	}
 
-	public void sell(int productId, int bidId)
-			throws PersistenceException, ServiceException, ValidationException {
-		// TODO Auto-generated method stub
+	/**
+	 * Sets the status of a product to "sold" and associates it with a bid.
+	 *
+	 * @param productId The ID of the product to be marked as sold.
+	 * @param bidId     The ID of the associated bid.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
+	 */
+	public void sell(int productId, int bidId) throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 
 		try {
-			String query = "UPDATE products SET bid_id=?, status = 's' "
-					+ "WHERE id=?";
+			String query = "UPDATE products SET bid_id=?, status = 's' " + "WHERE id=?";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setInt(1, bidId);
@@ -357,11 +379,14 @@ public class ProductDAO {
 			ConnectionUtil.close(conn, pre);
 		}
 	}
-	
+
 	/**
-	 * 
-	 * @param productId
-	 * @throws PersistenceException
+	 * Marks a product as deleted in the database.
+	 *
+	 * @param productId The product ID to be deleted.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ValidationException  If validation of the input data fails.
+	 * @throws ServiceException     If a service-related issue occurs.
 	 */
 	@SuppressWarnings("resource")
 	public void delete(String productId) throws PersistenceException, ValidationException, ServiceException {
@@ -407,12 +432,16 @@ public class ProductDAO {
 	}
 
 	/**
-	 * 
-	 * @param category
-	 * @return Set<Product>
-	 * @throws PersistenceException
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Retrieves a set of ListProductDTO objects for all products in a specific
+	 * category associated with a user (excluding their own products).
+	 *
+	 * @param category  The category of products to retrieve.
+	 * @param userEmail The email of the user.
+	 * @return A set of ListProductDTO representing products in the specified
+	 *         category associated with the user.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
 	 */
 	public Set<ListProductDTO> findAllProductsByCategory(String category, String userEmail)
 			throws PersistenceException, ServiceException, ValidationException {
@@ -422,27 +451,15 @@ public class ProductDAO {
 
 		Set<ListProductDTO> productArray = new HashSet<>();
 
-		int id = UserDAO.findUser(userEmail).getId();
+		UserDAO userDAO = new UserDAO();
+		int id = userDAO.findUser(userEmail).getId();
 		String cate = Category.getCate(category);
 
 		try {
-			String query = "SELECT " +
-				    "p.id, " +
-				    "p.product_id, " +
-				    "p.name, " +
-				    "p.price, " +
-				    "p.seller_id, " +
-				    "u.username, " +
-				    "u.location, " +
-				    "u.image " +
-				    "FROM " +
-				    "products AS p " +
-				    "INNER JOIN " +
-				    "users AS u ON p.seller_id = u.id " +
-				    "WHERE " +
-				    "p.status = ? " +
-				    "AND p.category = ? " +
-				    "AND u.id <> ?";
+			String query = "SELECT " + "p.id, " + "p.product_id, " + "p.name, " + "p.price, " + "p.seller_id, "
+					+ "u.username, " + "u.location, " + "u.image " + "FROM " + "products AS p " + "INNER JOIN "
+					+ "users AS u ON p.seller_id = u.id " + "WHERE " + "p.status = ? " + "AND p.category = ? "
+					+ "AND u.id <> ?";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			pre.setString(1, "a");
@@ -464,7 +481,8 @@ public class ProductDAO {
 				product.setSellerLocation(rs.getString("location"));
 				product.setSellerImage(rs.getString("image"));
 
-				product.setAsset(AssetsDAO.findFirstAssetByProductId(productId));
+				AssetsDAO assetsDAO = new AssetsDAO();
+				product.setAsset(assetsDAO.findFirstAssetByProductId(productId));
 
 				productArray.add(product);
 			}
@@ -477,6 +495,17 @@ public class ProductDAO {
 		return productArray;
 	}
 
+	/**
+	 * Retrieves a set of ListProductDTO objects for all products in a specific
+	 * category.
+	 *
+	 * @param category The category of products to retrieve.
+	 * @return A set of ListProductDTO representing products in the specified
+	 *         category.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
+	 */
 	public Set<ListProductDTO> findAllProductsByCategoryWithoutEmail(String category)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
@@ -510,7 +539,8 @@ public class ProductDAO {
 				product.setSellerLocation(rs.getString("location"));
 				product.setSellerImage(rs.getString("image"));
 
-				product.setAsset(AssetsDAO.findFirstAssetByProductId(productId));
+				AssetsDAO assetsDAO = new AssetsDAO();
+				product.setAsset(assetsDAO.findFirstAssetByProductId(productId));
 
 				productArray.add(product);
 			}
@@ -524,14 +554,15 @@ public class ProductDAO {
 	}
 
 	/**
-	 * 
-	 * @param productId
-	 * @return
-	 * @throws PersistenceException
-	 * @throws ServiceException
-	 * @throws ValidationException
+	 * Retrieves the ID of a product based on its product ID.
+	 *
+	 * @param productId The product ID to search for.
+	 * @return The ID of the product, or -1 if not found.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
 	 */
-	public static int findId(String productId) throws PersistenceException, ServiceException, ValidationException {
+	public int findId(String productId) throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
@@ -560,8 +591,16 @@ public class ProductDAO {
 	}
 
 	// Extra method for Validation
-
-	public static Product methodForValidation(String productId)
+	/**
+	 * Retrieves a Product object for validation purposes based on the product ID.
+	 *
+	 * @param productId The product ID to retrieve for validation.
+	 * @return A Product object containing information for validation.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
+	 */
+	public Product methodForValidation(String productId)
 			throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -600,7 +639,15 @@ public class ProductDAO {
 		return product;
 	}
 
-	public static boolean isActive(int productId) throws PersistenceException {
+	/**
+	 * Checks if a product with the given ID is active (status is 'a') in the
+	 * database.
+	 *
+	 * @param productId The product ID to check for activity.
+	 * @return True if the product is active, false otherwise.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 */
+	public boolean isActive(int productId) throws PersistenceException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
@@ -623,9 +670,17 @@ public class ProductDAO {
 		}
 		return false;
 	}
-	
-	public static Product list(int productId)
-			throws PersistenceException, ServiceException, ValidationException {
+
+	/**
+	 * Retrieves information about a product for listing purposes.
+	 *
+	 * @param productId The ID of the product to list.
+	 * @return A Product object containing information for listing.
+	 * @throws PersistenceException If there is an issue with database persistence.
+	 * @throws ServiceException     If a service-related issue occurs.
+	 * @throws ValidationException  If validation of the input data fails.
+	 */
+	public Product list(int productId) throws PersistenceException, ServiceException, ValidationException {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
@@ -645,7 +700,7 @@ public class ProductDAO {
 				product.setName(rs.getString("name"));
 				product.setStatus(rs.getString("status"));
 				product.setPrice(rs.getInt("price"));
-				
+
 			}
 
 		} catch (SQLException e) {
@@ -657,5 +712,5 @@ public class ProductDAO {
 
 		return product;
 	}
-	
+
 }

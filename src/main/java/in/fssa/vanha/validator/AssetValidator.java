@@ -12,11 +12,6 @@ import in.fssa.vanha.util.StringUtil;
 
 public class AssetValidator {
 
-	/**
-	 * 
-	 * @param newAsset
-	 * @throws ValidationException
-	 */
 	public static void createValidate(List<Assets> newAsset) throws ValidationException {
 		for (Assets asset : newAsset) {
 			String assetValue = asset.getValue();
@@ -37,14 +32,6 @@ public class AssetValidator {
 		}
 	}
 
-	/**
-	 * 
-	 * @param id
-	 * @param updateAsset
-	 * @throws ValidationException
-	 * @throws PersistenceException
-	 * @throws ServiceException
-	 */
 	public static void updateValidate(Assets newAsset, int id)
 			throws ValidationException, PersistenceException, ServiceException {
 

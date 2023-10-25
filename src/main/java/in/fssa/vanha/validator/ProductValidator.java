@@ -10,12 +10,6 @@ import in.fssa.vanha.util.StringUtil;
 
 public class ProductValidator {
 
-	/**
-	 * 
-	 * @param newProduct
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 */
 	public static void createValidate(Product newProduct, String userEmail)
 			throws ValidationException, ServiceException {
 
@@ -74,12 +68,6 @@ public class ProductValidator {
 		}
 	}
 
-	/**
-	 * 
-	 * @param sellerId
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 */
 	public static void findUserValidate(String sellerId) throws ValidationException, ServiceException {
 
 		StringUtil.RegectIfInvalidString(sellerId, "User ID");
@@ -90,12 +78,6 @@ public class ProductValidator {
 		}
 	}
 
-	/**
-	 * 
-	 * @param updateProduct
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 */
 	public static void updateValidate(Product updateProduct) throws ValidationException, ServiceException {
 
 		// null or empty checking
@@ -143,12 +125,6 @@ public class ProductValidator {
 		}
 	}
 
-	/**
-	 * 
-	 * @param productID
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 */
 	public static void productIdValidate(String productID) throws ValidationException, ServiceException {
 
 		StringUtil.RegectIfInvalidString(productID, "Product ID");
@@ -159,12 +135,6 @@ public class ProductValidator {
 		}
 	}
 
-	/**
-	 * 
-	 * @param category
-	 * @throws ValidationException
-	 * @throws ServiceException
-	 */
 	public static void findAllProductValidate(String category, String userEmail)
 			throws ValidationException, ServiceException {
 

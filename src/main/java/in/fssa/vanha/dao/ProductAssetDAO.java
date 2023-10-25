@@ -5,17 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import in.fssa.vanha.exception.PersistenceException;
-import in.fssa.vanha.exception.ServiceException;
 import in.fssa.vanha.model.ProductAsset;
 import in.fssa.vanha.util.ConnectionUtil;
 
 public class ProductAssetDAO {
 
 	/**
-	 * 
-	 * @param newProductAsset
-	 * @throws PersistenceException
-	 * @throws ServiceException
+	 * Inserts a new ProductAsset record into the database.
+	 *
+	 * @param newProductAsset The ProductAsset to be created.
+	 * @throws PersistenceException If there is an issue with database persistence.
 	 */
 	public void create(ProductAsset newProductAsset) throws PersistenceException {
 		Connection conn = null;
