@@ -42,6 +42,13 @@ public class ListProductDTO {
 		this.price = price;
 	}
 
+	public int getBidID() {
+		return bidId;
+	}
+
+	public void setBidID(int bidId) {
+		this.bidId = bidId;
+	}
 	public String getAsset() {
 		return asset;
 	}
@@ -88,6 +95,7 @@ public class ListProductDTO {
 	String status;
 	String date;
 	int price;
+	int bidId;
 
 	// Product image
 	String asset;

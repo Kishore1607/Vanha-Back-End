@@ -278,7 +278,7 @@ public class ProductDAO {
 
 		try {
 
-			String query = "SELECT id, product_id, name, price, status, created_at FROM products WHERE seller_id = ? AND status IN ('a', 's');";
+			String query = "SELECT id, product_id, name, price, status, created_at, bid_id FROM products WHERE seller_id = ? AND status IN ('a', 's');";
 			conn = ConnectionUtil.getConnection();
 			pre = conn.prepareStatement(query);
 			UserDAO userDAO = new UserDAO();
@@ -296,6 +296,7 @@ public class ProductDAO {
 				product.setPrice(rs.getInt("price"));
 				product.setStatus(rs.getString("status"));
 				product.setDate(rs.getString("created_at"));
+				product.setBidID(rs.getInt("bid_id"));
 
 				AssetsDAO assetsDAO = new AssetsDAO();
 				product.setAsset(assetsDAO.findFirstAssetByProductId(productId));
